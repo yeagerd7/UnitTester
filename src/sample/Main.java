@@ -2,22 +2,42 @@ package sample;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.*;
+import javafx.event.*;
+import javafx.scene.layout.StackPane;
+import javafx.stage.*;
+import javafx.scene.control.*;
 
-public class Main extends Application {
+public class Main extends Application implements EventHandler<ActionEvent> {
+
+    Button browseButton;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        //Build Main Window
+        primaryStage.setTitle("C++ Unit Tester");
+
+        //Browse Button
+        browseButton = new Button();
+        browseButton.setText("Browse");
+        browseButton.setOnAction(this);
+
+        StackPane layout = new StackPane();
+        layout.getChildren().add(browseButton);
+
+        //Makes window visible
+        primaryStage.setScene(new Scene(layout, 700, 600));
         primaryStage.show();
     }
 
 
-    public static void main(String[] args) {
-        launch(args);
+    @Override
+    public void handle(ActionEvent event) {
+
     }
 }
