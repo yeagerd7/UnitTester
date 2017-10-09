@@ -10,9 +10,16 @@ import javafx.scene.layout.VBox;
 import javafx.stage.*;
 import javafx.scene.control.*;
 
+/**
+ * Builds an GUI acting as an Alert Box that doesn't allow user interaction on other windows until
+ * user acknowledges the message by clicking 'Ok'
+ * @param title
+ * @param message
+ * @author David Yeager
+ */
 public class AlertBox {
 
-    public static void display(String title, String message) {
+    public static void simpleDisplay(String title, String message) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL); //Doesn't allow user interaction with other windows
         window.setTitle(title); //Sets the window title text desired via the parameter
