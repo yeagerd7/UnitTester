@@ -1,7 +1,7 @@
 package sample;
 
+//Import Statements
 import java.io.*;
-import javafx.collections.*;
 import javafx.geometry.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -18,56 +18,123 @@ import javafx.stage.*;
  */
 public class FrontEndGUI {
 
-    /**
-     * Builds the entire front end GUI that acts as the primary user interface
-     * @param primaryStage
-     */
-    public void mainWindowDisplay(Stage primaryStage) throws FileNotFoundException {
+    //Button Field Declarations
+    private Button browseButton1;
+    private Button browseButton2;
+    private Button preferencesButton;
+    private Button helpButton;
+    private Button generateButton;
+    private Button previewButton;
+    private Button refreshButton;
 
-        //Scene Initialization
-        BorderPane mainScene = new BorderPane();
-        HBox topBorderScene = new HBox();
-        VBox bottomBorderScene = new VBox();
-        HBox bottomSubSceneA = new HBox();
-        HBox bottomSubSceneB = new HBox();
-        HBox bottomSubSceneC = new HBox();
-        HBox bottomSubSceneD = new HBox();
-        HBox centerBorderScene = new HBox();
-        ListView centerSubSceneA = new ListView<CheckBox>();
-        VBox centerSubSceneB = new VBox();
+    //Main Layout Field Declaration
+    private BorderPane mainScene;
+
+    //Bottom Border Scene Field Declarations
+    private VBox bottomBorderScene;
+    private HBox bottomSubSceneA;
+    private HBox bottomSubSceneB;
+    private HBox bottomSubSceneC;
+    private HBox bottomSubSceneD;
+
+    //Top Border Scene Field Declaration
+    private HBox topBorderScene;
+
+    //Center Border Scene Field Declarations
+    private HBox centerBorderScene;
+    private ListView<CheckBox> centerSubSceneA;
+    private VBox centerSubSceneB;
+    private HBox centerSubSceneC;
+    private HBox centerSubSceneD;
+
+    //Label Field Declarations
+    private Label topLabelA;
+    private Label topLabelB;
+    private Label destinationLabel;
+
+    //Region Field Declarations
+    private Region topRegion;
+    private Region centerRegion;
+    private Region bottomRegion;
+
+    //TextField  Field Declaration
+    private  TextField destinationPath;
+
+    //Image Field Declaration
+    private Image image;
+
+    //Controller Field Declaration
+    private Controller controller;
+
+    /**
+     * Constructor that initializes all the attributes(fields) of the FrontEndGUI class
+     */
+    public FrontEndGUI() {
+        mainScene = new BorderPane();
+        topBorderScene = new HBox();
+        bottomBorderScene = new VBox();
+        bottomSubSceneA = new HBox();
+        bottomSubSceneB = new HBox();
+        bottomSubSceneC = new HBox();
+        bottomSubSceneD = new HBox();
+        centerBorderScene = new HBox();
+        centerSubSceneA = new ListView<>();
+        centerSubSceneB = new VBox();
+        centerSubSceneC = new HBox();
+        centerSubSceneD = new HBox();
 
         //Label Initialization
-        Label topLabelA = new Label("    C++ UNIT \n TEST GENERATOR ");
-        Label topLabelB = new Label();
-        Label destinationLabel = new Label();
+        topLabelA = new Label("    C++ UNIT \n TEST GENERATOR ");
+        topLabelB = new Label();
+        destinationLabel = new Label();
 
         //Region Initialization
-        Region topRegion = new Region();
-        Region bottomRegion = new Region();
-        Region centerRegion = new Region();
+        topRegion = new Region();
+        centerRegion = new Region();
+        bottomRegion = new Region();
 
         //TextField Initialization
-        TextField destinationPath = new TextField();
+        destinationPath = new TextField();
 
-        //Button Initialization and Formatting
-        Button browseButton1 = new Button();         browseButton1.setText("Browse");
-        browseButton1.setPrefSize(70, 20);
-        Button browseButton2 = new Button();         browseButton2.setText("Browse");
-        browseButton2.setPrefSize(70, 20);
-        Button previewButton = new Button();        previewButton.setText("Preview");
-        previewButton.setPrefSize(75, 20);
-        Button generateButton = new Button();       generateButton.setText(("Generate"));
-        generateButton.setPrefSize(75, 20);
-        Button preferencesButton = new Button();    preferencesButton.setText("Preferences");
-        preferencesButton.setPrefSize(80, 20);
-        Button helpButton = new Button();           helpButton.setText("Help");
-        helpButton.setPrefSize(75, 20);
+        //Button Initialization
+        browseButton1 = new Button();
+        browseButton2 = new Button();
+        previewButton = new Button();
+        generateButton = new Button();
+        preferencesButton = new Button();
+        helpButton = new Button();
+        refreshButton = new Button();
 
-        //Axolotyl Image
-        Image image = new Image("CuteLizard.PNG",100, 100,
+        //Axolotyl Image Initialization and Formatting
+        image = new Image("CuteLizard.PNG",100, 100,
                 false, false);
 
-        //ShadowEffect for Software Name and Axolotyl Image in Top Layer
+        //Controller Initialization (Singleton)
+        controller = Controller.getInstance();
+    }
+
+    /**
+     * Builds and formats the entire front end GUI (Graphical User Interface) that interacts with the user
+     * @param primaryStage Main window of program
+     */
+    public void mainWindowDisplay(Stage primaryStage) throws FileNotFoundException {
+        //Button Formatting
+        browseButton1.setText("Browse");
+        browseButton1.setPrefSize(70, 20);
+        browseButton2.setText("Browse");
+        browseButton2.setPrefSize(70, 20);
+        helpButton.setText("Help");
+        helpButton.setPrefSize(75, 20);
+        previewButton.setText("Preview");
+        previewButton.setPrefSize(75, 20);
+        preferencesButton.setText("Preferences");
+        preferencesButton.setPrefSize(80, 20);
+        generateButton.setText("Generate");
+        generateButton.setPrefSize(75, 20);
+        refreshButton.setText("Refresh");
+        refreshButton.setPrefSize(70, 20);
+
+        //ShadowEffect for Program Name and Axolotyl Image in Top Layer
         DropShadow shadow = new DropShadow();
         shadow.setOffsetX(3.0);
         shadow.setOffsetY(3.0);
@@ -107,6 +174,7 @@ public class FrontEndGUI {
         destinationLabel.setFont(Font.font("Courier New"));
         destinationLabel.setTextFill(Color.web("#DED8D8"));
         destinationPath.setPrefWidth(300);
+        destinationPath.setEditable(false);
         bottomSubSceneD.getChildren().addAll(destinationLabel, destinationPath, browseButton2);
         bottomSubSceneD.setSpacing(25);
         bottomSubSceneD.setPadding(new Insets(0, 12, 0, 12));
@@ -117,8 +185,13 @@ public class FrontEndGUI {
         //Populate and Format Center Region of Main Layout
         centerBorderScene.setPadding(new Insets(0, 25, 15, 20));
         centerSubSceneA.setMinWidth(430);
-        centerSubSceneA = FilePathCheckBoxList(0);
-        centerSubSceneB.getChildren().add(browseButton1);
+        centerSubSceneC.getChildren().add(browseButton1);
+        centerSubSceneC.setAlignment((Pos.CENTER));
+        centerSubSceneC.setPadding(new Insets(0, 0, 10, 0));
+        centerSubSceneD.getChildren().add(refreshButton);
+        centerSubSceneD.setAlignment((Pos.CENTER));
+        centerSubSceneD.setPadding(new Insets(10, 0, 0, 0));
+        centerSubSceneB.getChildren().addAll(centerSubSceneC, centerSubSceneD);
         centerSubSceneB.setAlignment(Pos.TOP_CENTER);
         centerSubSceneB.setPadding(new Insets(0, 20, 15, 40));
         HBox.setHgrow(centerSubSceneA, Priority.ALWAYS);
@@ -130,32 +203,37 @@ public class FrontEndGUI {
         primaryStage.setTitle("AxolotylSWENG:        Powered by Rowan University");
         primaryStage.setScene(new Scene(mainScene, 600, 390));
         primaryStage.show();
+
+        //Internal Method call to handle all action listeners
+        handleButtons();
     }
 
     /**
-     * Private Static Method that will populate and list the file(s) selected in the file or directory selected.
-     * in an int value determining the # of files selected dictating whether its a single file selected or an
-     * entire directory (CURRENTLY USED FOR TESTING PURPOSES)
-     * @param numberOfFiles
-     * @return fileList
+     * Private Internal Method that handles all Action Listeners for clicks on all buttons on Front End GIU (Graphical
+     * User Interface)
      */
-    private static ListView<CheckBox> FilePathCheckBoxList(int numberOfFiles) {
-        ListView<CheckBox> fileList = new ListView<CheckBox>();
-        ObservableList<CheckBox> items = FXCollections.observableArrayList();
-        CheckBox box;
-        if(numberOfFiles == 0) { //Testing Code for Initial GUI presentation
-            for(int i = 0; i < 5; i++) {
-                box = new CheckBox("C:\\FILEPATH" + (i + 1));
-                box.setSelected(true);
-                items.add(box);
-            }
-            fileList.setItems(items);
-        }
-        else {
+    private void handleButtons() {
+        /*
+        Action Listener for the 'Browse' Button that makes a static method call to sourceBrowse() in the Controller
+        class that populates CenterSubSceneA with .cpp files selected by the user.  Each file is given a checkbox
+        that also displays the file's specific filepath.
+         */
+        browseButton1.setOnAction(event -> {
+            centerSubSceneA = controller.sourceBrowse(centerSubSceneA);
+            centerSubSceneA.setPadding(new Insets(0, 0, 0, 10));
+            centerSubSceneA.setPrefWidth(430);
+        });
 
-        }
-        fileList.setPadding(new Insets(0, 25, 15, 20));
-        fileList.setMinWidth(430);
-        return fileList;
+        /*
+        Action Listener for the 'Browse' button that makes a static method call to destinationBrowse() in the Controller
+        class that populates the destinationPath with the specific filepath of the directory/folder selected by the user
+        for output.
+         */
+        browseButton2.setOnAction(event -> {
+            File destination = controller.destinationBrowse();
+            if(destination != null) {
+                destinationPath.setText(destination.getAbsolutePath());
+            }
+        } );
     }
 }
