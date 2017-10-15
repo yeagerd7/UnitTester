@@ -36,6 +36,7 @@ public class FrontEndGUI {
     private HBox bottomSubSceneB;
     private HBox bottomSubSceneC;
     private HBox bottomSubSceneD;
+    private HBox bottomSubSceneF;
 
     //Top Border Scene Field Declaration
     private HBox topBorderScene;
@@ -77,6 +78,7 @@ public class FrontEndGUI {
         bottomSubSceneB = new HBox();
         bottomSubSceneC = new HBox();
         bottomSubSceneD = new HBox();
+        bottomSubSceneF = new HBox();
         centerBorderScene = new HBox();
         centerSubSceneA = new ListView<>();
         centerSubSceneB = new VBox();
@@ -168,23 +170,27 @@ public class FrontEndGUI {
         bottomSubSceneB.getChildren().addAll(generateButton, preferencesButton, previewButton);
         bottomSubSceneC.setPadding(new Insets(0, 12, 0, 12));
         bottomSubSceneC.setSpacing(10);
-        bottomSubSceneC.getChildren().addAll(bottomSubSceneA, bottomRegion , bottomSubSceneB);
+        bottomSubSceneC.getChildren().addAll(bottomSubSceneA, bottomRegion, bottomSubSceneB);
         HBox.setHgrow(bottomRegion, Priority.ALWAYS);
         destinationLabel.setText("Destination: ");
         destinationLabel.setFont(Font.font("Courier New"));
         destinationLabel.setTextFill(Color.web("#DED8D8"));
-        destinationPath.setPrefWidth(300);
         destinationPath.setEditable(false);
-        bottomSubSceneD.getChildren().addAll(destinationLabel, destinationPath, browseButton2);
+        HBox.setHgrow(destinationPath, Priority.ALWAYS);
+        bottomSubSceneF.getChildren().add(browseButton2);
+        bottomSubSceneF.setPadding(new Insets(0, 33, 0,13));
+        bottomSubSceneF.setAlignment(Pos.CENTER);
+        bottomSubSceneD.getChildren().addAll(destinationLabel, destinationPath, bottomSubSceneF);
         bottomSubSceneD.setSpacing(25);
-        bottomSubSceneD.setPadding(new Insets(0, 12, 0, 12));
+        bottomSubSceneD.setPadding(new Insets(0, 12, 0, 20));
         bottomSubSceneD.setAlignment(Pos.CENTER);
         bottomBorderScene.setStyle("-fx-background-color: #373747;");
         bottomBorderScene.getChildren().addAll(bottomSubSceneD, bottomSubSceneC);
 
         //Populate and Format Center Region of Main Layout
         centerBorderScene.setPadding(new Insets(0, 25, 15, 20));
-        centerSubSceneA.setMinWidth(430);
+        centerSubSceneA.setPrefWidth(460);
+        centerSubSceneA.setMinWidth(460);
         centerSubSceneC.getChildren().add(browseButton1);
         centerSubSceneC.setAlignment((Pos.CENTER));
         centerSubSceneC.setPadding(new Insets(0, 0, 10, 0));
@@ -201,7 +207,7 @@ public class FrontEndGUI {
         //Makes window visible
         primaryStage.getIcons().add(new Image("CuteLizard.PNG"));
         primaryStage.setTitle("AxolotylSWENG:        Powered by Rowan University");
-        primaryStage.setScene(new Scene(mainScene, 600, 390));
+        primaryStage.setScene(new Scene(mainScene, 630, 390));
         primaryStage.show();
 
         //Internal Method call to handle all action listeners
