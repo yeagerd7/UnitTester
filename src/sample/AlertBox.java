@@ -13,12 +13,15 @@ import javafx.scene.control.*;
 /**
  * Builds an GUI acting as an Alert Box that doesn't allow user interaction on other windows until
  * user acknowledges the message by clicking 'Ok'
- * @param title
- * @param message
- * @author David Yeager
+ * @author Axolotl Development Team
  */
 public class AlertBox {
 
+    /**
+     * Constructor for the AlertBox class
+     * @param title The title of the alert
+     * @param message The message for the body of the alert
+     */
     public static void simpleDisplay(String title, String message) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL); //Doesn't allow user interaction with other windows

@@ -14,7 +14,7 @@ import javafx.stage.*;
 
 /**
  * Class represents the complete front-end GUI(Graphical User Interface) for the C++ Unit Generator.
- * @author David Yeager
+ * @author Axolotl Development Team
  */
 public class FrontEndGUI {
 
