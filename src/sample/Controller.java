@@ -10,7 +10,7 @@ import javafx.stage.FileChooser;
 /**
  * Controller class controls the GUI view and responds to inputs. Communicates with and organizes all parts.
  * Will utilize the singleton principle.
- * @author David Yeager
+ * @author Axolotl Development Team
  */
 public class Controller {
     //Source File List Field Declaration
