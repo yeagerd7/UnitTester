@@ -175,7 +175,7 @@ public class FrontEndGUI {
         destinationLabel.setText("Destination: ");
         destinationLabel.setFont(Font.font("Courier New"));
         destinationLabel.setTextFill(Color.web("#DED8D8"));
-        destinationPath.setEditable(false);
+        //destinationPath.setEditable(false);
         HBox.setHgrow(destinationPath, Priority.ALWAYS);
         bottomSubSceneF.getChildren().add(browseButton2);
         bottomSubSceneF.setPadding(new Insets(0, 33, 0,13));
@@ -220,9 +220,9 @@ public class FrontEndGUI {
      */
     private void handleButtons() {
         /*
-        Action Listener for the 'Browse' Button that makes a static method call to sourceBrowse() in the Controller
-        class that populates CenterSubSceneA with .cpp files selected by the user.  Each file is given a checkbox
-        that also displays the file's specific filepath.
+        Action Listener for the 'Browse' Button that makes a call to sourceBrowse() in the Controller class that
+        populates CenterSubSceneA with .cpp files selected by the user.  Each file is given a checkbox that also
+        displays the file's specific filepath.
          */
         browseButton1.setOnAction(event -> {
             centerSubSceneA = controller.sourceBrowse(centerSubSceneA);
@@ -231,7 +231,7 @@ public class FrontEndGUI {
         });
 
         /*
-        Action Listener for the 'Browse' button that makes a static method call to destinationBrowse() in the Controller
+        Action Listener for the 'Browse' button that makes a external method call to destinationBrowse() in the Controller
         class that populates the destinationPath with the specific filepath of the directory/folder selected by the user
         for output.
          */
@@ -241,5 +241,21 @@ public class FrontEndGUI {
                 destinationPath.setText(destination.getAbsolutePath());
             }
         } );
+        /*
+        Action Listener for the 'Refresh' button that makes a external method call to refreshSourceFiles in the
+        Controller class that will remove the files deselected by the user as well as updating the Controller's
+        sourceFile set instance variable
+         */
+        refreshButton.setOnAction(event -> {
+            if(centerSubSceneA.getItems().isEmpty()) {
+                //TEST
+                AlertBox.simpleDisplay("Alert", "Nothing to refresh!");
+            }
+            else {
+                centerSubSceneA = controller.refreshSourceFiles(centerSubSceneA);
+                centerSubSceneA.setPadding(new Insets(0, 0, 0, 10));
+                centerSubSceneA.setPrefWidth(430);
+            }
+        });
     }
 }

@@ -2,7 +2,7 @@ package sample;
 
 //Import Statements
 import java.io.*;
-import java.util.List;
+import java.util.*;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -14,7 +14,7 @@ import javafx.stage.FileChooser;
  */
 public class Controller {
     //Source File List Field Declaration
-    private List<File> sourceFiles;
+    private HashSet<File> sourceFiles;
 
     //Destination File Field Declaration
     private File destinationFile;
@@ -23,10 +23,12 @@ public class Controller {
     private static Controller singletonInstance = new Controller();
 
     /**
-     * Empty Constructor that generates an "Empty" object that initializes its fields upon user manipulation in the
-     * FrontEndGUI class
+     * Private Singleton Constructor that generates an Controller object that initializes most of its fields upon
+     * user manipulation in the FrontEndGUI class
      */
-    private Controller(){}
+    private Controller(){
+        sourceFiles = new HashSet<>();
+    }
 
     /**
      * Static Singleton Method that returns a singletonInstance(one and only instance) of this class
@@ -40,7 +42,8 @@ public class Controller {
      * Accessor method for 'sourceFiles' attribute that returns said attribute
      * @return sourceFiles
      */
-    public List<File> getSourceFiles() {
+    public HashSet<File> getSourceFiles() {
+
         return sourceFiles;
     }
 
@@ -49,7 +52,7 @@ public class Controller {
      * parameter
      * @param newSourceFiles new source file list
      */
-    public void setSourceFiles(List<File> newSourceFiles) {
+    public void setSourceFiles(HashSet<File> newSourceFiles) {
         sourceFiles = newSourceFiles;
     }
 
@@ -71,7 +74,8 @@ public class Controller {
     }
     /**
      * sourceBrowse is called up following a button click on the front end GUI (graphical user interface) and allows
-     * user to search their local machine for .cpp files
+     * user to search their local machine for .cpp files and does not in any point allow duplicate file names in the GUI
+     * checkbox list
      * @param fileListGUI existing ListView<CheckBox> object from FrontEndGUI
      * @return fileListGUI populated and displaying .cpp files selected by the user
      */
@@ -80,22 +84,41 @@ public class Controller {
         window.setInitialDirectory(new File("C:\\"));
         window.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter(".cpp Files", "*.cpp"));
-        sourceFiles = window.showOpenMultipleDialog(null);
-        if(sourceFiles != null) {
-            int size = sourceFiles.size();
+        List<File> tempSourceFiles = window.showOpenMultipleDialog(null);
+        if (tempSourceFiles != null) {
+            int size = tempSourceFiles.size();
+            int index = 0;
             CheckBox box;
-            for(int i = 0; i < size; i++) {
-                box = new CheckBox(sourceFiles.get(i).getAbsolutePath());
-                box.setSelected(true);
-                fileListGUI.getItems().add(box);
+            while (index < size) {
+                File fileToAdd = tempSourceFiles.get(index);
+                boolean duplicate = false;
+                String fileNameToCompare = "";
+                Iterator<File> itty = sourceFiles.iterator();
+                while (itty.hasNext() && !duplicate) {
+                    fileNameToCompare = itty.next().getName();
+                    if (fileNameToCompare.equalsIgnoreCase(fileToAdd.getName())) {
+                        duplicate = true;
+                    }
+                }
+                if (duplicate == false) {
+                    sourceFiles.add(fileToAdd);
+                    box = new CheckBox(tempSourceFiles.get(index).getAbsolutePath());
+                    box.setSelected(true);
+                    fileListGUI.getItems().add(box);
+                } else {
+                    AlertBox.simpleDisplay("Error: Duplicate File Name", "File: " + fileNameToCompare
+                        + " appears to be a duplicate.  File will not be processed.");
+                }
+                index++;
             }
         }
+        printSourceFiles();
         return fileListGUI;
     }
 
     /**
      * destinationBrowse is called up following a button click on the front end GUI (graphical user interface) and
-     * allows user to search their local machine for .cpp files
+     * allows user to specify their desired destination folder for the output
      * @return selectedFile
      */
     public File destinationBrowse() {
@@ -103,5 +126,46 @@ public class Controller {
         window.setInitialDirectory(new File("C:\\"));
         destinationFile = window.showDialog(null);
         return destinationFile;
+    }
+
+    /**
+     * refreshSourceBrowse is called up following a button click on the front end GUI (graphical user interface) and a
+     * @param fileListGUI
+     * @return
+     */
+    public ListView<CheckBox> refreshSourceFiles(ListView<CheckBox> fileListGUI) {
+        int index = 0;
+        int size = fileListGUI.getItems().size();
+        CheckBox box;
+        while(index < size) {
+            box = fileListGUI.getItems().get(index);
+            if(!box.isSelected()) {
+                Iterator<File> itty = sourceFiles.iterator();
+                while (itty.hasNext()) {
+                    File file = itty.next();
+                    if (file.getAbsolutePath().equalsIgnoreCase(box.getText())) {
+                        itty.remove();
+                    }
+                }
+                fileListGUI.getItems().remove(index);
+                size = fileListGUI.getItems().size();
+                index--;
+            }
+            index++;
+        }
+        printSourceFiles();
+        return fileListGUI;
+    }
+
+    /**
+     * TEST METHOD
+     */
+    private void printSourceFiles() {
+        Iterator<File> itty1 = sourceFiles.iterator();
+        while(itty1.hasNext()) {
+            File f = itty1.next();
+            System.out.println(f.getAbsolutePath());
+        }
+        System.out.println();
     }
 }
