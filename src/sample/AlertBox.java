@@ -17,6 +17,12 @@ import javafx.scene.control.*;
  */
 public class AlertBox {
 
+    private Stage window;
+    private VBox layout;
+    private Label label;
+    private Button closeButton;
+
+
     /**
      * Constructor for the AlertBox class
      * @param title The title of the alert
@@ -32,6 +38,7 @@ public class AlertBox {
         label.setText(message); //Sets the label text desired via the parameter
 
         Button closeButton = new Button();
+        closeButton.setPrefSize(70, 20);
         closeButton.setText("Ok");
         closeButton.setOnAction(e -> window.close()); //Lambda pointing event handler to close window on click
 
@@ -39,7 +46,7 @@ public class AlertBox {
         layout.getChildren().addAll(label, closeButton);
         layout.setAlignment(Pos.CENTER);
 
-        window.setScene(new Scene(layout, 300, 100));
+        window.setScene(new Scene(layout, 450, 100));
         window.show();
     }
 }
