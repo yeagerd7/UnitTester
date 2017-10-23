@@ -22,7 +22,7 @@ public class Method {
      * @param returnType The return type of the method.
      * @param paramTypes The types of the method's parameters.
      */
-    public Method(String className, String returnType, String[] paramTypes) {
+    Method(String className, String returnType, String[] paramTypes) {
         this.className = className;
         this.returnType = returnType;
         // Copies the values of the array
