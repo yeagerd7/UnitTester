@@ -28,6 +28,7 @@ public class Controller {
      */
     private Controller(){
         sourceFiles = new HashSet<>();
+        Main.LOGGER.finest("Controller object created and initialized");
     }
 
     /**
