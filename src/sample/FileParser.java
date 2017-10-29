@@ -97,7 +97,7 @@ public class FileParser {
     @returns a list of the file's methods
      */
     private static Method[] makeMethods(File hFile) throws IOException{
-        String regex = "[A-Za-z]+[ \t]+[A-Za-z]+[ \t]*\\([ \t]*([A-Za-z]+[ \t]+[A-Za-z]+[ \t]*,?)*\\)[ \t]*;";
+        String regex = "[A-Za-z_\\-*&<>]+[ \t]+[A-Za-z_\\-*&<>]+[ \t]*\\([ \t]*([A-Za-z_\\-*&<>]+[ \t]+[A-Za-z_\\-*&<>]+[ \t]*,?)*\\)[ \t]*;";
         ArrayList<Method> methods = new ArrayList<>();
         String className = hFile.getName().substring(0, hFile.getName().indexOf('.'));
         String currentReturnType, currentMethodName;
@@ -116,7 +116,8 @@ public class FileParser {
                     currentParamTypes = line.split(",");
                     for(int i = 0; i < currentParamTypes.length; i++) {
                         currentParamTypes[i] = currentParamTypes[i].trim();
-                        currentParamTypes[i] = currentParamTypes[i].substring(0, currentParamTypes[i].indexOf(' ') == -1 ? currentParamTypes[i].indexOf('\t') : currentParamTypes[i].indexOf(' ')).trim();
+                        if(!currentParamTypes[i].isEmpty())
+                            currentParamTypes[i] = currentParamTypes[i].substring(0, currentParamTypes[i].indexOf(' ') == -1 ? currentParamTypes[i].indexOf('\t') : currentParamTypes[i].indexOf(' ')).trim();
                     }
 
                     methods.add(new Method(className, currentReturnType, currentMethodName, currentParamTypes));
