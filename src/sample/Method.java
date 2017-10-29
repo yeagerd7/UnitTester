@@ -10,9 +10,10 @@ public class Method {
     /*
      * className - The name of the class that this method belongs to.
      * returnType - The name of the data type that this method returns.
+     * methodName - The name of the method
      * paramTypes - The data types of the method's parameters.
      */
-    private String className, returnType;
+    private String className, returnType, methodName;
     private String[] paramTypes;
 
     /**
@@ -20,11 +21,13 @@ public class Method {
      *
      * @param className  The name of the class this method belongs to.
      * @param returnType The return type of the method.
+     * @param methodName The name of the method
      * @param paramTypes The types of the method's parameters.
      */
-    Method(String className, String returnType, String[] paramTypes) {
+    Method(String className, String returnType, String methodName, String[] paramTypes) {
         this.className = className;
         this.returnType = returnType;
+        this.methodName = methodName;
         // Copies the values of the array
         this.paramTypes = new String[paramTypes.length];
         System.arraycopy(paramTypes, 0, this.paramTypes, 0, this.paramTypes.length);
@@ -37,6 +40,8 @@ public class Method {
     public String getReturnType() {
         return returnType;
     }
+
+    public String getMethodName() { return methodName; }
 
     public String[] getParamTypes() {
         String[] copy = new String[paramTypes.length];
