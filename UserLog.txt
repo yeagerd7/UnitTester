@@ -1,0 +1,6 @@
+Oct 27, 2017 6:49:45 PM sample.Controller <init>
+FINEST: Controller object created and initialized
+Oct 27, 2017 6:49:46 PM sample.FrontEndGUI mainWindowDisplay
+INFO: Front End User Interface built and displayed
+Oct 27, 2017 6:49:46 PM sample.Main start
+INFO: Program begins to execute,   Logger Formatted

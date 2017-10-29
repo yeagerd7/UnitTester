@@ -210,6 +210,8 @@ public class FrontEndGUI {
         primaryStage.setScene(new Scene(mainScene, 630, 390));
         primaryStage.show();
 
+        Main.LOGGER.info("Front End User Interface built and displayed");
+
         //Internal Method call to handle all action listeners
         handleButtons();
     }

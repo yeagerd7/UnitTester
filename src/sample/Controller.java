@@ -28,6 +28,7 @@ public class Controller {
      */
     private Controller(){
         sourceFiles = new HashSet<>();
+        Main.LOGGER.finest("Controller object created and initialized");
     }
 
     /**
@@ -81,9 +82,8 @@ public class Controller {
      */
     public ListView<CheckBox> sourceBrowse(ListView<CheckBox> fileListGUI) {
         FileChooser window = new FileChooser();
-        window.setInitialDirectory(new File("C:\\"));
         window.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter(".cpp Files", "*.cpp"));
+                new FileChooser.ExtensionFilter(".cpp and .h Files", "*.cpp", "*.h"));
         List<File> tempSourceFiles = window.showOpenMultipleDialog(null);
         if (tempSourceFiles != null) {
             int size = tempSourceFiles.size();
@@ -123,7 +123,6 @@ public class Controller {
      */
     public File destinationBrowse() {
         DirectoryChooser window = new DirectoryChooser();
-        window.setInitialDirectory(new File("C:\\"));
         destinationFile = window.showDialog(null);
         return destinationFile;
     }
@@ -161,11 +160,16 @@ public class Controller {
      * TEST METHOD
      */
     private void printSourceFiles() {
-        Iterator<File> itty1 = sourceFiles.iterator();
-        while(itty1.hasNext()) {
-            File f = itty1.next();
-            System.out.println(f.getAbsolutePath());
+        if(!sourceFiles.isEmpty()) {
+            Iterator<File> itty1 = sourceFiles.iterator();
+            while (itty1.hasNext()) {
+                File f = itty1.next();
+                System.out.println(f.getAbsolutePath());
+            }
+            System.out.println();
         }
-        System.out.println();
+        else {
+            System.out.println("No files selected");
+        }
     }
 }
