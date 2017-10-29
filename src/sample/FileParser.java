@@ -40,6 +40,8 @@ public class FileParser {
             String line = br.readLine();
             // Reads the whole file for now
             while (line != null) {
+                if(line.contains("//"))
+                    line = line.substring(0, line.indexOf("//"));
                 line = line.trim();
                 if (line.startsWith("#include")) {
                     // Gets just the class name after "#includes"
@@ -97,7 +99,7 @@ public class FileParser {
     @returns a list of the file's methods
      */
     private static Method[] makeMethods(File hFile) throws IOException{
-        String regex = "[A-Za-z_\\-*&<>]+[ \t]+[A-Za-z_\\-*&<>]+[ \t]*\\([ \t]*([A-Za-z_\\-*&<>]+[ \t]+[A-Za-z_\\-*&<>]+[ \t]*,?)*\\)[ \t]*;";
+        String regex = "[A-Za-z_\\-*&<>]+[ \t]+[A-Za-z_\\-*&<>]+[ \t]*\\([ \t]*([A-Za-z_\\-*&<>]+[ \t]+[A-Za-z_\\-*&<>]+[ \t]*,?[ \t]*)*\\)[ \t]*;";
         ArrayList<Method> methods = new ArrayList<>();
         String className = hFile.getName().substring(0, hFile.getName().indexOf('.'));
         String currentReturnType, currentMethodName;
@@ -107,6 +109,13 @@ public class FileParser {
             String line = br.readLine();
             // Reads the whole file for now
             while (line != null) {
+                if(line.contains("//"))
+                    line = line.substring(0, line.indexOf("//"));
+                while(line.contains("(") && !line.contains(")")) {
+                    line += " " + br.readLine().trim();
+                    if (line.contains("//"))
+                        line = line.substring(0, line.indexOf("//"));
+                }
                 line = line.trim();
                 if(line.matches(regex)){
                     currentReturnType = line.substring(0, line.indexOf(' ') == -1 ? line.indexOf('\t') : line.indexOf(' ')).trim();
