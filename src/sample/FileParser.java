@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 public class FileParser {
 
-    public File[] parseFiles(String projectName, File[] projectFiles) throws IOException{
+    public static File[] parseFiles(String projectName, File[] projectFiles) throws IOException{
         ArrayList<Method> methods = new ArrayList<>();
         ArrayList<Dependence> dependences = new ArrayList<>();
         for(File cFile : projectFiles) {
@@ -30,7 +30,7 @@ public class FileParser {
      * @return The list of project files and c++ libraries that this class files depends on
      * @throws IOException If and I/O exception occurred when attempting to read the file
      */
-    private Dependence makeDependance(File cppFile) throws IOException {
+    private static Dependence makeDependance(File cppFile) throws IOException {
         // Gets the string of the file name without its file type signifier
         String className = cppFile.getName().substring(0, cppFile.getName().indexOf('.'));
         HashSet<String> dependencies = new HashSet<>();
@@ -96,7 +96,7 @@ public class FileParser {
     @param hFile the java.io.File to be searched through
     @returns a list of the file's methods
      */
-    private Method[] makeMethods(File hFile) throws IOException{
+    private static Method[] makeMethods(File hFile) throws IOException{
         String regex = "[A-Za-z]+[ \t]+[A-Za-z]+[ \t]*\\([ \t]*([A-Za-z]+[ \t]+[A-Za-z]+[ \t]*,?)*\\)[ \t]*;";
         ArrayList<Method> methods = new ArrayList<>();
         String className = hFile.getName().substring(0, hFile.getName().indexOf('.'));
@@ -135,7 +135,7 @@ public class FileParser {
         return methodsArray;
     }
 
-    private void consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(ArrayList<Method> methods, ArrayList<Dependence> dependences) {
+    private static void consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(ArrayList<Method> methods, ArrayList<Dependence> dependences) {
         methods.forEach(n -> System.out.println(n.toString()));
         dependences.forEach(n -> System.out.println(n.toString()));
     }
