@@ -2,6 +2,7 @@ package sample;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -14,8 +15,7 @@ public class FileParser {
             if(cFile.getName().endsWith(".cpp"))
                 dependences.add(makeDependance(cFile));
             else if(cFile.getName().endsWith(".h"))
-                for(Method cMethod : makeMethods(cFile))
-                methods.add(cMethod);
+                methods.addAll(Arrays.asList(makeMethods(cFile)));
             else
                 throw new IOException("An unexpected file has been passed.");
         }
