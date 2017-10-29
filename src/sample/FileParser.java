@@ -1,6 +1,7 @@
 package sample;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class FileParser {
@@ -75,4 +76,50 @@ public class FileParser {
 
         return new Dependence(className, depArray, libArray);
     }
+
+    /*
+    Reads a C++ file and finds each method declared in the file and its header files, turning them into
+    a Method object
+    @param cppFile the java.io.File to be searched through
+    @returns a list of the file's methods
+     */
+    private Method[] makeMethods(File cppFile, File hFile) throws IOException{
+        String regex = "[A-Za-z]+[ \t]+[A-Za-z]+[ \t]*\\([ \t]*([A-Za-z]+[ \t]+[A-Za-z]+[ \t]*,?)*\\)[ \t]*;";
+        ArrayList<Method> methods = new ArrayList<>();
+        String className = cppFile.getName().substring(0,cppFile.getName().indexOf('.'));
+        String currentReturnType, currentMethodName;
+        String[] currentParamTypes;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(cppFile))) {
+            String line = br.readLine();
+            // Reads the whole file for now
+            while (line != null) {
+                line = line.trim();
+                if(line.matches(regex)){
+                    currentReturnType = line.substring(0, line.indexOf(' ') == -1 ? line.indexOf('\t') : line.indexOf(' ')).trim();
+                    line = line.substring(line.indexOf(' ') == -1 ? line.indexOf('\t') : line.indexOf(' ')).trim();
+                    currentMethodName = line.substring(0, line.indexOf('(')).trim();
+                    line = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
+                    currentParamTypes = line.split(",");
+                    for(int i = 0; i < currentParamTypes.length; i++) {
+                        currentParamTypes[i] = currentParamTypes[i].trim();
+                        currentParamTypes[i] = currentParamTypes[i].substring(0, currentParamTypes[i].indexOf(' ') == -1 ? currentParamTypes[i].indexOf('\t') : currentParamTypes[i].indexOf(' ')).trim();
+                    }
+
+                    methods.add(new Method(className, currentReturnType, currentMethodName, currentParamTypes));
+                }
+                line = br.readLine();
+            }
+        } catch (FileNotFoundException e) {
+            // Log Error
+            throw e;
+        } catch (IOException e) {
+            // Log Error
+            throw e;
+        }
+
+        return (Method[])methods.toArray();
+    }
+
+
 }
