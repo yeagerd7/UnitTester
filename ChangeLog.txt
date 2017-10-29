@@ -22,3 +22,4 @@
 10-23 | Sprint 2 | Wrote dependency reading functionality (yet to be tested)
 10-27 | Sprint 2 | Product sponsors given access to ChangeLog.txt on GitHub
 10-27 | Sprint 2 | Event Logger (Backend) created and implemented
+10-29 | Sprint 2 | Finished method and dependency parsing methods
