@@ -48,4 +48,13 @@ public class Method {
         System.arraycopy(paramTypes, 0, copy, 0, copy.length);
         return copy;
     }
+
+    public String toString() {
+        String toReturn = "";
+        toReturn += className + ": " + returnType + " " + methodName + "(";
+        for (String cParam: paramTypes)
+            toReturn += cParam + ", ";
+        toReturn = toReturn.indexOf(',') == -1 ? toReturn + ")" : toReturn.substring(0, toReturn.lastIndexOf(',')) + ")";
+        return toReturn;
+    }
 }

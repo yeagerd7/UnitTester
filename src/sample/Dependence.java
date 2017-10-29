@@ -44,4 +44,15 @@ public class Dependence {
         System.arraycopy(libraries, 0, copy, 0, copy.length);
         return copy;
     }
+
+    public String toString() {
+        String toReturn = "";
+        toReturn += className + ": ";
+        for(String cLib : libraries)
+            toReturn += "<" + cLib + "> ";
+        for(String cDep : dependencies)
+            toReturn += "\"" + cDep + "\" ";
+        toReturn = toReturn.trim();
+        return toReturn;
+    }
 }

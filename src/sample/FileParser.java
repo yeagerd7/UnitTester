@@ -2,11 +2,24 @@ package sample;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 
 public class FileParser {
 
-    public File[] parseFiles(String projectName, File[] projectFiles) {
+    public File[] parseFiles(String projectName, File[] projectFiles) throws IOException{
+        ArrayList<Method> methods = new ArrayList<>();
+        ArrayList<Dependence> dependences = new ArrayList<>();
+        for(File cFile : projectFiles) {
+            if(cFile.getName().endsWith(".cpp"))
+                dependences.add(makeDependance(cFile));
+            else if(cFile.getName().endsWith(".h"))
+                for(Method cMethod : makeMethods(cFile))
+                methods.add(cMethod);
+            else
+                throw new IOException("An unexpected file has been passed.");
+        }
+        consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependences);
         return projectFiles;
     }
 
@@ -80,17 +93,17 @@ public class FileParser {
     /*
     Reads a C++ file and finds each method declared in the file and its header files, turning them into
     a Method object
-    @param cppFile the java.io.File to be searched through
+    @param hFile the java.io.File to be searched through
     @returns a list of the file's methods
      */
-    private Method[] makeMethods(File cppFile, File hFile) throws IOException{
+    private Method[] makeMethods(File hFile) throws IOException{
         String regex = "[A-Za-z]+[ \t]+[A-Za-z]+[ \t]*\\([ \t]*([A-Za-z]+[ \t]+[A-Za-z]+[ \t]*,?)*\\)[ \t]*;";
         ArrayList<Method> methods = new ArrayList<>();
-        String className = cppFile.getName().substring(0,cppFile.getName().indexOf('.'));
+        String className = hFile.getName().substring(0, hFile.getName().indexOf('.'));
         String currentReturnType, currentMethodName;
         String[] currentParamTypes;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(cppFile))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(hFile))) {
             String line = br.readLine();
             // Reads the whole file for now
             while (line != null) {
@@ -117,9 +130,13 @@ public class FileParser {
             // Log Error
             throw e;
         }
-
-        return (Method[])methods.toArray();
+        Method[] methodsArray = new Method[methods.size()];
+        methods.toArray(methodsArray);
+        return methodsArray;
     }
 
-
+    private void consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(ArrayList<Method> methods, ArrayList<Dependence> dependences) {
+        methods.forEach(n -> System.out.println(n.toString()));
+        dependences.forEach(n -> System.out.println(n.toString()));
+    }
 }
