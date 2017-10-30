@@ -2,27 +2,27 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2017-10-27T22:49:46.658250500Z</date>
-  <millis>1509144586658</millis>
-  <nanos>250500</nanos>
+  <date>2017-10-29T20:10:42.420504600Z</date>
+  <millis>1509307842420</millis>
+  <nanos>504600</nanos>
   <sequence>1</sequence>
   <logger>global</logger>
   <level>INFO</level>
   <class>sample.FrontEndGUI</class>
   <method>mainWindowDisplay</method>
-  <thread>16</thread>
+  <thread>17</thread>
   <message>Front End User Interface built and displayed</message>
 </record>
 <record>
-  <date>2017-10-27T22:49:46.679809100Z</date>
-  <millis>1509144586679</millis>
-  <nanos>809100</nanos>
+  <date>2017-10-29T20:10:42.432506100Z</date>
+  <millis>1509307842432</millis>
+  <nanos>506100</nanos>
   <sequence>2</sequence>
   <logger>global</logger>
   <level>INFO</level>
   <class>sample.Main</class>
   <method>start</method>
-  <thread>16</thread>
+  <thread>17</thread>
   <message>Program begins to execute,   Logger Formatted</message>
 </record>
 </log>

@@ -259,5 +259,18 @@ public class FrontEndGUI {
                 centerSubSceneA.setPrefWidth(430);
             }
         });
+        /*
+        Action Listener for the 'Generate' button. Does not fully generate the files yet, but ather tests the file
+        parsing functionality
+         */
+        generateButton.setOnAction(event -> {
+            File[] parsingFiles = new File[controller.getSourceFiles().size()];
+            controller.getSourceFiles().toArray(parsingFiles);
+            try {
+                FileParser.parseFiles("Test", parsingFiles);
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+        });
     }
 }
