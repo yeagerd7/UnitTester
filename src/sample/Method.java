@@ -49,12 +49,18 @@ public class Method {
         return copy;
     }
 
+    /**
+     * Returns in the format of className: returnType methodName(paramType1, paramType2,...)
+     *
+     * @return A string representation of this classes fields.
+     */
     public String toString() {
-        String toReturn = "";
-        toReturn += className + ": " + returnType + " " + methodName + "(";
+        StringBuilder toReturn = new StringBuilder();
+        toReturn.append(className).append(": ").append(returnType).append(" ").append(methodName).append("(");
         for (String cParam: paramTypes)
-            toReturn += cParam + ", ";
-        toReturn = toReturn.indexOf(',') == -1 ? toReturn + ")" : toReturn.substring(0, toReturn.lastIndexOf(',')) + ")";
-        return toReturn;
+            toReturn.append(cParam).append(", ");
+        toReturn = new StringBuilder(toReturn.toString().indexOf(',') == -1 ?
+                toReturn + ")" : toReturn.substring(0, toReturn.toString().lastIndexOf(',')) + ")");
+        return toReturn.toString();
     }
 }

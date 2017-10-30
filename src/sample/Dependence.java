@@ -45,14 +45,19 @@ public class Dependence {
         return copy;
     }
 
+    /**
+     * Returns in the format of className: <library1> <library2>... "dependence1" "dependence2"...
+     *
+     * @return A string representation of this classes fields.
+     */
     public String toString() {
-        String toReturn = "";
-        toReturn += className + ": ";
-        for(String cLib : libraries)
-            toReturn += "<" + cLib + "> ";
-        for(String cDep : dependencies)
-            toReturn += "\"" + cDep + "\" ";
-        toReturn = toReturn.trim();
-        return toReturn;
+        StringBuilder toReturn = new StringBuilder();
+        toReturn.append(className).append(": ");
+        for (String cLib : libraries)
+            toReturn.append("<").append(cLib).append("> ");
+        for (String cDep : dependencies)
+            toReturn.append("\"").append(cDep).append("\" ");
+        toReturn = new StringBuilder(toReturn.toString().trim());
+        return toReturn.toString();
     }
 }
