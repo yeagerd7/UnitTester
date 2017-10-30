@@ -2,9 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2017-10-30T11:55:49.071342600Z</date>
-  <millis>1509364549071</millis>
-  <nanos>342600</nanos>
+  <date>2017-10-30T12:24:09.980547300Z</date>
+  <millis>1509366249980</millis>
+  <nanos>547300</nanos>
   <sequence>1</sequence>
   <logger>global</logger>
   <level>INFO</level>
@@ -14,9 +14,9 @@
   <message>Front End User Interface built and displayed</message>
 </record>
 <record>
-  <date>2017-10-30T11:55:49.085339100Z</date>
-  <millis>1509364549085</millis>
-  <nanos>339100</nanos>
+  <date>2017-10-30T12:24:09.994046500Z</date>
+  <millis>1509366249994</millis>
+  <nanos>46500</nanos>
   <sequence>2</sequence>
   <logger>global</logger>
   <level>INFO</level>

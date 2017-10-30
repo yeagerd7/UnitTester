@@ -59,7 +59,8 @@ public class Method {
         toReturn.append(className).append(": ").append(returnType).append(" ").append(methodName).append("(");
         for (String cParam: paramTypes)
             toReturn.append(cParam).append(", ");
-        toReturn = new StringBuilder(toReturn.toString().indexOf(',') == -1 ? toReturn + ")" : toReturn.substring(0, toReturn.toString().lastIndexOf(',')) + ")");
+        toReturn = new StringBuilder(toReturn.toString().indexOf(',') == -1 ?
+                toReturn + ")" : toReturn.substring(0, toReturn.toString().lastIndexOf(',')) + ")");
         return toReturn.toString();
     }
 }
