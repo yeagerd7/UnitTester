@@ -65,10 +65,10 @@ public class FileParser {
                 line = br.readLine();
             }
         } catch (FileNotFoundException e) {
-            // Log Error
+            Main.LOGGER.severe("Somehow, a file that made its way into the FileParser was not found. As these files should have ultimately come from a brows functionality, this should not be possible.");
             throw e;
         } catch (IOException e) {
-            // Log Error
+            Main.LOGGER.warning("An IOException was caught processing: " + cppFile.getName() + ". This occurred while parsing for methods.");
             throw e;
         }
 
@@ -134,10 +134,10 @@ public class FileParser {
                 line = br.readLine();
             }
         } catch (FileNotFoundException e) {
-            // Log Error
+            Main.LOGGER.severe("Somehow, a file that made its way into the FileParser was not found. As these files should have ultimately come from a brows functionality, this should not be possible.");
             throw e;
         } catch (IOException e) {
-            // Log Error
+            Main.LOGGER.warning("An IOException was caught processing: " + hFile.getName() + ". This occurred while parsing for methods.");
             throw e;
         }
         Method[] methodsArray = new Method[methods.size()];
