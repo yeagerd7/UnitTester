@@ -1,0 +1,26 @@
+10-05 | Sprint 1 | Project repository created
+10-05 | Sprint 1 | Basic GUI example created
+10-05 | Sprint 1 | AlertBox class created
+10-08 | Sprint 1 | Example GUI replaced with simple GUI framework
+10-08 | Sprint 1 | API - Collaborative planning document created
+10-08 | Sprint 1 | API - Object template created
+10-14 | Sprint 1 | GUI class completely built
+10-14 | Sprint 1 | Controller class created
+10-14 | Sprint 1 | API - Core objects defined
+10-14 | Sprint 1 | Destination file path text field modified to resize properly
+10-15 | Sprint 1 | API - Core objects refined
+10-15 | Sprint 1 | API - Diagram created
+10-14 | Sprint 1 | GUI comments edited for clarity
+10-16 | Sprint 1 | API - Diagram refined and finished
+
+
+10-19 | Sprint 2 | GUI/Controller - Duplicate file name bug fixed
+10-19 | Sprint 2 | GUI - Destination path text field made editable
+10-19 | Sprint 2 | GUI/Controller - ‘Refresh’ button functionality added
+10-19 | Sprint 2 | Method class created
+10-21 | Sprint 2 | Dependence class created
+10-23 | Sprint 2 | Wrote dependency reading functionality (yet to be tested)
+10-27 | Sprint 2 | Product sponsors given access to ChangeLog.txt on GitHub
+10-27 | Sprint 2 | Event Logger (Backend) created and implemented
+10-29 | Sprint 2 | Finished method and dependency parsing methods
+10-30 | Sprint 2 | Fished commenting and formating the FileParser
