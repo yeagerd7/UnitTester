@@ -175,7 +175,7 @@ public class FrontEndGUI {
         destinationLabel.setText("Destination: ");
         destinationLabel.setFont(Font.font("Courier New"));
         destinationLabel.setTextFill(Color.web("#DED8D8"));
-        //destinationPath.setEditable(false);
+        destinationPath.setFocusTraversable(false);
         HBox.setHgrow(destinationPath, Priority.ALWAYS);
         bottomSubSceneF.getChildren().add(browseButton2);
         bottomSubSceneF.setPadding(new Insets(0, 33, 0,13));
@@ -191,6 +191,7 @@ public class FrontEndGUI {
         centerBorderScene.setPadding(new Insets(0, 25, 15, 20));
         centerSubSceneA.setPrefWidth(460);
         centerSubSceneA.setMinWidth(460);
+        centerSubSceneA.setFocusTraversable(false);
         centerSubSceneC.getChildren().add(browseButton1);
         centerSubSceneC.setAlignment((Pos.CENTER));
         centerSubSceneC.setPadding(new Insets(0, 0, 10, 0));
@@ -206,7 +207,7 @@ public class FrontEndGUI {
 
         //Makes window visible
         primaryStage.getIcons().add(new Image("CuteLizard.PNG"));
-        primaryStage.setTitle("AxolotylSWENG:        Powered by Rowan University");
+        primaryStage.setTitle("AxolotlSWENG:        Powered by Rowan University");
         primaryStage.setScene(new Scene(mainScene, 630, 390));
         primaryStage.show();
 
@@ -237,11 +238,7 @@ public class FrontEndGUI {
         makeTab.setText("Makefile");
         unitTab.setText("Unit Test File");
         testTab.setText("Test Fixture");
-        tabpane.getTabs().add(walkthroughTab);
-        tabpane.getTabs().add(buttonTab);
-        tabpane.getTabs().add(makeTab);
-        tabpane.getTabs().add(unitTab);
-        tabpane.getTabs().add(testTab);
+        tabpane.getTabs().addAll(walkthroughTab, buttonTab, makeTab, unitTab, testTab);
 
         /**
          * Code for the buttons tab
@@ -384,7 +381,7 @@ public class FrontEndGUI {
         testTab.setContent(testScroll);
 
         /**
-         * Code for program alkthrough tab
+         * Code for program walkthrough tab
          */
         ScrollPane walkScroll = new ScrollPane();
         ImageView gMenu = new ImageView();
@@ -451,7 +448,10 @@ public class FrontEndGUI {
         refreshButton.setOnAction(event -> {
             if(centerSubSceneA.getItems().isEmpty()) {
                 //TEST
-                AlertBox.simpleDisplay("Alert", "Nothing to refresh!");
+                AlertBox.simpleDisplay("Nothing to refresh... No source files selected!");
+            }
+            else if(controller.checkThatAllDesiredFilesAreSelected(centerSubSceneA)) {
+                AlertBox.simpleDisplay("Nothing to refresh... All files are selected and up to date!");
             }
             else {
                 centerSubSceneA = controller.refreshSourceFiles(centerSubSceneA);
@@ -461,22 +461,45 @@ public class FrontEndGUI {
         });
         /*
         Action Listener for the 'Generate' button. Does not fully generate the files yet, but other tests the file
-        parsing functionality
+        parsing functionality and error handling capabilities
          */
         generateButton.setOnAction(event -> {
-            File[] parsingFiles = new File[controller.getSourceFiles().size()];
-            controller.getSourceFiles().toArray(parsingFiles);
-            try {
-                FileParser.parseFiles("Test", parsingFiles);
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
+            File destination = new File(destinationPath.getText());
+            String errorMessage = "";
+            boolean error = false;
+            if(centerSubSceneA.getItems().isEmpty() && !controller.checkDestinationPath(destination)) {
+                error = true;
+                errorMessage = "No source files selected and the destination selected doesn't exist on this system!";
+            }
+            else if(centerSubSceneA.getItems().isEmpty()) {
+                error = true;
+                errorMessage = "No source files selected.  Search for source files by clicking the 'browse' button!";
+            }
+            else if(!controller.checkThatAllDesiredFilesAreSelected(centerSubSceneA)) {
+                error = true;
+                errorMessage = "Not all desired source files are selected for processing, did you forget to refresh?";
+            }
+            else if(!controller.checkDestinationPath(destination)) {
+                error = true;
+                errorMessage = "Destination selected doesn't exist on the system!  Double check the path you entered.";
+            }
+            if(!error) {
+                File[] parsingFiles = new File[controller.getSourceFiles().size()];
+                controller.getSourceFiles().toArray(parsingFiles);
+                try {
+                    FileParser.parseFiles("Test", parsingFiles);
+                } catch (IOException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+            else {
+                AlertBox.simpleDisplay(errorMessage);
             }
         });
         /*
         Action listener for the 'Help' button that will display the 'Help' menu for the user
          */
-        helpButton.setOnAction(event -> {
-            helpWindowDisplay();
-        });
+        helpButton.setOnAction(event -> helpWindowDisplay());
+
     }
 }

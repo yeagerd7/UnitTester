@@ -13,7 +13,6 @@
 10-14 | Sprint 1 | GUI comments edited for clarity
 10-16 | Sprint 1 | API - Diagram refined and finished
 
-
 10-19 | Sprint 2 | GUI/Controller - Duplicate file name bug fixed
 10-19 | Sprint 2 | GUI - Destination path text field made editable
 10-19 | Sprint 2 | GUI/Controller - ‘Refresh’ button functionality added
@@ -24,3 +23,8 @@
 10-27 | Sprint 2 | Event Logger (Backend) created and implemented
 10-29 | Sprint 2 | Finished method and dependency parsing methods
 10-30 | Sprint 2 | Fished commenting and formating the FileParser
+10-30 | Sprint 2 | Help button functionality implemented along w/ a help manual
+
+11-05 | Sprint 3 | Bad Path handled in the Destination text field/label
+11-05 | Sprint 3 | Duplicate source file error message handled and implemented properly
+11-05 | Sprint 3 | Alert Box formatting and more error capabilities added
