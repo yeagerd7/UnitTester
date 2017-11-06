@@ -88,6 +88,7 @@ public class Controller {
         if (tempSourceFiles != null) {
             int size = tempSourceFiles.size();
             int index = 0;
+            ListView<String> duplicates =  new ListView<>();
             CheckBox box;
             while (index < size) {
                 File fileToAdd = tempSourceFiles.get(index);
@@ -106,10 +107,12 @@ public class Controller {
                     box.setSelected(true);
                     fileListGUI.getItems().add(box);
                 } else {
-                    AlertBox.simpleDisplay("Error: Duplicate File Name", "File: " + fileNameToCompare
-                        + " appears to be a duplicate.  File will not be processed.");
+                    duplicates.getItems().add(fileNameToCompare);
                 }
                 index++;
+            }
+            if(!duplicates.getItems().isEmpty()) {
+                AlertBox.duplicateSourceFilesErrorDisplay(duplicates);
             }
         }
         printSourceFiles();
@@ -129,7 +132,7 @@ public class Controller {
 
     /**
      * refreshSourceBrowse is called up following a button click on the front end GUI (graphical user interface) and a
-     * @param fileListGUI
+     * @param fileListGUI CheckBox list of files to be refreshed
      * @return
      */
     public ListView<CheckBox> refreshSourceFiles(ListView<CheckBox> fileListGUI) {
@@ -154,6 +157,41 @@ public class Controller {
         }
         printSourceFiles();
         return fileListGUI;
+    }
+
+    /**
+     * Checks to see if all files in the Checkbox list are selected in order to process them.
+     * @param checkList  Checkbox list to be examined
+     * @return  Either true or false indicating
+     */
+    public boolean checkThatAllDesiredFilesAreSelected(ListView<CheckBox> checkList) {
+        boolean allSelected = true;
+        int index = 0;
+        int size = checkList.getItems().size();
+        CheckBox box;
+        while(allSelected && index < size) {
+            box = checkList.getItems().get(index);
+            if(!box.isSelected()) {
+                allSelected = false;
+            }
+           index++;
+        }
+        return allSelected;
+    }
+
+    /**
+     * Checks if the current File's path in the parameter exists on the system.
+     * @param destination incoming destination path to be checked
+     * @return true or false indicating if the file exists on the system.
+     */
+    public boolean checkDestinationPath(File destination) {
+        if(!destination.exists()) {
+            return false;
+        }
+        else {
+            destinationFile = destination;
+            return true;
+        }
     }
 
     /**
