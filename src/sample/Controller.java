@@ -180,6 +180,43 @@ public class Controller {
     }
 
     /**
+     * Selects all files in a ListView of Check Box objects and then returns the updated listview object.
+     * @param files
+     * @return Updated ListView<CheckBox> object
+     */
+    public ListView<CheckBox> selectAllSourceFiles(ListView<CheckBox> files) {
+        int index = 0;
+        int size = files.getItems().size();
+        CheckBox box;
+        while(index < size){
+            box = files.getItems().get(index);
+            if(!box.isSelected()) {
+                box.setSelected(true);
+            }
+            index++;
+        }
+        return files;
+    }
+
+    /**
+     * Deselects all files in a ListView of Check Box objects and then returns the updated listview object.
+     * @param files
+     * @return
+     */
+    public ListView<CheckBox> deselectAllSourceFiles(ListView<CheckBox> files) {
+        int index = 0;
+        int size = files.getItems().size();
+        CheckBox box;
+        while(index < size){
+            box = files.getItems().get(index);
+            if(box.isSelected()) {
+                box.setSelected(false);
+            }
+            index++;
+        }
+        return files;
+    }
+    /**
      * Checks if the current File's path in the parameter exists on the system.
      * @param destination incoming destination path to be checked
      * @return true or false indicating if the file exists on the system.

@@ -26,6 +26,8 @@ public class FrontEndGUI {
     private Button generateButton;
     private Button previewButton;
     private Button refreshButton;
+    private Button selectAllButton;
+    private Button deselectAllButton;
 
     //Main Layout Field Declaration
     private BorderPane mainScene;
@@ -47,6 +49,8 @@ public class FrontEndGUI {
     private VBox centerSubSceneB;
     private HBox centerSubSceneC;
     private HBox centerSubSceneD;
+    private HBox centerSubSceneE;
+    private HBox centerSubSceneF;
 
     //Label Field Declarations
     private Label topLabelA;
@@ -84,6 +88,8 @@ public class FrontEndGUI {
         centerSubSceneB = new VBox();
         centerSubSceneC = new HBox();
         centerSubSceneD = new HBox();
+        centerSubSceneE = new HBox();
+        centerSubSceneF = new HBox();
 
         //Label Initialization
         topLabelA = new Label("    C++ UNIT \n TEST GENERATOR ");
@@ -106,6 +112,8 @@ public class FrontEndGUI {
         preferencesButton = new Button();
         helpButton = new Button();
         refreshButton = new Button();
+        selectAllButton = new Button();
+        deselectAllButton = new Button();
 
         //Axolotyl Image Initialization and Formatting
         image = new Image("CuteLizard.PNG",100, 100,
@@ -122,19 +130,23 @@ public class FrontEndGUI {
     public void mainWindowDisplay(Stage primaryStage) throws FileNotFoundException {
         //Button Formatting
         browseButton1.setText("Browse");
-        browseButton1.setPrefSize(70, 20);
+        browseButton1.setPrefSize(78, 20);
         browseButton2.setText("Browse");
-        browseButton2.setPrefSize(70, 20);
+        browseButton2.setPrefSize(78, 20);
         helpButton.setText("Help");
-        helpButton.setPrefSize(75, 20);
+        helpButton.setPrefSize(78, 20);
         previewButton.setText("Preview");
-        previewButton.setPrefSize(75, 20);
+        previewButton.setPrefSize(78, 20);
         preferencesButton.setText("Preferences");
         preferencesButton.setPrefSize(80, 20);
         generateButton.setText("Generate");
-        generateButton.setPrefSize(75, 20);
+        generateButton.setPrefSize(78, 20);
         refreshButton.setText("Refresh");
-        refreshButton.setPrefSize(70, 20);
+        refreshButton.setPrefSize(78, 20);
+        selectAllButton.setText("Select All");
+        selectAllButton.setPrefSize(78, 20);
+        deselectAllButton.setText("Deselect All");
+        deselectAllButton.setPrefSize(78, 20);
 
         //ShadowEffect for Program Name and Axolotyl Image in Top Layer
         DropShadow shadow = new DropShadow();
@@ -148,8 +160,6 @@ public class FrontEndGUI {
         mainScene.setTop(topBorderScene);
         mainScene.setBottom(bottomBorderScene);
         mainScene.setCenter(centerBorderScene);
-        mainScene.setMinWidth(600);
-        mainScene.setMinHeight(360);
 
         //Populate & Format Top Region of Main Layout
         topBorderScene.setPadding(new Insets(15, 12, 15, 0));
@@ -178,10 +188,10 @@ public class FrontEndGUI {
         destinationPath.setFocusTraversable(false);
         HBox.setHgrow(destinationPath, Priority.ALWAYS);
         bottomSubSceneF.getChildren().add(browseButton2);
-        bottomSubSceneF.setPadding(new Insets(0, 33, 0,13));
+        bottomSubSceneF.setPadding(new Insets(0, 12, 0,40));
         bottomSubSceneF.setAlignment(Pos.CENTER);
         bottomSubSceneD.getChildren().addAll(destinationLabel, destinationPath, bottomSubSceneF);
-        bottomSubSceneD.setSpacing(25);
+        bottomSubSceneD.setSpacing(5);
         bottomSubSceneD.setPadding(new Insets(0, 12, 0, 20));
         bottomSubSceneD.setAlignment(Pos.CENTER);
         bottomBorderScene.setStyle("-fx-background-color: #373747;");
@@ -189,18 +199,24 @@ public class FrontEndGUI {
 
         //Populate and Format Center Region of Main Layout
         centerBorderScene.setPadding(new Insets(0, 25, 15, 20));
-        centerSubSceneA.setPrefWidth(460);
-        centerSubSceneA.setMinWidth(460);
+        centerSubSceneA.setPrefWidth(455);
+        centerSubSceneA.setMinWidth(455);
         centerSubSceneA.setFocusTraversable(false);
         centerSubSceneC.getChildren().add(browseButton1);
         centerSubSceneC.setAlignment((Pos.CENTER));
         centerSubSceneC.setPadding(new Insets(0, 0, 10, 0));
         centerSubSceneD.getChildren().add(refreshButton);
         centerSubSceneD.setAlignment((Pos.CENTER));
-        centerSubSceneD.setPadding(new Insets(10, 0, 0, 0));
-        centerSubSceneB.getChildren().addAll(centerSubSceneC, centerSubSceneD);
+        centerSubSceneD.setPadding(new Insets(15, 0, 10, 0));
+        centerSubSceneE.getChildren().add(selectAllButton);
+        centerSubSceneE.setAlignment((Pos.CENTER));
+        centerSubSceneE.setPadding(new Insets(0, 0, 10, 0));
+        centerSubSceneF.getChildren().add(deselectAllButton);
+        centerSubSceneF.setAlignment((Pos.CENTER));
+        centerSubSceneF.setPadding(new Insets(0, 0, 0, 0));
+        centerSubSceneB.getChildren().addAll(centerSubSceneC, centerSubSceneD, centerSubSceneE, centerSubSceneF);
         centerSubSceneB.setAlignment(Pos.TOP_CENTER);
-        centerSubSceneB.setPadding(new Insets(0, 20, 15, 40));
+        centerSubSceneB.setPadding(new Insets(0, 0, 15, 40));
         HBox.setHgrow(centerSubSceneA, Priority.ALWAYS);
         centerBorderScene.setStyle("-fx-background-color: #373747;");
         centerBorderScene.getChildren().addAll(centerSubSceneA, centerRegion, centerSubSceneB);
@@ -208,7 +224,9 @@ public class FrontEndGUI {
         //Makes window visible
         primaryStage.getIcons().add(new Image("CuteLizard.PNG"));
         primaryStage.setTitle("AxolotlSWENG:        Powered by Rowan University");
-        primaryStage.setScene(new Scene(mainScene, 630, 390));
+        primaryStage.setScene(new Scene(mainScene, 700, 415));
+        mainScene.setMinWidth(700);
+        mainScene.setMinHeight(415);
         primaryStage.show();
 
         Main.LOGGER.info("Front End User Interface built and displayed");
@@ -459,6 +477,40 @@ public class FrontEndGUI {
                 centerSubSceneA.setPrefWidth(430);
             }
         });
+        /*
+         Action Listener for the "Select All" button that will first check to see if the source files checklist on the
+        GUI is empty.  If it is empty, the user is prompted with an error message.  If its not empty, it makes another
+        check to see if all the source files are already selected, if they are not, it will make a call to the
+        controller to select all source files in the checklist on the GUI.
+        */
+        selectAllButton.setOnAction(event -> {
+            if(centerSubSceneA.getItems().isEmpty()) {
+                AlertBox.simpleDisplay("No source files to select!");
+            }
+            else {
+                if(!controller.checkThatAllDesiredFilesAreSelected(centerSubSceneA)) {
+                    centerSubSceneA = controller.selectAllSourceFiles(centerSubSceneA);
+                }
+                else {
+                    AlertBox.simpleDisplay("Nothing to select... all desired source files are up to date!");
+                }
+            }
+        });
+
+        /*
+        Action Listener for the "Deselect All" button that will first check to see if the source files checklist on the
+        GUI is empty.  If it is empty, the user is prompted with an error message.  If its not empty, it makes a call
+        to the controller to deselect all source files in the checklist.
+         */
+        deselectAllButton.setOnAction(event -> {
+            if(centerSubSceneA.getItems().isEmpty()) {
+                AlertBox.simpleDisplay("No source files to deselect!");
+            }
+            else {
+                    centerSubSceneA = controller.deselectAllSourceFiles(centerSubSceneA);
+            }
+        });
+
         /*
         Action Listener for the 'Generate' button. Does not fully generate the files yet, but other tests the file
         parsing functionality and error handling capabilities
