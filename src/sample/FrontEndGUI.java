@@ -68,6 +68,11 @@ public class FrontEndGUI {
     //Image Field Declaration
     private Image image;
 
+    //ToolTip Field Declaration
+    private Tooltip sourceBrowseTip;
+    private Tooltip destinationBrowseTip;
+    private Tooltip refreshTip;
+
     //Controller Field Declaration
     private Controller controller;
 
@@ -119,6 +124,11 @@ public class FrontEndGUI {
         image = new Image("CuteLizard.PNG",100, 100,
                 false, false);
 
+        //ToolTip Initialization/Formatting
+        sourceBrowseTip = new Tooltip();
+        destinationBrowseTip = new Tooltip();
+        refreshTip = new Tooltip();
+
         //Controller Initialization (Singleton)
         controller = Controller.getInstance();
     }
@@ -148,6 +158,14 @@ public class FrontEndGUI {
         deselectAllButton.setText("Deselect All");
         deselectAllButton.setPrefSize(78, 20);
 
+        //ToolTip insertion
+        sourceBrowseTip.setText("Search for .cpp \nand .h source files");
+        browseButton1.setTooltip(sourceBrowseTip);
+        destinationBrowseTip.setText("Search for or enter in \nyour destination directory");
+        browseButton2.setTooltip(destinationBrowseTip);
+        refreshTip.setText("Remove all \nunselected files");
+        refreshButton.setTooltip(refreshTip);
+
         //ShadowEffect for Program Name and Axolotyl Image in Top Layer
         DropShadow shadow = new DropShadow();
         shadow.setOffsetX(3.0);
@@ -166,7 +184,7 @@ public class FrontEndGUI {
         topLabelB.setGraphic(new ImageView(image));
         topLabelB.setPadding(new Insets(15, 12, 15, 0));
         topLabelA.setTextFill(Color.web("#DED8D8"));
-        topLabelA.setFont(Font.font("Courier New", FontWeight.BOLD, 48));
+        topLabelA.setFont(Font.font("Courier New", FontWeight.BOLD, 60));
         HBox.setHgrow(topRegion, Priority.ALWAYS);
         topBorderScene.setStyle("-fx-background-color: #373747;");
         topBorderScene.getChildren().addAll(topLabelA, topRegion, topLabelB);
@@ -182,13 +200,13 @@ public class FrontEndGUI {
         bottomSubSceneC.setSpacing(10);
         bottomSubSceneC.getChildren().addAll(bottomSubSceneA, bottomRegion, bottomSubSceneB);
         HBox.setHgrow(bottomRegion, Priority.ALWAYS);
-        destinationLabel.setText("Destination: ");
+        destinationLabel.setText("Destination:");
         destinationLabel.setFont(Font.font("Courier New"));
         destinationLabel.setTextFill(Color.web("#DED8D8"));
         destinationPath.setFocusTraversable(false);
         HBox.setHgrow(destinationPath, Priority.ALWAYS);
         bottomSubSceneF.getChildren().add(browseButton2);
-        bottomSubSceneF.setPadding(new Insets(0, 12, 0,40));
+        bottomSubSceneF.setPadding(new Insets(0, 12, 0,35));
         bottomSubSceneF.setAlignment(Pos.CENTER);
         bottomSubSceneD.getChildren().addAll(destinationLabel, destinationPath, bottomSubSceneF);
         bottomSubSceneD.setSpacing(5);
@@ -224,9 +242,9 @@ public class FrontEndGUI {
         //Makes window visible
         primaryStage.getIcons().add(new Image("CuteLizard.PNG"));
         primaryStage.setTitle("AxolotlSWENG:        Powered by Rowan University");
-        primaryStage.setScene(new Scene(mainScene, 700, 415));
+        primaryStage.setScene(new Scene(mainScene, 700, 430));
         mainScene.setMinWidth(700);
-        mainScene.setMinHeight(415);
+        mainScene.setMinHeight(430);
         primaryStage.show();
 
         Main.LOGGER.info("Front End User Interface built and displayed");
@@ -485,7 +503,8 @@ public class FrontEndGUI {
         */
         selectAllButton.setOnAction(event -> {
             if(centerSubSceneA.getItems().isEmpty()) {
-                AlertBox.simpleDisplay("No source files to select!");
+                AlertBox.simpleDisplay("\"No source files selected.  Search for source files by clicking " +
+                        "the 'browse' button!");
             }
             else {
                 if(!controller.checkThatAllDesiredFilesAreSelected(centerSubSceneA)) {
@@ -504,7 +523,8 @@ public class FrontEndGUI {
          */
         deselectAllButton.setOnAction(event -> {
             if(centerSubSceneA.getItems().isEmpty()) {
-                AlertBox.simpleDisplay("No source files to deselect!");
+                AlertBox.simpleDisplay("No source files selected.  Search for source files by clicking " +
+                        "the 'browse' button!");
             }
             else {
                     centerSubSceneA = controller.deselectAllSourceFiles(centerSubSceneA);
@@ -552,6 +572,5 @@ public class FrontEndGUI {
         Action listener for the 'Help' button that will display the 'Help' menu for the user
          */
         helpButton.setOnAction(event -> helpWindowDisplay());
-
     }
 }
