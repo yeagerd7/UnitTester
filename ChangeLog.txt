@@ -30,5 +30,5 @@
 11-05 | Sprint 3 | Alert Box formatting and more error capabilities added
 11-07 | Sprint 3 | 'Select All' button added to GUI along w/ functionality
 11-07 | Sprint 3 | 'Deselect All' button added to GUI along w/ functionality
-11-07 | Sprint 3 | Small cosmetic changes on FrontEndGUI
+11-07 | Sprint 3 | Tool Tips for each 'Browse' button added as well as small cosmetic changes on FrontEndGUI
 
