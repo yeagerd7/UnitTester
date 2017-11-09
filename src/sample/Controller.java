@@ -28,6 +28,7 @@ public class Controller {
      */
     private Controller(){
         sourceFiles = new HashSet<>();
+        Main.LOGGER.finest("Controller object created and initialized");
     }
 
     /**
@@ -81,13 +82,13 @@ public class Controller {
      */
     public ListView<CheckBox> sourceBrowse(ListView<CheckBox> fileListGUI) {
         FileChooser window = new FileChooser();
-        window.setInitialDirectory(new File("C:\\"));
         window.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter(".cpp Files", "*.cpp"));
+                new FileChooser.ExtensionFilter(".cpp and .h Files", "*.cpp", "*.h"));
         List<File> tempSourceFiles = window.showOpenMultipleDialog(null);
         if (tempSourceFiles != null) {
             int size = tempSourceFiles.size();
             int index = 0;
+            ListView<String> duplicates =  new ListView<>();
             CheckBox box;
             while (index < size) {
                 File fileToAdd = tempSourceFiles.get(index);
@@ -106,10 +107,12 @@ public class Controller {
                     box.setSelected(true);
                     fileListGUI.getItems().add(box);
                 } else {
-                    AlertBox.simpleDisplay("Error: Duplicate File Name", "File: " + fileNameToCompare
-                        + " appears to be a duplicate.  File will not be processed.");
+                    duplicates.getItems().add(fileNameToCompare);
                 }
                 index++;
+            }
+            if(!duplicates.getItems().isEmpty()) {
+                AlertBox.duplicateSourceFilesErrorDisplay(duplicates);
             }
         }
         printSourceFiles();
@@ -123,14 +126,13 @@ public class Controller {
      */
     public File destinationBrowse() {
         DirectoryChooser window = new DirectoryChooser();
-        window.setInitialDirectory(new File("C:\\"));
         destinationFile = window.showDialog(null);
         return destinationFile;
     }
 
     /**
      * refreshSourceBrowse is called up following a button click on the front end GUI (graphical user interface) and a
-     * @param fileListGUI
+     * @param fileListGUI CheckBox list of files to be refreshed
      * @return
      */
     public ListView<CheckBox> refreshSourceFiles(ListView<CheckBox> fileListGUI) {
@@ -158,14 +160,91 @@ public class Controller {
     }
 
     /**
+     * Checks to see if all files in the Checkbox list are selected in order to process them.
+     * @param checkList  Checkbox list to be examined
+     * @return  Either true or false indicating
+     */
+    public boolean checkThatAllDesiredFilesAreSelected(ListView<CheckBox> checkList) {
+        boolean allSelected = true;
+        int index = 0;
+        int size = checkList.getItems().size();
+        CheckBox box;
+        while(allSelected && index < size) {
+            box = checkList.getItems().get(index);
+            if(!box.isSelected()) {
+                allSelected = false;
+            }
+           index++;
+        }
+        return allSelected;
+    }
+
+    /**
+     * Selects all files in a ListView of Check Box objects and then returns the updated listview object.
+     * @param files
+     * @return Updated ListView<CheckBox> object
+     */
+    public ListView<CheckBox> selectAllSourceFiles(ListView<CheckBox> files) {
+        int index = 0;
+        int size = files.getItems().size();
+        CheckBox box;
+        while(index < size){
+            box = files.getItems().get(index);
+            if(!box.isSelected()) {
+                box.setSelected(true);
+            }
+            index++;
+        }
+        return files;
+    }
+
+    /**
+     * Deselects all files in a ListView of Check Box objects and then returns the updated listview object.
+     * @param files
+     * @return
+     */
+    public ListView<CheckBox> deselectAllSourceFiles(ListView<CheckBox> files) {
+        int index = 0;
+        int size = files.getItems().size();
+        CheckBox box;
+        while(index < size){
+            box = files.getItems().get(index);
+            if(box.isSelected()) {
+                box.setSelected(false);
+            }
+            index++;
+        }
+        return files;
+    }
+    /**
+     * Checks if the current File's path in the parameter exists on the system.
+     * @param destination incoming destination path to be checked
+     * @return true or false indicating if the file exists on the system.
+     */
+    public boolean checkDestinationPath(File destination) {
+        if(!destination.exists()) {
+            return false;
+        }
+        else {
+            destinationFile = destination;
+            return true;
+        }
+    }
+
+    /**
      * TEST METHOD
      */
     private void printSourceFiles() {
-        Iterator<File> itty1 = sourceFiles.iterator();
-        while(itty1.hasNext()) {
-            File f = itty1.next();
-            System.out.println(f.getAbsolutePath());
+        if(!sourceFiles.isEmpty()) {
+            Iterator<File> itty1 = sourceFiles.iterator();
+            while (itty1.hasNext()) {
+                File f = itty1.next();
+                System.out.println(f.getAbsolutePath());
+            }
+            System.out.println();
         }
-        System.out.println();
+        else {
+            System.out.println("No files selected");
+        }
     }
 }
