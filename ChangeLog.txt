@@ -32,4 +32,5 @@
 11-07 | Sprint 3 | 'Deselect All' button added to GUI along w/ functionality
 11-07 | Sprint 3 | Tool Tips for each 'Browse' button added as well as small cosmetic changes on FrontEndGUI
 11-10 | Sprint 3 | Formatted the FileParser class to improve communication between components and design pattern
+11-11 | Sprint 3 | More 'Generate' button functionality added, Generate window built and button functionality added
 

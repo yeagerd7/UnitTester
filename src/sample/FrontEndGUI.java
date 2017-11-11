@@ -17,6 +17,8 @@ import javafx.stage.*;
  * @author Axolotl Development Team
  */
 public class FrontEndGUI {
+    //Stage Field Declaration
+    private Stage window;
 
     //Button Field Declarations
     private Button browseButton1;
@@ -72,6 +74,9 @@ public class FrontEndGUI {
     private Tooltip sourceBrowseTip;
     private Tooltip destinationBrowseTip;
     private Tooltip refreshTip;
+
+    //Shadow Effect Field Declaration
+    private DropShadow shadow;
 
     //Controller Field Declaration
     private Controller controller;
@@ -129,6 +134,11 @@ public class FrontEndGUI {
         destinationBrowseTip = new Tooltip();
         refreshTip = new Tooltip();
 
+        shadow = new DropShadow();
+        shadow.setOffsetX(3.0);
+        shadow.setOffsetY(3.0);
+        shadow.setColor(Color.BLACK);
+
         //Controller Initialization (Singleton)
         controller = Controller.getInstance();
     }
@@ -138,6 +148,7 @@ public class FrontEndGUI {
      * @param primaryStage Main window of program
      */
     public void mainWindowDisplay(Stage primaryStage) throws FileNotFoundException {
+        window = primaryStage;
         //Button Formatting
         browseButton1.setText("Browse");
         browseButton1.setPrefSize(78, 20);
@@ -167,10 +178,6 @@ public class FrontEndGUI {
         refreshButton.setTooltip(refreshTip);
 
         //ShadowEffect for Program Name and Axolotyl Image in Top Layer
-        DropShadow shadow = new DropShadow();
-        shadow.setOffsetX(3.0);
-        shadow.setOffsetY(3.0);
-        shadow.setColor(Color.BLACK);
         topLabelA.setEffect(shadow);
         topLabelB.setEffect(shadow);
 
@@ -240,12 +247,12 @@ public class FrontEndGUI {
         centerBorderScene.getChildren().addAll(centerSubSceneA, centerRegion, centerSubSceneB);
 
         //Makes window visible
-        primaryStage.getIcons().add(new Image("CuteLizard.PNG"));
-        primaryStage.setTitle("AxolotlSWENG:        Powered by Rowan University");
-        primaryStage.setScene(new Scene(mainScene, 700, 430));
+        window.getIcons().add(new Image("CuteLizard.PNG"));
+        window.setTitle("AxolotlSWENG:        Powered by Rowan University");
+        window.setScene(new Scene(mainScene, 700, 430));
         mainScene.setMinWidth(700);
         mainScene.setMinHeight(430);
-        primaryStage.show();
+        window.show();
 
         Main.LOGGER.info("Front End User Interface built and displayed");
 
@@ -450,6 +457,106 @@ public class FrontEndGUI {
     }
 
     /**
+     * Builds the 'Generate' Window which alerts the user that the program has completed execution and that output
+     * files are in their selected directory.  The user is given the choice to either return to the main menu, or close
+     * the program, completely finishing program execution
+     */
+    private void buildGenerateWindow() {
+        //Generate window layout declaration and initialization
+        BorderPane generateLayout = new BorderPane();
+
+        //Generate window scene declarations and initializations
+        HBox generateTopScene = new HBox();
+        VBox generateTopSceneA = new VBox();
+        HBox generateTopSceneB = new HBox();
+        HBox generateTopSceneC = new HBox();
+        HBox generateCenterScene = new HBox();
+        HBox generateCenterSubSceneA = new HBox();
+        HBox generateCenterSubSceneB = new HBox();
+
+        //Generate window label declarations and initializations
+        Label topSceneLabelA = new Label();
+        Label topSceneLabelB = new Label();
+
+        //Generate window region declaration and initialization
+        Region topRegion = new Region();
+
+        //Generate window button declarations and initializations
+        Button closeButton = new Button();
+        Button mainMenuButton = new Button();
+        Button destinationOutput = new Button();
+
+        //Generate window image declaration and initialization
+        Image partyLizard = new Image("HappyLizard.JPG",200, 200,
+                false, false);
+
+        //Generate Window button formatting
+        mainMenuButton.setText("Main Menu");
+        mainMenuButton.setPrefSize(80, 20);
+        closeButton.setText("Close");
+        closeButton.setPrefSize(80, 20);
+        destinationOutput.setText("Destination");
+        destinationOutput.setPrefSize(80, 20);
+
+        //ShadowEffect for Program Name and Axolotyl Image in Top Layer
+        topSceneLabelB.setEffect(shadow);
+
+        //Top Scene formatting
+        topSceneLabelA.setText("      Success! \n\n Output files have \n been sent to your \n selected directory!");
+        topSceneLabelA.setTextFill(Color.web("#DED8D8"));
+        topSceneLabelA.setFont(Font.font("Courier New", FontWeight.BOLD, 20));
+        topSceneLabelA.setPadding(new Insets(25, 0, 15, 20));
+        topSceneLabelB.setGraphic(new ImageView(partyLizard));
+        topSceneLabelB.setPadding(new Insets(25, 20, 15, 20));
+        generateTopSceneC.getChildren().add(destinationOutput);
+        generateTopSceneC.setPadding(new Insets(15, 0, 15, 15));
+        generateTopSceneC.setAlignment(Pos.CENTER);
+        generateTopSceneB.getChildren().add(topSceneLabelB);
+        generateTopSceneB.setPadding(new Insets(0, 10, 0, 0));
+        generateTopSceneA.getChildren().addAll(topSceneLabelA, generateTopSceneC);
+        generateTopSceneA.setAlignment(Pos.CENTER);
+        generateTopSceneA.setPadding(new Insets(0, 0, 0, 20));
+        HBox.setHgrow(topRegion, Priority.ALWAYS);
+        generateTopScene.getChildren().addAll(generateTopSceneA, topRegion,generateTopSceneB);
+
+        //Center Scene formatting
+        generateCenterSubSceneA.getChildren().add(mainMenuButton);
+        generateCenterSubSceneA.setPadding(new Insets(15, 12, 15, 12));
+        generateCenterSubSceneB.getChildren().add(closeButton);
+        generateCenterSubSceneB.setPadding(new Insets(15, 12, 15, 0));
+        generateCenterScene.getChildren().addAll(generateCenterSubSceneA, generateCenterSubSceneB);
+        generateCenterScene.setAlignment(Pos.CENTER);
+        generateCenterScene.setStyle("-fx-background-color: #373747;");
+        generateTopScene.setStyle("-fx-background-color: #373747;");
+
+        //Generate window layout formatting
+        generateLayout.setTop(generateTopScene);
+        generateLayout.setCenter(generateCenterScene);
+
+        //Generate window formatting
+        Stage stage = new Stage();
+        stage.setTitle("AxolotlSWENG:        Powered by Rowan University");
+        stage.setScene(new Scene(generateLayout, 530, 300));
+        stage.setResizable(false);
+        stage.getIcons().add(new Image("CuteLizard.PNG"));
+        stage.show();
+        /*
+        Action Listener for the Generate window that closes this window and ends program execution
+         */
+        closeButton.setOnAction(event -> {
+            stage.close();
+            window.close();
+        });
+        /*
+        Action Listener for the Generate window that closes this window and returns the user back to the main menu
+         */
+        mainMenuButton.setOnAction(event -> {
+            stage.close();
+            window.show();
+        });
+    }
+
+    /**
      * Private Internal Method that handles all Action Listeners for clicks on all buttons on Front End GIU (Graphical
      * User Interface)
      */
@@ -561,6 +668,9 @@ public class FrontEndGUI {
                 try {
                     controller.getFileParser().parseFilesAndGenerateOutputFiles(parsingFiles,
                             controller.getDestinationFile());
+                    window.hide();
+                    buildGenerateWindow();
+
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }
