@@ -1,8 +1,11 @@
 package sample;
 
 //Import Statements
+import java.awt.*;
 import java.io.*;
 import java.util.*;
+import java.util.List;
+
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -22,14 +25,18 @@ public class Controller {
     //FileParser Field Declaration
     private FileParser fileParser;
 
+    private Desktop desktop;
+
     //Required Declaration for Singleton Pattern
     private static Controller singletonInstance = new Controller();
+
 
     /**
      * Private Singleton Constructor that generates an Controller object that initializes most of its fields upon
      * user manipulation in the FrontEndGUI class
      */
     private Controller(){
+        desktop = Desktop.getDesktop();
         sourceFiles = new HashSet<>();
         fileParser = new FileParser();
         Main.LOGGER.finest("Controller object created and initialized");
@@ -233,6 +240,14 @@ public class Controller {
         }
         else {
             return false;
+        }
+    }
+
+    public void openDestinationDirectory() {
+        try {
+            desktop.open(destinationFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
