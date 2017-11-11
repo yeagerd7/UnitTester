@@ -13,19 +13,24 @@ import java.util.HashSet;
  */
 public class FileParser {
 
+    private ArrayList<Method> methods;
+    private ArrayList<Dependence> dependencies;
+
+    public FileParser() {
+        methods = new ArrayList<>();
+        dependencies = new ArrayList<>();
+    }
+
     /**
      * Receives the files to be parsed and extracts the necessary information;
      * Currently prints that information to the console, but will ultimately pass the information to the file writers.
      *
-     * @param projectName  The finial desired project executable name.
      * @param projectFiles The array of files to be read.
      * @return The projectFiles array at the current time;
      * Will ultimately return the makefiles and the unit test and test fixture files.
      * @throws IOException Thrown if an IOException was experienced by BufferedReader reading a passed file.
      */
-    public static File[] parseFiles(String projectName, File[] projectFiles) throws IOException {
-        ArrayList<Method> methods = new ArrayList<>();
-        ArrayList<Dependence> dependencies = new ArrayList<>();
+    public void parseFilesAndGenerateOutputFiles(File[] projectFiles, File destination) throws IOException {
         for (File cFile : projectFiles) {
             if (cFile.getName().endsWith(".cpp"))
                 dependencies.add(makeDependence(cFile));
@@ -35,7 +40,7 @@ public class FileParser {
                 throw new IOException("An unexpected file has been passed.");
         }
         consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
-        return projectFiles;
+        writeMakefile(destination);
     }
 
     /**
@@ -214,6 +219,21 @@ public class FileParser {
         Method[] methodsArray = new Method[methods.size()];
         methods.toArray(methodsArray);
         return methodsArray;
+    }
+
+    private void writeMakefile(File destination) {
+        BufferedWriter writer = null;
+        try {
+            String test = "SOON TO BE MAKEFILE FAM";
+            File makefile = new File(destination.getAbsolutePath() + "/makefile.make");
+            FileWriter fw = new FileWriter(makefile);
+            writer = new BufferedWriter(fw);
+            writer.write(test);
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

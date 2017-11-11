@@ -559,7 +559,8 @@ public class FrontEndGUI {
                 File[] parsingFiles = new File[controller.getSourceFiles().size()];
                 controller.getSourceFiles().toArray(parsingFiles);
                 try {
-                    FileParser.parseFiles("Test", parsingFiles);
+                    controller.getFileParser().parseFilesAndGenerateOutputFiles(parsingFiles,
+                            controller.getDestinationFile());
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }

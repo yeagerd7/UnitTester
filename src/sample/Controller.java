@@ -19,6 +19,9 @@ public class Controller {
     //Destination File Field Declaration
     private File destinationFile;
 
+    //FileParser Field Declaration
+    private FileParser fileParser;
+
     //Required Declaration for Singleton Pattern
     private static Controller singletonInstance = new Controller();
 
@@ -28,6 +31,7 @@ public class Controller {
      */
     private Controller(){
         sourceFiles = new HashSet<>();
+        fileParser = new FileParser();
         Main.LOGGER.finest("Controller object created and initialized");
     }
 
@@ -44,7 +48,6 @@ public class Controller {
      * @return sourceFiles
      */
     public HashSet<File> getSourceFiles() {
-
         return sourceFiles;
     }
 
@@ -73,6 +76,8 @@ public class Controller {
     public void setDestinationFile(File newDestinationFile) {
         destinationFile = newDestinationFile;
     }
+
+    public FileParser getFileParser() { return fileParser; }
     /**
      * sourceBrowse is called up following a button click on the front end GUI (graphical user interface) and allows
      * user to search their local machine for .cpp files and does not in any point allow duplicate file names in the GUI
@@ -222,12 +227,12 @@ public class Controller {
      * @return true or false indicating if the file exists on the system.
      */
     public boolean checkDestinationPath(File destination) {
-        if(!destination.exists()) {
-            return false;
-        }
-        else {
+        if(destination.exists() && destination.isDirectory()) {
             destinationFile = destination;
             return true;
+        }
+        else {
+            return false;
         }
     }
 
