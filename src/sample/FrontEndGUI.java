@@ -554,6 +554,12 @@ public class FrontEndGUI {
             stage.close();
             window.show();
         });
+         /*
+        Action Listener for the Generate window that takes the user to their destination directory
+         */
+        destinationOutput.setOnAction(event -> {
+            controller.openDestinationDirectory();
+        });
     }
 
     /**
