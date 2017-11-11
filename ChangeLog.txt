@@ -22,7 +22,7 @@
 10-27 | Sprint 2 | Product sponsors given access to ChangeLog.txt on GitHub
 10-27 | Sprint 2 | Event Logger (Backend) created and implemented
 10-29 | Sprint 2 | Finished method and dependency parsing methods
-10-30 | Sprint 2 | Fished commenting and formating the FileParser
+10-30 | Sprint 2 | Finished commenting and formatting the FileParser
 10-30 | Sprint 2 | Help button functionality implemented along w/ a help manualform
 
 11-05 | Sprint 3 | Bad Path handled in the Destination text field/label
@@ -31,4 +31,5 @@
 11-07 | Sprint 3 | 'Select All' button added to GUI along w/ functionality
 11-07 | Sprint 3 | 'Deselect All' button added to GUI along w/ functionality
 11-07 | Sprint 3 | Tool Tips for each 'Browse' button added as well as small cosmetic changes on FrontEndGUI
+11-10 | Sprint 3 | Formatted the FileParser class to improve communication between components and design pattern
 
