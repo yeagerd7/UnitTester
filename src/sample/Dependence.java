@@ -5,7 +5,7 @@ package sample;
  *
  * @author Axolotl Development Team
  */
-public class Dependence {
+public class Dependence implements Comparable<Dependence>{
 
     /*
      * className - The name of the class this dependency list refers to.
@@ -59,5 +59,10 @@ public class Dependence {
             toReturn.append("\"").append(cDep).append("\" ");
         toReturn = new StringBuilder(toReturn.toString().trim());
         return toReturn.toString();
+    }
+
+    @Override
+    public int compareTo(Dependence o) {
+        return className.compareTo(o.getClassName());
     }
 }

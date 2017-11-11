@@ -14,11 +14,11 @@ import java.util.HashSet;
 public class FileParser {
 
     private ArrayList<Method> methods;
-    private ArrayList<Dependence> dependencies;
+    private HashSet<Dependence> dependencies;
 
     public FileParser() {
         methods = new ArrayList<>();
-        dependencies = new ArrayList<>();
+        dependencies = new HashSet<>();
     }
 
     /**
@@ -39,8 +39,11 @@ public class FileParser {
             else
                 throw new IOException("An unexpected file has been passed.");
         }
-        consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
-        writeMakefile(destination);
+        MakeFileWriter.setCompiler("gcc");
+        MakeFileWriter.setFlags("-c -Wall");
+        MakeFileWriter.writeMakefile(dependencies, "helloWorld");
+        //consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
+        //writeMakefile(destination);
     }
 
     /**
@@ -231,6 +234,7 @@ public class FileParser {
             writer.write(test);
             writer.close();
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -244,7 +248,7 @@ public class FileParser {
      * @param dependencies The collection of dependencies to be printed.
      */
     private static void consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(ArrayList<Method> methods,
-                                                                          ArrayList<Dependence> dependencies) {
+                                                                          HashSet<Dependence> dependencies) {
         methods.forEach(n -> System.out.println(n.toString()));
         dependencies.forEach(n -> System.out.println(n.toString()));
     }
