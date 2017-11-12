@@ -13,7 +13,7 @@ import java.util.HashSet;
  */
 public class MakeFileWriter {
 
-    private static String tempFile = "C:\\\\Users\\lynne9\\Downloads\\makefile";
+    private static String destFile = "C:\\\\Users\\lynne9\\Downloads\\makefile";
 
     //The compiler to be used- default is g++
     private static String compilerName = "g++";
@@ -21,14 +21,16 @@ public class MakeFileWriter {
     //Flags to compile with= default is that no flags are set
     private static String flags = "";
 
-    public MakeFileWriter(){
 
-    }
-
-
+    /*
+    Creates a makefile for a project given a list of the dependencies for the project and a name for the final executable.
+    @param depList a HashSet of depencencies for each file the executable is dependant on
+    @param exeName the desired name of the final executable
+    @returns a java.io.File form of the created Makefile
+     */
     public static File writeMakefile(HashSet<Dependence> depList, String exeName) throws IOException {
 
-        File temp = new File(tempFile);
+        File temp = new File(destFile + "\\makefile");
         temp.createNewFile();
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(temp)))) {
 
@@ -37,7 +39,7 @@ public class MakeFileWriter {
             StringBuilder objectList = new StringBuilder();
             depList.forEach(c -> objectList.append(" " + c.getClassName() + ".o"));
             pw.print(objectList.toString() + "\n\t$(CC) " + objectList.toString() + " -o " + exeName + "\n\n");
-            depList.forEach(c -> pw.println(c.getClassName() + ".o: " + c.getClassName() + ".cpp\n\t$(CC) $(FLAGS) " + c.getClassName() + ".cpp\n"));
+            depList.forEach(c -> pw.print(c.toMakeString()));
             pw.print("clean:\n\trm *.o " + exeName);
         } catch (IOException e) {
             System.out.println(e.getStackTrace());
@@ -45,14 +47,29 @@ public class MakeFileWriter {
         return temp;
     }
 
+    /*
+    Setter for the name of the compiler to be used when generating the makefile
+    @param newCompilerName The name of the compiler as it would appear in the command-line, ex. "gcc" or "g++"
+     */
     public static void setCompiler(String newCompilerName){
         compilerName = newCompilerName;
     }
 
+    /*
+    Setter for the list of flags for the compiler to be run with
+    @param newFlags The list of flags as they would appear in the command-line, ex. "-c" or "-o -Wall"
+     */
     public static void setFlags(String newFlags){
         flags = newFlags;
     }
 
+    /*
+    Setter for the destination of the final exectuable
+    @param newDestFile The full pathname of the final executable file
+     */
+    public static void setDestinationFilepath(String newDestFile){
+        destFile = newDestFile;
+    }
 
 
 }

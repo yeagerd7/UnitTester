@@ -39,9 +39,10 @@ public class FileParser {
             else
                 throw new IOException("An unexpected file has been passed.");
         }
-        MakeFileWriter.setCompiler("gcc");
-        MakeFileWriter.setFlags("-c -Wall");
-        MakeFileWriter.writeMakefile(dependencies, "helloWorld");
+        MakeFileWriter.setDestinationFilepath(destination.getAbsolutePath());
+        MakeFileWriter.setCompiler("g++");
+        MakeFileWriter.setFlags("-c");
+        MakeFileWriter.writeMakefile(dependencies, "executable");
         //consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
         //writeMakefile(destination);
     }

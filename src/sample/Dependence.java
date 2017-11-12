@@ -65,4 +65,16 @@ public class Dependence implements Comparable<Dependence>{
     public int compareTo(Dependence o) {
         return className.compareTo(o.getClassName());
     }
+
+    public String toMakeString() {
+        StringBuilder toReturn = new StringBuilder();
+        toReturn.append(className + ".o: " + className + ".cpp");
+        //for(int i = 0; i < dependencies.length; i++)
+            //toReturn.append(" " + dependencies[i] + ".h");
+        toReturn.append("\n\t$(CC) $(FLAGS) " + className + ".cpp");
+        //for(int i = 0; i < dependencies.length; i++)
+            //toReturn.append(" " + dependencies[i] + ".cpp");
+        toReturn.append("\n\n");
+        return toReturn.toString();
+    }
 }
