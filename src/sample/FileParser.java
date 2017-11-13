@@ -13,9 +13,14 @@ import java.util.HashSet;
  */
 public class FileParser {
 
+    //Methods Field Declaration
     private ArrayList<Method> methods;
+    //Dependencies Field Declaration
     private HashSet<Dependence> dependencies;
 
+    /**
+     * Constructor for the FileParser class that initializes methods and dependencies instance variables
+     */
     public FileParser() {
         methods = new ArrayList<>();
         dependencies = new HashSet<>();
@@ -39,12 +44,10 @@ public class FileParser {
             else
                 throw new IOException("An unexpected file has been passed.");
         }
-        MakeFileWriter.setDestinationFilepath(destination.getAbsolutePath());
         MakeFileWriter.setCompiler("g++");
         MakeFileWriter.setFlags("-c");
-        MakeFileWriter.writeMakefile(dependencies, "executable");
-        //consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
-        //writeMakefile(destination);
+        MakeFileWriter.writeMakefile(dependencies, "executable", destination);
+        consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
     }
 
     /**
@@ -223,22 +226,6 @@ public class FileParser {
         Method[] methodsArray = new Method[methods.size()];
         methods.toArray(methodsArray);
         return methodsArray;
-    }
-
-    private void writeMakefile(File destination) {
-        BufferedWriter writer = null;
-        try {
-            String test = "SOON TO BE MAKEFILE FAM";
-            File makefile = new File(destination.getAbsolutePath() + "/makefile.make");
-            FileWriter fw = new FileWriter(makefile);
-            writer = new BufferedWriter(fw);
-            writer.write(test);
-            writer.close();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
