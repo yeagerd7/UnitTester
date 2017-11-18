@@ -13,12 +13,17 @@ import java.util.HashSet;
  */
 public class FileParser {
 
+    //Methods Field Declaration
     private ArrayList<Method> methods;
-    private ArrayList<Dependence> dependencies;
+    //Dependencies Field Declaration
+    private HashSet<Dependence> dependencies;
 
+    /**
+     * Constructor for the FileParser class that initializes methods and dependencies instance variables
+     */
     public FileParser() {
         methods = new ArrayList<>();
-        dependencies = new ArrayList<>();
+        dependencies = new HashSet<>();
     }
 
     /**
@@ -39,8 +44,10 @@ public class FileParser {
             else
                 throw new IOException("An unexpected file has been passed.");
         }
+        MakeFileWriter.setCompiler("g++");
+        MakeFileWriter.setFlags("-c");
+        MakeFileWriter.writeMakefile(dependencies, "executable", destination);
         consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
-        writeMakefile(destination);
     }
 
     /**
@@ -221,21 +228,6 @@ public class FileParser {
         return methodsArray;
     }
 
-    private void writeMakefile(File destination) {
-        BufferedWriter writer = null;
-        try {
-            String test = "SOON TO BE MAKEFILE FAM";
-            File makefile = new File(destination.getAbsolutePath() + "/makefile.make");
-            FileWriter fw = new FileWriter(makefile);
-            writer = new BufferedWriter(fw);
-            writer.write(test);
-            writer.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * A temporary test method that prints all parsed information to the console;
      * Will ultimately be removed and its functionality will be covered by JUnit testing.
@@ -244,7 +236,7 @@ public class FileParser {
      * @param dependencies The collection of dependencies to be printed.
      */
     private static void consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(ArrayList<Method> methods,
-                                                                          ArrayList<Dependence> dependencies) {
+                                                                          HashSet<Dependence> dependencies) {
         methods.forEach(n -> System.out.println(n.toString()));
         dependencies.forEach(n -> System.out.println(n.toString()));
     }
