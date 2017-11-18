@@ -29,16 +29,28 @@ public class Dependence implements Comparable<Dependence>{
         System.arraycopy(libraries, 0, this.libraries, 0, this.libraries.length);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getClassName() {
         return className;
     }
 
+    /**
+     *
+     * @return
+     */
     public String[] getDependencies() {
         String[] copy = new String[dependencies.length];
         System.arraycopy(dependencies, 0, copy, 0, copy.length);
         return copy;
     }
 
+    /**
+     *
+     * @return
+     */
     public String[] getLibraries() {
         String[] copy = new String[libraries.length];
         System.arraycopy(libraries, 0, copy, 0, copy.length);
@@ -61,19 +73,28 @@ public class Dependence implements Comparable<Dependence>{
         return toReturn.toString();
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public int compareTo(Dependence o) {
         return className.compareTo(o.getClassName());
     }
 
+    /**
+     *
+     * @return
+     */
     public String toMakeString() {
         StringBuilder toReturn = new StringBuilder();
         toReturn.append(className + ".o: " + className + ".cpp");
-        //for(int i = 0; i < dependencies.length; i++)
-            //toReturn.append(" " + dependencies[i] + ".h");
+        for(int i = 0; i < dependencies.length; i++)
+            toReturn.append(" " + dependencies[i] + ".h");
         toReturn.append("\n\t$(CC) $(FLAGS) " + className + ".cpp");
-        //for(int i = 0; i < dependencies.length; i++)
-            //toReturn.append(" " + dependencies[i] + ".cpp");
+        for(int i = 0; i < dependencies.length; i++)
+            toReturn.append(" " + dependencies[i] + ".cpp");
         toReturn.append("\n\n");
         return toReturn.toString();
     }
