@@ -17,6 +17,8 @@ public class FileParser {
     private ArrayList<Method> methods;
     //Dependencies Field Declaration
     private HashSet<Dependence> dependencies;
+    //Parameters for a makefile to be generated with
+    private TestFixture fixture;
 
     /**
      * Constructor for the FileParser class that initializes methods and dependencies instance variables
@@ -24,6 +26,7 @@ public class FileParser {
     public FileParser() {
         methods = new ArrayList<>();
         dependencies = new HashSet<>();
+        fixture = new TestFixture();
     }
 
     /**
@@ -44,9 +47,9 @@ public class FileParser {
             //else
                 //throw new IOException("An unexpected file has been passed.");
         }
-        MakeFileWriter.setCompiler("g++");
-        MakeFileWriter.setFlags("-c");
-        MakeFileWriter.writeMakefile(dependencies, "executable", destination);
+        MakeFileWriter.setCompiler(fixture.getCompiler());
+        MakeFileWriter.setFlags(fixture.getFlags());
+        MakeFileWriter.writeMakefile(dependencies, fixture.getFinalExecutableName(), destination);
         consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
     }
 
@@ -264,5 +267,13 @@ public class FileParser {
                                                                           HashSet<Dependence> dependencies) {
         methods.forEach(n -> System.out.println(n.toString()));
         dependencies.forEach(n -> System.out.println(n.toString()));
+    }
+
+    /*
+    Setter for the test fixture to be used. Invoke when you don't want to be using the default parameters for a test.
+    @param fixture the TestFixture to be applied to test generation
+     */
+    public void setTestFixture(TestFixture fixture){
+        this.fixture = fixture;
     }
 }
