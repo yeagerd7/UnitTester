@@ -39,10 +39,10 @@ public class FileParser {
         for (File cFile : projectFiles) {
             if (cFile.getName().endsWith(".cpp"))
                 dependencies.add(makeDependence(cFile));
-            else if (cFile.getName().endsWith(".h"))
+            //else if (cFile.getName().endsWith(".h"))
                 methods.addAll(Arrays.asList(makeMethods(cFile)));
-            else
-                throw new IOException("An unexpected file has been passed.");
+            //else
+                //throw new IOException("An unexpected file has been passed.");
         }
         MakeFileWriter.setCompiler("g++");
         MakeFileWriter.setFlags("-c");
@@ -147,7 +147,7 @@ public class FileParser {
            ie Stri[]ng or a method name with illegal characters,
            these uncompilable parts are not expected in the passes files.
          */
-        String regex = "\\S+\\s+\\S+\\s*\\(\\s*(\\S+\\s+\\S+\\s*,?\\s*)*\\)\\s*;";
+        String regex = "\\S+\\s+\\S+\\s*\\(\\s*(\\S+\\s+\\S+\\s*,?\\s*)*\\).*";
         ArrayList<Method> methods = new ArrayList<>();
         // Grabs the class name by taking every part before the file's type
         String className = hFile.getName().substring(0, hFile.getName().indexOf('.'));
@@ -156,11 +156,13 @@ public class FileParser {
 
         try (BufferedReader br = new BufferedReader(new FileReader(hFile))) {
             String line = br.readLine();
+            String restOfLine = "";
             // Reads the whole file
             while (line != null) {
                 // Cuts any line comments out of the considered line
                 if (line.contains("//"))
                     line = line.substring(0, line.indexOf("//"));
+
                 /* Extends the considered string to include the next line if an open parenthesis was not closed;
                    It is possible that, do to page space constraints,
                    the parameters were declared across different lines;
@@ -192,6 +194,7 @@ public class FileParser {
                        Also removes anything past the close parenthesis;
                        What we should have now is the list of method parameters.
                      */
+                    restOfLine = line.substring(line.indexOf(')') + 1);
                     line = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
                     // Splits the method parameters around any commas and puts the pieces into an array
                     currentParamTypes = line.split(",");
@@ -210,6 +213,9 @@ public class FileParser {
                                             currentParamTypes[i].indexOf(' ')).trim();
                     }
                     methods.add(new Method(className, currentReturnType, currentMethodName, currentParamTypes));
+                    if(!restOfLine.contains(";"))
+                        curlyBurn(br, restOfLine);
+                    restOfLine = "";
                 }
                 line = br.readLine();
             }
@@ -226,6 +232,25 @@ public class FileParser {
         Method[] methodsArray = new Method[methods.size()];
         methods.toArray(methodsArray);
         return methodsArray;
+    }
+
+    private static void curlyBurn(BufferedReader br, String restOfLine) throws IOException {
+        int brace = 0;
+        while(restOfLine != null) {
+            if (restOfLine.contains("{")) {
+                brace++;
+                restOfLine = restOfLine.substring(restOfLine.indexOf('{') + 1);
+            }
+            if (restOfLine.contains("}")) {
+                brace--;
+                if(brace == 0)
+                    return;
+                restOfLine = restOfLine.substring(restOfLine.indexOf('}') + 1);
+            }
+            restOfLine = br.readLine();
+        }
+        if(brace != 0)
+            throw new IllegalArgumentException("This file does not close a curly brace.");
     }
 
     /**
