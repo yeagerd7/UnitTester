@@ -42,13 +42,6 @@ public class TestFixture implements java.io.Serializable {
         */
     private HashMap<Method, File> inputValues;
 
-    /*
-       Hashmap of methods that need to output particular values mapped to a .csv file with the parameters stored
-       Output values in the file for each test to occur should be newline-separated
-       TOBE used in actual unit test generation
-        */
-    private HashMap<Method, File> outputValues;
-
 
     public TestFixture(){
         fixtureName = "TF";
@@ -57,18 +50,16 @@ public class TestFixture implements java.io.Serializable {
         finalExecutableName = "executable";
         testSuite = new ArrayList<File>();
         inputValues = new HashMap<Method, File>();
-        outputValues = new HashMap<Method, File>();
     }
 
     public TestFixture(String fixtureName, String compiler, String flags, String finalExecutableName, ArrayList<File> testSuite,
-                        HashMap<Method, File> inputValues, HashMap<Method,File>outputValues){
+                        HashMap<Method, File> inputValues){
         this.fixtureName = fixtureName;
         this.compiler = compiler;
         this.flags = flags;
         this.finalExecutableName = finalExecutableName;
         this.testSuite = testSuite;
         this.inputValues = inputValues;
-        this.outputValues = outputValues;
     }
 
 
@@ -150,22 +141,6 @@ public class TestFixture implements java.io.Serializable {
      */
     public void setTestSuite(ArrayList<File> inputFiles) {
         testSuite = inputFiles;
-    }
-
-    /*
-      Getter for the methods to be tested with particular expected outputs
-      @returns a HashMap where methods are mapped to a file full of outputs they should produce
-    */
-    public HashMap<Method, File> getOutputValues() {
-        return outputValues;
-    }
-
-    /*
-      Getter for the methods to be tested with particular parameters
-      @param outputValues a HashMap where methods are mapped to a file full of outputs they should produce
-    */
-    public void setOutputValues(HashMap<Method, File> outputValues) {
-        this.outputValues = outputValues;
     }
 
     /*
