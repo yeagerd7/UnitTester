@@ -805,31 +805,31 @@ public class FrontEndGUI {
 
         //Preferences window label declaration/initialization and formatting
         Label preferenceLabelA = new Label();
-        preferenceLabelA.setText("Use custom executable name: (default is executable)   ");
+        preferenceLabelA.setText("Placeholder for preference 1:                         ");
         preferenceLabelA.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelA.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelB = new Label();
-        preferenceLabelB.setText("Use custom compiler: (default is g++)                 ");
+        preferenceLabelB.setText("Placeholder for preference 2:                         ");
         preferenceLabelB.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelB.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelC = new Label();
-        preferenceLabelC.setText("Use custom flags on compiler: (default is -c)         ");
+        preferenceLabelC.setText("Placeholder for preference 3:                         ");
         preferenceLabelC.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelC.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelD = new Label();
-        preferenceLabelD.setText("Use preset input files:                               ");
+        preferenceLabelD.setText("Placeholder for preference 4:                         ");
         preferenceLabelD.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelD.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelE = new Label();
-        preferenceLabelE.setText("Use specific parameters for specific methods:         ");
+        preferenceLabelE.setText("Placeholder for preference 5:                         ");
         preferenceLabelE.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelE.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelF = new Label();
-        preferenceLabelF.setText("Expect specific outputs from specific methods:        ");
+        preferenceLabelF.setText("Placeholder for preference 6:                         ");
         preferenceLabelF.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelF.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelG = new Label();
-        preferenceLabelG.setText("Use custom values for any data types:                 ");
+        preferenceLabelG.setText("Placeholder for preference 7:                         ");
         preferenceLabelG.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelG.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelH = new Label();

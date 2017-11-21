@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2017-11-19T15:32:43</date>
-  <millis>1511123563375</millis>
+  <date>2017-11-21T14:11:30</date>
+  <millis>1511291490571</millis>
   <sequence>1</sequence>
   <logger>global</logger>
   <level>INFO</level>
@@ -13,8 +13,8 @@
   <message>Front End User Interface built and displayed</message>
 </record>
 <record>
-  <date>2017-11-19T15:32:43</date>
-  <millis>1511123563378</millis>
+  <date>2017-11-21T14:11:30</date>
+  <millis>1511291490576</millis>
   <sequence>2</sequence>
   <logger>global</logger>
   <level>INFO</level>
