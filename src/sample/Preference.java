@@ -66,26 +66,29 @@ public class Preference implements java.io.Serializable {
      * TEST METHOD
      */
     public void printPreferences() {
+        System.out.println("Serialized Preferences");
         for(int i = 0; i < 7; i++) {
             System.out.println("Preference " + i + ": "+ preferences.get(i));
         }
+        System.out.println();
     }
 
     /**
      * TEST METHOD
      */
     public void printDestinationFiles() {
+        System.out.println("Serialized Destination Paths");
         if(!preferredDestinationPaths.isEmpty()) {
             Iterator<File> itty1 = preferredDestinationPaths.iterator();
             while (itty1.hasNext()) {
                 File f = itty1.next();
                 System.out.println(f.getAbsolutePath());
             }
-            System.out.println();
         }
         else {
-            System.out.println("No files selected");
+            System.out.println("No preferred destinations stored");
         }
+        System.out.println();
     }
 
 }

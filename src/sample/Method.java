@@ -15,6 +15,7 @@ public class Method {
      */
     private String className, returnType, methodName;
     private String[] paramTypes;
+    private boolean willBeTested;
 
     /**
      * Creates a new Method object.
@@ -30,6 +31,7 @@ public class Method {
         this.methodName = methodName;
         // Copies the values of the array
         this.paramTypes = new String[paramTypes.length];
+        willBeTested = true;
         System.arraycopy(paramTypes, 0, this.paramTypes, 0, this.paramTypes.length);
     }
 
@@ -47,6 +49,12 @@ public class Method {
         String[] copy = new String[paramTypes.length];
         System.arraycopy(paramTypes, 0, copy, 0, copy.length);
         return copy;
+    }
+
+    public boolean getWillBeTested() { return willBeTested; }
+
+    public void setWillBeTested(boolean willBeTested) {
+        this.willBeTested = willBeTested;
     }
 
     /**
