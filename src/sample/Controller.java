@@ -31,6 +31,25 @@ public class Controller {
     //Preference Field Declaration
     private Preference defaultPreference;
 
+    //Compiler Choice Field Declaration
+    private String compilerChoice;
+
+    //Executable Name Choice Field Declaration
+    private String executableName;
+
+    //User-Selected CFlag List Field Declaration
+    private ArrayList<String> cFlagList;
+
+    //User-Selected List of Methods to to be tested Field Declararion
+    private ArrayList<Method> guiMethodList;
+
+    //Default Data Type Value Field Declarations
+    private String stringDefault;
+    private Character characterDefault;
+    private Integer integerDefault;
+    private Double doubleDefault;
+    private Boolean booleanDefault;
+
     //Required Declaration for Singleton Pattern
     private static Controller singletonInstance = new Controller();
 
@@ -43,6 +62,15 @@ public class Controller {
         sourceFiles = new HashSet<>();
         fileParser = new FileParser();
         defaultPreference = deserializePreference();
+        compilerChoice = "G++";
+        executableName = "executable";
+        cFlagList = new ArrayList<>();
+        guiMethodList = new ArrayList<>();
+        stringDefault = "Axolotl";
+        characterDefault = 'X';
+        integerDefault = 36;
+        doubleDefault = 3.14;
+        booleanDefault = true;
         Main.LOGGER.finest("Controller object created and initialized");
     }
 
@@ -92,14 +120,168 @@ public class Controller {
      * Accessor method for the 'fileParser' attribute that returns said attribute
      * @return fileParser
      */
-    public FileParser getFileParser() { return fileParser; }
+    public FileParser getFileParser() {
+        return fileParser; }
 
     /**
-     * Accessor method for the 'defaultPreference attribute that returns said attribute.
+     * Accessor method for the 'defaultPreference' attribute that returns said attribute.
      * @return defaultPreference
      */
     public Preference getDefaultPreference() {
         return defaultPreference;
+    }
+
+    /**
+     * Accessor method for the 'compilerChoice' attribute that returns said attribute.
+     * @return
+     */
+    public String getCompilerChoice() {
+        return compilerChoice;
+    }
+
+    /**
+     * Setter method for 'compilerChoice' attribute that sets the value to a new compilerChoice String value denoted as a
+     * parameter
+     * @param  compilerChoice new value
+     */
+    public void setCompilerChoice(String compilerChoice) {
+        this.compilerChoice = compilerChoice;
+    }
+
+    /**
+     * Accessor method for the 'executableName' attribute that returns said attribute.
+     * @return
+     */
+    public String getExecutableName() {
+        return executableName;
+    }
+
+    /**
+     * * Setter method for 'executableName' attribute that sets the value to a new exectutableName String value denoted
+     * as aparameter
+     * @param executableName new value
+     */
+    public void setExecutableName(String executableName) {
+        this.executableName = executableName;
+    }
+
+    /**
+     * Accessor method for the 'cFlagsList' attribute that returns said attribute.
+     * @return
+     */
+    public ArrayList<String> getcFlagList() {
+        return cFlagList;
+    }
+
+    /**
+     * Setter method for 'cFlagList' attribute that sets the value to a new cFlagList ArrayList<String> value denoted
+     * as a parameter
+     * @param cFlagList new value
+     */
+    public void setcFlagList(ArrayList<String> cFlagList) {
+        this.cFlagList = cFlagList;
+    }
+
+    /**
+     * Accessor method for the 'guiMethodList' attribute that returns said attribute.
+     * @return
+     */
+    public ArrayList<Method> getGuiMethodList() {
+        return guiMethodList;
+    }
+
+    /**
+     * Setter method for 'guiMethodList' attribute that sets the value to a new guiMethodList ArrayList<String> value
+     * denoted as a parameter
+     * @param guiMethodList new value
+     */
+    public void setGuiMethodList(ArrayList<Method> guiMethodList) {
+        this.guiMethodList = guiMethodList;
+    }
+
+    /**
+     * Accessor method for the 'stringDefault' attribute that returns said attribute.
+     * @return
+     */
+    public String getStringDefault() {
+        return stringDefault;
+    }
+
+    /**
+     * Setter method for 'stringDefault' attribute that sets the value to a new stringDefault String value denoted as a
+     * parameter
+     * @param stringDefault new value
+     */
+    public void setStringDefault(String stringDefault) {
+        this.stringDefault = stringDefault;
+    }
+
+    /**
+     * Accessor method for the 'characterDefault' attribute that returns said attribute.
+     * @return
+     */
+    public Character getCharacterDefault() {
+        return characterDefault;
+    }
+
+    /**
+     * Setter method for 'characterDefault' attribute that sets the value to a new characterDefault character value
+     * denoted as a parameter
+     * @param characterDefault new value
+     */
+    public void setCharacterDefault(Character characterDefault) {
+        this.characterDefault = characterDefault;
+    }
+
+    /**
+     * Accessor method for the 'integerDefault' attribute that returns said attribute.
+     * @return
+     */
+    public Integer getIntegerDefault() {
+        return integerDefault;
+    }
+
+    /**
+     * Setter method for 'integerDefault' attribute that sets the value to a new integerDefault integer value
+     * denoted as a parameter
+     * @param integerDefault new value
+     */
+    public void setIntegerDefault(Integer integerDefault) {
+        this.integerDefault = integerDefault;
+    }
+
+    /**
+     * Accessor method for the 'floatingPointDefault' attribute that returns said attribute.
+     * @return
+     */
+    public Double getFloatingPointDefault() {
+        return doubleDefault;
+    }
+
+    /**
+     * Setter method for 'floatingPointDefault' attribute that sets the value to a new floatingPointDefault float value
+     * denoted as a parameter
+     * @param doubleDefault new value
+     */
+    public void setFloatingPointDefault(Double doubleDefault) {
+        this.doubleDefault = doubleDefault;
+    }
+
+    /**
+     * Accessor method for the 'booleanDefault' attribute that returns said attribute.
+     * @return
+     */
+    public Boolean getBooleanDefault() {
+        return booleanDefault;
+    }
+
+    /**
+     * Setter method for 'booleanDefault' attribute that sets the value to a new booleanDefault float value
+     * denoted as a parameter
+     * @param booleanDefault new value
+     */
+    public void setBooleanDefault(Boolean booleanDefault) {
+        this.booleanDefault = booleanDefault;
     }
 
     /**
@@ -304,14 +486,6 @@ public class Controller {
     }
 
     /**
-     * Clears all the instance variables in the Controller class
-     */
-    public void clearController() {
-        sourceFiles = new HashSet<>();
-        destinationFile = null;
-    }
-
-    /**
      *Updates the check list of preferences on the front end GUI to directly match the the ArrayList object of booleans
      * representing whether a specific preference is active or not.
      */
@@ -347,55 +521,6 @@ public class Controller {
         return defaultPreference.getPreferredDestinationPaths();
     }
 
-    /**
-     * Serializes the Preference object and allows the user to load up preferences they used on the last program
-     * execution and select as well as save pre-defined destination paths every time they open and close the program.
-     * This method is what essentially stores the data for next time (aka serialize)
-     */
-    public void serializePreference()
-    {
-        try
-        {
-            FileOutputStream fileOut = new FileOutputStream("preference.ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(defaultPreference);
-            out.close();
-            fileOut.close();
-            System.out.printf("Serialized data is saved in preference.ser");
-        }
-        catch (IOException i)
-        {
-            i.printStackTrace();
-        }
-    }
-
-    /**
-     * Deserializes the Preference object and allows the user to load up preferences they used on the last program
-     * execution and select as well as save pre-defined destination paths every time they open and close the program.
-     * This method is what essentially loads the data for the last time the preferences were set.
-     * @return
-     */
-    public Preference deserializePreference()
-    {
-        Preference p = null;
-        try {
-            FileInputStream fileIn = new FileInputStream("preference.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            p = (Preference) in.readObject();
-            in.close();
-            fileIn.close();
-        } catch (IOException i) {
-            System.out.println("Did not read serialized file");
-            p = new Preference();
-        } catch (ClassNotFoundException c) {
-            System.out.println("Preference class not found");
-            c.printStackTrace();
-        }
-        //TESTS
-        p.printPreferences();
-        p.printDestinationFiles();
-        return p;
-    }
 
     /**
      * saveBrowse is called up following a button click on the preferences window/menu and allow user to search their
@@ -405,7 +530,8 @@ public class Controller {
      * @param preferredDestinations
      * @return preferredDestinations
      */
-    public ListView<CheckBox> saveBrowse(ListView<CheckBox> preferredDestinations,TextField potentialDestination) {
+    public ListView<CheckBox> saveDestinationPath(ListView<CheckBox> preferredDestinations,
+                                                                TextField potentialDestination) {
         File destination = new File(potentialDestination.getText());
         if(checkDestinationPath(destination)) {
             if(!defaultPreference.getPreferredDestinationPaths().contains(destination)) {
@@ -428,11 +554,9 @@ public class Controller {
     /**
      * Method makes sure that the default path attribute in the Front End GUI class is transparent with the default
      * destination path list stored in the serialized Preference class.
-     * @param defaultPaths
-     * @param potentialDestination
      * @return temp;
      */
-    public ChoiceBox<String> updateDefaultPaths(ChoiceBox<String> defaultPaths, TextField potentialDestination ) {
+    public ChoiceBox<String> updateDefaultPaths() {
         ChoiceBox<String> temp = new ChoiceBox<>();
         Iterator<File> itty = defaultPreference.getPreferredDestinationPaths().iterator();
         while(itty.hasNext()) {
@@ -443,9 +567,138 @@ public class Controller {
     }
 
     /**
+     * Allows the user to load their parsed methods from their source .cpp/.h files on a selectable checkbox list
+     * denoting the methods to be tested
+     * @param list CheckBox list from the GUI of Methods to be populated and then returned
+     * @return
+     */
+    public ListView<CheckBox> populateMethodsOnGui(ListView<CheckBox> list) {
+        ArrayList<Method> parsedMethods = fileParser.getMethods();
+        int size = parsedMethods.size();
+        int index = 0;
+        while(index < size) {
+            CheckBox box = new CheckBox();
+            box.setText(parsedMethods.get(index).toString());
+            box.setSelected(true);
+            list.getItems().add(box);
+            index++;
+        }
+        return list;
+    }
+
+    /**
+     * Allows the user to update the FileParser object's methods attribute (ArrayList) to directly correlate with the
+     * method checklist on the GUI.  Used to insure transparency between components.  If the user deselected method(s)
+     * then saved it, those specific Method object's attributes need to be updated for testing purposes.
+     * @param guiMethodList
+     */
+    public void updateParsedMethodsForTesting(ListView<CheckBox> guiMethodList) {
+        ArrayList<Method> methodsForTesting = fileParser.getMethods();
+        int size = methodsForTesting.size();
+        int index = 0;
+        System.out.println("FileParser Method List : GUI Method List (willBeTested Boolean Value) ");
+        while(index < size) {
+            Method parsedMethod = methodsForTesting.get(index);
+            CheckBox guiMethod = guiMethodList.getItems().get(index);
+            if(guiMethod.isSelected()) {
+                parsedMethod.setWillBeTested(true);
+            }
+            else {
+                parsedMethod.setWillBeTested(false);
+            }
+            System.out.println(parsedMethod.getWillBeTested() + " : "
+                                    + guiMethodList.getItems().get(index).isSelected()); //TEST
+            index++;
+        }
+        System.out.println();
+        fileParser.setMethods(methodsForTesting);
+    }
+
+    /**
+     * Allows the user to update the controller's test fixture attributes (String/Character/Integer/Double/Float
+     * Boolean according to the one's inputted in by the user (otherwise default) in the text fixture window
+     * @param userCompiler, userExecutableName, userStringDefault, userCharacterDefault, userIntegerDefault
+     *  userFloatingPointDefault, userBooleanDefault
+     */
+    public void updateTestFixturePreferences(String userCompiler, String userExecutableName, String userStringDefault,
+                                             String userCharacterDefault, String userIntegerDefault,
+                                             String userFloatingPointDefault, String userBooleanDefault) {
+        setCompilerChoice(userCompiler);
+        setExecutableName(userExecutableName);
+        setStringDefault(userStringDefault);
+        setCharacterDefault(userCharacterDefault.toCharArray()[0]);
+        setIntegerDefault(Integer.parseInt(userIntegerDefault));
+        setFloatingPointDefault(Double.parseDouble(userFloatingPointDefault));
+        if(userBooleanDefault.equalsIgnoreCase("True")) {
+            setBooleanDefault(true);
+        }
+        else {
+            setBooleanDefault(false);
+        }
+
+    }
+
+    /**
+     * Clears all the instance variables in the Controller class
+     */
+    public void clearController() {
+        sourceFiles = new HashSet<>();
+        destinationFile = null;
+        fileParser.setMethods(new ArrayList<>());
+        fileParser.setDependencies(new HashSet<>());
+    }
+
+    /**
+     * Serializes the Preference object and allows the user to load up preferences they used on the last program
+     * execution and select as well as save pre-defined destination paths every time they open and close the program.
+     * This method is what essentially stores the data for next time (aka serialize)
+     */
+    public void serializePreference() {
+        try {
+            FileOutputStream fileOut = new FileOutputStream("preference.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(defaultPreference);
+            out.close();
+            fileOut.close();
+            System.out.printf("Serialized data is saved in preference.ser");
+        }
+        catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+
+    /**
+     * Deserializes the Preference object and allows the user to load up preferences they used on the last program
+     * execution and select as well as save pre-defined destination paths every time they open and close the program.
+     * This method is what essentially loads the data for the last time the preferences were set.
+     * @return
+     */
+    public Preference deserializePreference() {
+        Preference p = null;
+        try {
+            FileInputStream fileIn = new FileInputStream("preference.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            p = (Preference) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (IOException i) {
+            System.out.println("Did not read serialized file");
+            p = new Preference();
+        } catch (ClassNotFoundException c) {
+            System.out.println("Preference class not found");
+            c.printStackTrace();
+        }
+        //TESTS
+        p.printPreferences();
+        p.printDestinationFiles();
+        return p;
+    }
+
+    /**
      * TEST METHOD
      */
     public void printSourceFiles() {
+        System.out.println(".CPP and .H Source Files");
         if(!sourceFiles.isEmpty()) {
             Iterator<File> itty1 = sourceFiles.iterator();
             while (itty1.hasNext()) {
@@ -457,5 +710,20 @@ public class Controller {
         else {
             System.out.println("No files selected");
         }
+        System.out.println();
+    }
+
+    /**
+     * TEST METHOD
+     */
+    public void printTextFixturePreferences() {
+        System.out.println("Current Test Fixture Preferences: ");
+        System.out.println(compilerChoice);
+        System.out.println(executableName);
+        System.out.println(stringDefault);
+        System.out.println(characterDefault);
+        System.out.println(integerDefault);
+        System.out.println(doubleDefault);
+        System.out.println(booleanDefault + "\n");
     }
 }
