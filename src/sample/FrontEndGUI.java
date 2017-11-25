@@ -87,13 +87,14 @@ public class FrontEndGUI {
     //Toggles Field declaration
     private ArrayList<Boolean> toggles;
 
-    //manageSubSceneA field declaration
+    //User-Default Destination Path Field Declaration
     private ListView<CheckBox> manageSubSceneA;
 
-    //Method List(Test Fixtures) Field Declaration
+    //Method CheckList/ChoiceList (Test Fixtures) Field Declaration
     private ListView<CheckBox> methodCheckList;
+    private ChoiceBox<String> methodChoiceList;
 
-    //CFlag List(Test Fixture) Field Declaration
+    //CFlag Checklist(Test Fixture) Field Declaration
     private ListView<CheckBox> cFlagCheckList;
 
     //Default (Test Fixtures) TextField Declarations
@@ -186,8 +187,9 @@ public class FrontEndGUI {
         image = new Image("CuteLizard.PNG", 140, 140,
                 false, false);
 
-        //(To be)Parsed Method List
+        //(To be)Parsed Method List (Choice/Check)
         methodCheckList = new ListView<>();
+        methodChoiceList = new ChoiceBox<>();
 
         //CFlag List Declaration/Initialization and Populating
         cFlagCheckList = new ListView<>();
@@ -1297,8 +1299,9 @@ public class FrontEndGUI {
                         integerDefault.getText(), doubleDefault.getText(), booleanDefault.getText());
                 controller.printTextFixturePreferences(); //Test Method
                 controller.getFileParser().generateOutputFiles(controller.getDestinationFile(), //Destination
-                                                    //MORE TO BE ADDED
-                                                    controller.getExecutableName()); //Executable Name
+                        controller.getCompilerChoice(), controller.getExecutableName(), controller.getcFlagList(),
+                        controller.getStringDefault(), controller.getCharacterDefault(), controller.getIntegerDefault(),
+                        controller.getDoubleDefault(), controller.getBooleanDefault());
                 fixtureStage.close();
             }
             else {
@@ -1425,12 +1428,17 @@ public class FrontEndGUI {
                 Button methodApplyButton = new Button("Apply");
                 methodApplyButton.setTooltip(new Tooltip("All unselected methods will \nnot be tested!"));
                 methodApplyButton.setPrefSize(78, 20);
+                Button methodAttachButton = new Button("Attach File");
+                methodAttachButton.setTooltip(new Tooltip("Attach a csv file to a \nselected method for " +
+                                                                        "testing !"));
+                methodAttachButton.setPrefSize(93, 20);
                 Button methodCloseButton = new Button("Close");
                 methodCloseButton.setTooltip(new Tooltip("Did you click 'Apply' \nto save your changes?"));
                 methodCloseButton.setPrefSize(78, 20);
 
                 //'Add Methods' window center scene formatting and populating
-                methodCenterSubScene.getChildren().addAll(methodSelectAllButton, methodDeselectAllButton);
+                methodCenterSubScene.getChildren().addAll(methodAttachButton, methodSelectAllButton,
+                        methodDeselectAllButton);
                 methodCenterSubScene.setSpacing(10);
                 methodCenterSubScene.setAlignment(Pos.TOP_CENTER);
                 methodCenterScene.getChildren().addAll(methodCheckList, regionA, methodCenterSubScene);
@@ -1466,12 +1474,59 @@ public class FrontEndGUI {
                 });
 
                 /*
+                Action Listener for the 'Attach File' button that opens a new window for the user and allows them
+                 */
+                methodAttachButton.setOnAction(eventA -> {
+                    //'Attach File' window main scene declaration/initialization
+                    HBox attachFileWindow = new HBox();
+
+                    //'Attach File' window button declaration/initialization and formatting
+                    Button loadButton = new Button("Load");
+                    loadButton.setPrefSize(78, 20);
+                    Button closeButton = new Button("Close");
+                    closeButton.setPrefSize(78, 20);
+
+                    //Selected Methods checkList formatting
+                    methodChoiceList.setMinWidth(500);
+                    methodChoiceList.getSelectionModel().selectFirst();
+
+                    //'Defaults window population, formatting and display
+                    attachFileWindow.getChildren().addAll(methodChoiceList, loadButton, closeButton);
+                    attachFileWindow.setSpacing(10);
+                    attachFileWindow.setPadding(new Insets(10, 10, 10, 10));
+                    Stage attachFileStage = new Stage();
+                    attachFileStage.setScene(new Scene(attachFileWindow, 650, 50));
+                    attachFileStage.initModality(Modality.APPLICATION_MODAL);
+                    attachFileStage.setTitle("AxolotlSWENG:        Powered by Rowan University");
+                    attachFileStage.setResizable(false);
+                    attachFileStage.getIcons().add(new Image("CuteLizard.PNG"));
+                    attachFileStage.show();
+
+                    /*
+                    * Action Listener for the 'Close' button in the 'Attach File' window that closes the window
+                    */
+                    closeButton.setOnAction(eventB -> {
+                        attachFileStage.close();
+                    });
+
+                    /*
+                    * Action Listener for the 'Load' button in the 'Attach File' window that loads the selected
+                    * destination from the drop down menu onto the main GUI for the user
+                    */
+                    loadButton.setOnAction(eventB -> {
+                        controller.attachCSVToMethod(methodChoiceList.getSelectionModel().getSelectedItem());
+                        attachFileStage.close();
+                    });
+                });
+
+                /*
                 Action Listener for the 'Add Methods' 'Apply' button that makes a call to the controller to update
                 the FileParser component's 'method' (ArrayList) attribute to be transparent and synonymous with the
                 check list of parsed methods on the 'Add Methods' window
                  */
                 methodApplyButton.setOnAction(eventA -> {
                     controller.updateParsedMethodsForTesting(methodCheckList);
+                    methodChoiceList = controller.populateMethodsOnGuiChoiceList();
                 });
 
                 /*
@@ -1601,7 +1656,9 @@ public class FrontEndGUI {
                 try {
                     controller.getFileParser().parseSourceFiles(parsingFiles); //PARSES SOURCE FILES
                     window.hide();
-                    methodCheckList = controller.populateMethodsOnGui(methodCheckList);
+                    methodCheckList = controller.populateMethodsOnGuiCheckList(methodCheckList);
+                    methodChoiceList = controller.populateMethodsOnGuiChoiceList();
+
                     buildTestFixtureWindow();
 
                 } catch (IOException e) {
@@ -1658,7 +1715,7 @@ public class FrontEndGUI {
                 defaultPathStage.show();
 
                 /*
-                 * Action Listener for the 'Load' button in the 'Defaults' window that closes the window
+                 * Action Listener for the 'Close' button in the 'Defaults' window that closes the window
                  */
                 closeButton.setOnAction(eventA -> {
                     defaultPathStage.close();
