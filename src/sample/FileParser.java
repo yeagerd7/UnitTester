@@ -68,8 +68,10 @@ public class FileParser {
      * @param destination
      * @param executableName
      */
-    public void generateOutputFiles(File destination, String executableName) {
-        MakeFileWriter.setCompiler("g++");
+    public void generateOutputFiles(File destination, String compilerChoice, String executableName,
+                                    ArrayList<String> cFlagList, String stringDefault, Character characterDefault,
+                                    Integer integerDefault, Double doubledefault, Boolean booleanDefault) {
+        MakeFileWriter.setCompiler(compilerChoice);
         MakeFileWriter.setFlags("-c");
         try {
             MakeFileWriter.writeMakefile(dependencies, executableName, destination);

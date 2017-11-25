@@ -1,5 +1,7 @@
 package sample;
 
+import java.io.File;
+
 /**
  * Stores necessary data of one method for easy transfer.
  *
@@ -12,10 +14,13 @@ public class Method {
      * returnType - The name of the data type that this method returns.
      * methodName - The name of the method
      * paramTypes - The data types of the method's parameters.
+     * willBeTested - Determines whether the method will be included for testing
+     * csvFile - CSV file
      */
     private String className, returnType, methodName;
     private String[] paramTypes;
     private boolean willBeTested;
+    private File csvFile;
 
     /**
      * Creates a new Method object.
@@ -32,6 +37,7 @@ public class Method {
         // Copies the values of the array
         this.paramTypes = new String[paramTypes.length];
         willBeTested = true;
+        csvFile = null;
         System.arraycopy(paramTypes, 0, this.paramTypes, 0, this.paramTypes.length);
     }
 
@@ -43,7 +49,9 @@ public class Method {
         return returnType;
     }
 
-    public String getMethodName() { return methodName; }
+    public String getMethodName() {
+        return methodName;
+    }
 
     public String[] getParamTypes() {
         String[] copy = new String[paramTypes.length];
@@ -51,10 +59,20 @@ public class Method {
         return copy;
     }
 
-    public boolean getWillBeTested() { return willBeTested; }
+    public boolean getWillBeTested() {
+        return willBeTested;
+    }
 
     public void setWillBeTested(boolean willBeTested) {
         this.willBeTested = willBeTested;
+    }
+
+    public File getCsvFile() {
+        return csvFile;
+    }
+
+    public void setCsvFile(File csvFile) {
+        this.csvFile = csvFile;
     }
 
     /**

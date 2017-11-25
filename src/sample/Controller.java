@@ -62,7 +62,7 @@ public class Controller {
         sourceFiles = new HashSet<>();
         fileParser = new FileParser();
         defaultPreference = deserializePreference();
-        compilerChoice = "G++";
+        compilerChoice = "g++";
         executableName = "executable";
         cFlagList = new ArrayList<>();
         guiMethodList = new ArrayList<>();
@@ -254,7 +254,7 @@ public class Controller {
      * Accessor method for the 'floatingPointDefault' attribute that returns said attribute.
      * @return
      */
-    public Double getFloatingPointDefault() {
+    public Double getDoubleDefault() {
         return doubleDefault;
     }
 
@@ -263,7 +263,7 @@ public class Controller {
      * denoted as a parameter
      * @param doubleDefault new value
      */
-    public void setFloatingPointDefault(Double doubleDefault) {
+    public void setDoubleDefault(Double doubleDefault) {
         this.doubleDefault = doubleDefault;
     }
 
@@ -572,7 +572,7 @@ public class Controller {
      * @param list CheckBox list from the GUI of Methods to be populated and then returned
      * @return
      */
-    public ListView<CheckBox> populateMethodsOnGui(ListView<CheckBox> list) {
+    public ListView<CheckBox> populateMethodsOnGuiCheckList(ListView<CheckBox> list) {
         ArrayList<Method> parsedMethods = fileParser.getMethods();
         int size = parsedMethods.size();
         int index = 0;
@@ -581,6 +581,26 @@ public class Controller {
             box.setText(parsedMethods.get(index).toString());
             box.setSelected(true);
             list.getItems().add(box);
+            index++;
+        }
+        return list;
+    }
+
+    /**
+     * Allows the user to load all the tested selected into a ChoiceBox drop down which is transparent across all
+     * components
+     * @return
+     */
+    public ChoiceBox<String> populateMethodsOnGuiChoiceList() {
+        ArrayList<Method> parsedMethods = fileParser.getMethods();
+        ChoiceBox<String> list = new ChoiceBox<>();
+        int size = parsedMethods.size();
+        int index = 0;
+        while(index < size) {
+            Method methodChoice = parsedMethods.get(index);
+            if(methodChoice.getWillBeTested()) {
+                list.getItems().add(methodChoice.toString());
+            }
             index++;
         }
         return list;
@@ -628,7 +648,7 @@ public class Controller {
         setStringDefault(userStringDefault);
         setCharacterDefault(userCharacterDefault.toCharArray()[0]);
         setIntegerDefault(Integer.parseInt(userIntegerDefault));
-        setFloatingPointDefault(Double.parseDouble(userFloatingPointDefault));
+        setDoubleDefault(Double.parseDouble(userFloatingPointDefault));
         if(userBooleanDefault.equalsIgnoreCase("True")) {
             setBooleanDefault(true);
         }
@@ -636,6 +656,35 @@ public class Controller {
             setBooleanDefault(false);
         }
 
+    }
+
+    /**
+     * Allows the user to attach a CSV file (w/default values) to a method and updates the method object's 'csvFile'
+     * attribute to the non-null user-selected CSV file.
+     * @param methodString, csvFile
+     */
+    public void attachCSVToMethod(String methodString) {
+        FileChooser window = new FileChooser();
+        window.getExtensionFilters().add(new FileChooser.ExtensionFilter(".csv Files", "*.csv"));
+        File csvFile = window.showOpenDialog(null);
+        int size = fileParser.getMethods().size();
+        int index = 0;
+        boolean searching = true;
+        while(index < size) {
+            Method method = fileParser.getMethods().get(index);
+            if(method.toString().equals(methodString)) {
+                fileParser.getMethods().get(index).setCsvFile(csvFile);
+                //searching = false;
+            }
+            //TEST
+            if(fileParser.getMethods().get(index).getCsvFile() == null) {
+                System.out.println("Method CSV: null");
+            }
+            else {
+                System.out.println("Method CSV: " + fileParser.getMethods().get(index).getCsvFile().getAbsolutePath());
+            }
+            index++;
+        }
     }
 
     /**
