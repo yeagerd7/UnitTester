@@ -71,10 +71,8 @@ public class FileParser {
      * @param destination
      */
     public void generateOutputFiles(File destination) {
-        MakeFileWriter.setCompiler(fixture.getCompiler());
-        MakeFileWriter.setFlags(fixture.getFlags());
         try {
-            MakeFileWriter.writeMakefile(dependencies, fixture.getFinalExecutableName(), destination);
+            MakeFileWriter.writeMakefile(dependencies, fixture, destination);
         } catch (IOException e) {
             e.printStackTrace();
         }
