@@ -17,6 +17,8 @@ public class FileParser {
     private ArrayList<Method> methods;
     //Dependencies Field Declaration
     private HashSet<Dependence> dependencies;
+    //Parameters for a makefile to be generated with
+    private TestFixture fixture;
 
     /**
      * Constructor for the FileParser class that initializes methods and dependencies instance variables
@@ -24,6 +26,7 @@ public class FileParser {
     public FileParser() {
         methods = new ArrayList<>();
         dependencies = new HashSet<>();
+        fixture = new TestFixture();
     }
 
     public ArrayList<Method> getMethods() {
@@ -55,11 +58,12 @@ public class FileParser {
         for (File cFile : projectFiles) {
             if (cFile.getName().endsWith(".cpp"))
                 dependencies.add(makeDependence(cFile));
-            else if (cFile.getName().endsWith(".h"))
+            //else if (cFile.getName().endsWith(".h"))
                 methods.addAll(Arrays.asList(makeMethods(cFile)));
-            else
-                throw new IOException("An unexpected file has been passed.");
+            //else
+                //throw new IOException("An unexpected file has been passed.");
         }
+
     }
 
     /**
@@ -68,16 +72,15 @@ public class FileParser {
      * @param destination
      * @param executableName
      */
-    public void generateOutputFiles(File destination, String compilerChoice, String executableName,
-                                    ArrayList<String> cFlagList, String stringDefault, Character characterDefault,
-                                    Integer integerDefault, Double doubledefault, Boolean booleanDefault) {
-        MakeFileWriter.setCompiler(compilerChoice);
-        MakeFileWriter.setFlags("-c");
+    public void generateOutputFiles(File destination, String executableName) {
+        MakeFileWriter.setCompiler(fixture.getCompiler());
+        MakeFileWriter.setFlags(fixture.getFlags());
         try {
-            MakeFileWriter.writeMakefile(dependencies, executableName, destination);
+            MakeFileWriter.writeMakefile(dependencies, fixture.getFinalExecutableName(), destination);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
     }
 
@@ -178,7 +181,7 @@ public class FileParser {
            ie Stri[]ng or a method name with illegal characters,
            these uncompilable parts are not expected in the passes files.
          */
-        String regex = "\\S+\\s+\\S+\\s*\\(\\s*(\\S+\\s+\\S+\\s*,?\\s*)*\\)\\s*;";
+        String regex = "\\S+\\s+\\S+\\s*\\(\\s*(\\S+\\s+\\S+\\s*,?\\s*)*\\).*";
         ArrayList<Method> methods = new ArrayList<>();
         // Grabs the class name by taking every part before the file's type
         String className = hFile.getName().substring(0, hFile.getName().indexOf('.'));
@@ -187,11 +190,13 @@ public class FileParser {
 
         try (BufferedReader br = new BufferedReader(new FileReader(hFile))) {
             String line = br.readLine();
+            String restOfLine = "";
             // Reads the whole file
             while (line != null) {
                 // Cuts any line comments out of the considered line
                 if (line.contains("//"))
                     line = line.substring(0, line.indexOf("//"));
+
                 /* Extends the considered string to include the next line if an open parenthesis was not closed;
                    It is possible that, do to page space constraints,
                    the parameters were declared across different lines;
@@ -223,6 +228,7 @@ public class FileParser {
                        Also removes anything past the close parenthesis;
                        What we should have now is the list of method parameters.
                      */
+                    restOfLine = line.substring(line.indexOf(')') + 1);
                     line = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
                     // Splits the method parameters around any commas and puts the pieces into an array
                     currentParamTypes = line.split(",");
@@ -241,6 +247,9 @@ public class FileParser {
                                             currentParamTypes[i].indexOf(' ')).trim();
                     }
                     methods.add(new Method(className, currentReturnType, currentMethodName, currentParamTypes));
+                    if(!restOfLine.contains(";"))
+                        curlyBurn(br, restOfLine);
+                    restOfLine = "";
                 }
                 line = br.readLine();
             }
@@ -259,6 +268,25 @@ public class FileParser {
         return methodsArray;
     }
 
+    private static void curlyBurn(BufferedReader br, String restOfLine) throws IOException {
+        int brace = 0;
+        while(restOfLine != null) {
+            if (restOfLine.contains("{")) {
+                brace++;
+                restOfLine = restOfLine.substring(restOfLine.indexOf('{') + 1);
+            }
+            if (restOfLine.contains("}")) {
+                brace--;
+                if(brace == 0)
+                    return;
+                restOfLine = restOfLine.substring(restOfLine.indexOf('}') + 1);
+            }
+            restOfLine = br.readLine();
+        }
+        if(brace != 0)
+            throw new IllegalArgumentException("This file does not close a curly brace.");
+    }
+
     /**
      * A temporary test method that prints all parsed information to the console;
      * Will ultimately be removed and its functionality will be covered by JUnit testing.
@@ -272,5 +300,13 @@ public class FileParser {
         methods.forEach(n -> System.out.println(n.toString()));
         dependencies.forEach(n -> System.out.println(n.toString()));
         System.out.println();
+    }
+
+    /*
+    Setter for the test fixture to be used. Invoke when you don't want to be using the default parameters for a test.
+    @param fixture the TestFixture to be applied to test generation
+     */
+    public void setTestFixture(TestFixture fixture){
+        this.fixture = fixture;
     }
 }

@@ -813,6 +813,7 @@ public class FrontEndGUI {
         Region bottomRegion = new Region();
 
         //Preferences window label declaration/initialization and formatting
+
         Label preferenceLabelA = new Label("This will contain info for the first preference       ");
         preferenceLabelA.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelA.setTextFill(Color.web("#DED8D8"));
@@ -832,6 +833,7 @@ public class FrontEndGUI {
         preferenceLabelF.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelF.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelG = new Label("This will contain info for the seventh preference     ");
+
         preferenceLabelG.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelG.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelH = new Label("Update Preferred Destinations:  ");

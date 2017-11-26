@@ -20,6 +20,8 @@ public:
 
     bool getMotionDetected() const;
 
+    inline void test();
+
 private:
     unsigned inputPin;
     float    delay;

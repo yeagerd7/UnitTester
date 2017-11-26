@@ -24,3 +24,13 @@ void LED::setColor(const char *col) {
 
 }
 
+&int inlineTest(){
+    int i = 0;
+    if(i == 1){
+        return &2
+    }
+    else{
+        return &i
+    }
+
+}
