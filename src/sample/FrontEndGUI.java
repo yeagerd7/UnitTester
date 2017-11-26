@@ -75,11 +75,6 @@ public class FrontEndGUI {
     //Image Field Declaration
     private Image image;
 
-    //ToolTip Field Declaration
-    private Tooltip sourceBrowseTip;
-    private Tooltip destinationBrowseTip;
-    private Tooltip refreshTip;
-
     //Shadow Effect Field Declaration
     private DropShadow shadow;
 
@@ -89,11 +84,24 @@ public class FrontEndGUI {
     //Serialized Default Preference Field Declaration;
     private ArrayList<ChoiceBox<String>> preferences;
 
-    //Toggles field declaration/initialization
+    //Toggles Field declaration
     private ArrayList<Boolean> toggles;
 
-    //manageSubSceneA field declaration/initialization
+    //manageSubSceneA field declaration
     private ListView<CheckBox> manageSubSceneA;
+
+    //Method List(Test Fixtures) Field Declaration
+    private ListView<CheckBox> methodCheckList;
+
+    //CFlag List(Test Fixture) Field Declaration
+    private ListView<CheckBox> cFlagCheckList;
+
+    //Default (Test Fixtures) TextField Declarations
+    private TextField stringDefault;
+    private TextField characterDefault;
+    private TextField integerDefault;
+    private TextField doubleDefault;
+    private TextField booleanDefault;
 
     //Controller Field Declaration
     private Controller controller;
@@ -125,7 +133,7 @@ public class FrontEndGUI {
         //Label Initialization
         topLabelA = new Label("    C++ UNIT \n TEST GENERATOR ");
         topLabelB = new Label();
-        destinationLabel = new Label();
+        destinationLabel = new Label("Destination:");
 
         //Region Initialization
         topRegionA = new Region();
@@ -135,38 +143,70 @@ public class FrontEndGUI {
 
         //TextField Initialization
         destinationPath = new TextField();
+        stringDefault = new TextField("Axolotl");
+        characterDefault = new TextField("X");
+        integerDefault = new TextField("36");
+        doubleDefault = new TextField("3.14");
+        booleanDefault = new TextField("true");
 
-        //Button Initialization
-        browseButton1 = new Button();
-        browseButton2 = new Button();
-        previewButton = new Button();
-        generateButton = new Button();
-        preferencesButton = new Button();
-        helpButton = new Button();
-        refreshButton = new Button();
-        selectAllButton = new Button();
-        deselectAllButton = new Button();
-        defaultsButton = new Button();
+        //Button/Tooltip Initialization/Declaration and Formatting
+        browseButton1 = new Button("Browse");
+        browseButton1.setTooltip(new Tooltip("Search for .cpp \nand .h source files!"));
+        browseButton1.setPrefSize(78, 20);
+        browseButton2 = new Button("Browse");
+        browseButton2.setTooltip(new Tooltip("Search for or enter in \nyour destination directory!"));
+        browseButton2.setPrefSize(78, 20);
+        previewButton = new Button("Preview");
+        previewButton.setTooltip(new Tooltip("Preview output files!"));
+        previewButton.setPrefSize(78, 20);
+        generateButton = new Button("Generate");
+        generateButton.setTooltip(new Tooltip("Parse source files and select \ntest fixture preferences!"));
+        generateButton.setPrefSize(78, 20);
+        preferencesButton = new Button("Preferences");
+        preferencesButton.setTooltip(new Tooltip("Select preferences and manage \nuser-selected default " +
+                                                    "destination paths!"));
+        preferencesButton.setPrefSize(80, 27);
+        preferencesButton.setFont(Font.font(11));
+        helpButton = new Button("Help");
+        helpButton.setTooltip(new Tooltip("Access the help manual!"));
+        helpButton.setPrefSize(78, 20);
+        refreshButton = new Button("Refresh");
+        refreshButton.setTooltip(new Tooltip("Remove all \nunselected files!"));
+        refreshButton.setPrefSize(78, 20);
+        selectAllButton = new Button("Select All");
+        selectAllButton.setPrefSize(78, 20);
+        deselectAllButton = new Button("Deselect All");
+        deselectAllButton.setFont(Font.font(11));
+        deselectAllButton.setPrefSize(78, 27);
+        defaultsButton = new Button("Defaults");
+        defaultsButton.setTooltip(new Tooltip("Load a default \ndestination path!"));
+        defaultsButton.setPrefSize(78, 20);
 
         //Axolotl Image Initialization and Formatting
-        image = new Image("CuteLizard.PNG", 100, 100,
+        image = new Image("CuteLizard.PNG", 140, 140,
                 false, false);
 
-        //ToolTip Initialization/Formatting
-        sourceBrowseTip = new Tooltip();
-        destinationBrowseTip = new Tooltip();
-        refreshTip = new Tooltip();
+        //(To be)Parsed Method List
+        methodCheckList = new ListView<>();
+
+        //CFlag List Declaration/Initialization and Populating
+        cFlagCheckList = new ListView<>();
+        for(int i = 0; i < 5; i++) {
+            CheckBox box = new CheckBox("Flag" + (i + 1));
+            cFlagCheckList.getItems().add(box);
+        }
 
         /*
-         * Initializes the ListView object and defaultPaths  that represents the list of preferred destination paths
-         * and loads the check list coinciding with the serialized user preference settings defined in the Preferences
-         * class
+         * Initializes the ListView and ChoiceBox objects that represents the lists of preferred destination paths
+         * and loads the check lists coinciding with the serialized user preference settings defined in the Preferences
+         * class.  The ListView lives in the 'Manage' window while the ChoiceBox lives in the window resulting from the
+         * 'Defaults' button click on the main gui.
          */
         manageSubSceneA = new ListView<>();
         defaultPaths = new ChoiceBox<>();
-        Iterator<File> itty = controller.setPreferredDestinations().iterator();
-        while(itty.hasNext()) {
-            File destination = itty.next();
+        Iterator<File> it = controller.setPreferredDestinations().iterator();
+        while(it.hasNext()) {
+            File destination = it.next();
             CheckBox box = new CheckBox();
             box.setText(destination.getAbsolutePath());
             box.setSelected(true);
@@ -185,7 +225,7 @@ public class FrontEndGUI {
         for (int i = 0; i < 7; i++) {
             ChoiceBox<String> preference = new ChoiceBox<>(FXCollections.observableArrayList("Off", "On"));
             preferences.add(preference);
-            if(toggles.get(i) == false) {
+            if(!toggles.get(i)) {
                 preferences.get(i).getSelectionModel().selectFirst();
             }
             else{
@@ -200,44 +240,14 @@ public class FrontEndGUI {
         shadow.setColor(Color.BLACK);
     }
 
-
     /**
      * Builds and formats the entire front end GUI (Graphical User Interface) that interacts with the user
      * @param primaryStage Main window of program
      */
     public void mainWindowDisplay(Stage primaryStage) throws FileNotFoundException {
         window = primaryStage;
-        //Button Formatting
-        browseButton1.setText("Browse");
-        browseButton1.setPrefSize(78, 20);
-        browseButton2.setText("Browse");
-        browseButton2.setPrefSize(78, 20);
-        helpButton.setText("Help");
-        helpButton.setPrefSize(78, 20);
-        previewButton.setText("Preview");
-        previewButton.setPrefSize(78, 20);
-        preferencesButton.setText("Preferences");
-        preferencesButton.setPrefSize(80, 20);
-        generateButton.setText("Generate");
-        generateButton.setPrefSize(78, 20);
-        refreshButton.setText("Refresh");
-        refreshButton.setPrefSize(78, 20);
-        selectAllButton.setText("Select All");
-        selectAllButton.setPrefSize(78, 20);
-        deselectAllButton.setText("Deselect All");
-        deselectAllButton.setPrefSize(78, 20);
-        defaultsButton.setText("Defaults");
-        defaultsButton.setPrefSize(78, 20);
 
-        //ToolTip insertion
-        sourceBrowseTip.setText("Search for .cpp \nand .h source files");
-        browseButton1.setTooltip(sourceBrowseTip);
-        destinationBrowseTip.setText("Search for or enter in \nyour destination directory");
-        browseButton2.setTooltip(destinationBrowseTip);
-        refreshTip.setText("Remove all \nunselected files");
-        refreshButton.setTooltip(refreshTip);
-
-        //ShadowEffect for Program Name and Axolotyl Image in Top Layer
+        //ShadowEffect for Program Name and Axolotl Image in Top Layer
         topLabelA.setEffect(shadow);
         topLabelB.setEffect(shadow);
 
@@ -251,7 +261,7 @@ public class FrontEndGUI {
         topLabelB.setGraphic(new ImageView(image));
         topLabelB.setPadding(new Insets(15, 12, 15, 0));
         topLabelA.setTextFill(Color.web("#DED8D8"));
-        topLabelA.setFont(Font.font("Courier New", FontWeight.BOLD, 60));
+        topLabelA.setFont(Font.font("Courier New", FontWeight.BOLD, 66));
         HBox.setHgrow(topRegionB, Priority.ALWAYS);
         HBox.setHgrow(topRegionA, Priority.ALWAYS);
         topBorderScene.setStyle("-fx-background-color: #373747;");
@@ -268,7 +278,6 @@ public class FrontEndGUI {
         bottomSubSceneC.setSpacing(10);
         bottomSubSceneC.getChildren().addAll(bottomSubSceneA, bottomRegion, bottomSubSceneB);
         HBox.setHgrow(bottomRegion, Priority.ALWAYS);
-        destinationLabel.setText("Destination:");
         destinationLabel.setFont(Font.font("Courier New"));
         destinationLabel.setTextFill(Color.web("#DED8D8"));
         destinationPath.setFocusTraversable(false);
@@ -311,9 +320,9 @@ public class FrontEndGUI {
         //Makes window visible
         window.getIcons().add(new Image("CuteLizard.PNG"));
         window.setTitle("AxolotlSWENG:        Powered by Rowan University");
-        window.setScene(new Scene(mainScene, 800, 500));
-        mainScene.setMinWidth(700);
-        mainScene.setMinHeight(430);
+        window.setScene(new Scene(mainScene, 800, 510));
+        mainScene.setMinWidth(800);
+        mainScene.setMinHeight(510);
         window.show();
 
         Main.LOGGER.info("Front End User Interface built and displayed");
@@ -554,22 +563,18 @@ public class FrontEndGUI {
         //Generate window region declaration and initialization
         Region topRegion = new Region();
 
-        //Generate window button declarations and initializations
-        Button closeButton = new Button();
-        Button mainMenuButton = new Button();
-        Button destinationOutput = new Button();
+        //Generate window button declarations/initialization and formatting
+        Button closeButton = new Button("Close");
+        closeButton.setPrefSize(80, 20);
+        Button mainMenuButton = new Button("Main Menu");
+        mainMenuButton.setPrefSize(90, 20);
+        Button destinationOutput = new Button("Destination");
+        destinationOutput.setTooltip(new Tooltip("Access your output files!"));
+        destinationOutput.setPrefSize(90, 20);
 
         //Generate window image declaration and initialization
         Image partyLizard = new Image("HappyLizard.JPG",200, 200,
                 false, false);
-
-        //Generate Window button formatting
-        mainMenuButton.setText("Main Menu");
-        mainMenuButton.setPrefSize(80, 20);
-        closeButton.setText("Close");
-        closeButton.setPrefSize(80, 20);
-        destinationOutput.setText("Destination");
-        destinationOutput.setPrefSize(80, 20);
 
         //ShadowEffect for Program Name and Axolotl Image in Top Layer
         topSceneLabelB.setEffect(shadow);
@@ -613,6 +618,12 @@ public class FrontEndGUI {
         stage.setResizable(false);
         stage.getIcons().add(new Image("CuteLizard.PNG"));
         stage.show();
+        /*
+
+         */
+        stage.setOnCloseRequest(event -> {
+            controller.serializePreference();
+        });
         /*
         Action Listener for the Generate window that closes this window and ends program execution
          */
@@ -658,16 +669,13 @@ public class FrontEndGUI {
         Region previewRegion= new Region();
 
         //Preview window bottom label declaration/initialization and formatting
-        Label bottomPreviewLabel = new Label();
-        bottomPreviewLabel.setText("Sample File:  ");
+        Label bottomPreviewLabel = new Label("Sample File:  ");
         bottomPreviewLabel.setFont(Font.font("Courier New"));
         bottomPreviewLabel.setTextFill(Color.web("#DED8D8"));
 
-        Button sampleFileButton = new Button();
-        sampleFileButton.setText("Assignment.cpp");
+        Button sampleFileButton = new Button("Assignment.cpp");
         sampleFileButton.setPrefSize(120, 20);
-        Button previewCloseButton = new Button();
-        previewCloseButton.setText("Close");
+        Button previewCloseButton = new Button("Close");
         previewCloseButton.setPrefSize(80, 20);
 
         //Populating Bottom Preview Window Scene
@@ -677,13 +685,10 @@ public class FrontEndGUI {
         bottomPreviewScene.getChildren().addAll(bottomPreviewSubSceneA, previewRegion, bottomPreviewSubSceneB);
 
         //Preview window Tab/Tab Pane declaration/initialization and formatting
-        Tab makefileTab = new Tab();
-        Tab unitTestTab = new Tab();
-        Tab testFixtureTab = new Tab();
+        Tab makefileTab = new Tab("Makefile");
+        Tab unitTestTab = new Tab("Unit Test");
+        Tab testFixtureTab = new Tab("Test Fixture");
         TabPane previewTabPane = new TabPane();
-        makefileTab.setText("Makefile");
-        unitTestTab.setText("Unit Test");
-        testFixtureTab.setText("Test Fixture");
         previewTabPane.getTabs().addAll(makefileTab, unitTestTab, testFixtureTab);
         previewTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -780,21 +785,23 @@ public class FrontEndGUI {
         HBox preferencesSubSceneS = new HBox();
         HBox preferencesSubSceneT = new HBox();
 
-        //Preferences window button declaration/initialization and formatting.
-        Button saveButton = new Button();
-        saveButton.setText("Save");
+        //Tooltip Declaration/Initialization
+
+        //Preferences window button/tooltip declaration/initialization and formatting.
+        Button saveButton = new Button("Save");
+        saveButton.setTooltip(new Tooltip("Save a destination path!"));
         saveButton.setPrefSize(78, 20);
-        Button applyButton = new Button();
-        applyButton.setText("Apply");
+        Button applyButton = new Button("Apply");
+        applyButton.setTooltip(new Tooltip("Save your changes!"));
         applyButton.setPrefSize(78, 20);
-        Button closeButton = new Button();
-        closeButton.setText("Cancel");
+        Button closeButton = new Button("Cancel");
+        closeButton.setTooltip(new Tooltip("Did you save your changes?"));
         closeButton.setPrefSize(78, 20);
-        Button browseButton = new Button();
-        browseButton.setText("Browse");
+        Button browseButton = new Button("Browse");
+        browseButton.setTooltip(new Tooltip("Search for a destination path!"));
         browseButton.setPrefSize(78, 20);
-        Button manageButton = new Button();
-        manageButton.setText("Manage");
+        Button manageButton = new Button("Manage");
+        manageButton.setTooltip(new Tooltip("Manage your default \ndestination paths!"));
         manageButton.setPrefSize(78, 20);
 
         //TextField declaration/initialization
@@ -804,36 +811,30 @@ public class FrontEndGUI {
         Region bottomRegion = new Region();
 
         //Preferences window label declaration/initialization and formatting
-        Label preferenceLabelA = new Label();
-        preferenceLabelA.setText("Placeholder for preference 1:                         ");
+
+        Label preferenceLabelA = new Label("This will contain info for the first preference       ");
         preferenceLabelA.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelA.setTextFill(Color.web("#DED8D8"));
-        Label preferenceLabelB = new Label();
-        preferenceLabelB.setText("Placeholder for preference 2:                         ");
+        Label preferenceLabelB = new Label("This will contain info for the second preference      ");
         preferenceLabelB.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelB.setTextFill(Color.web("#DED8D8"));
-        Label preferenceLabelC = new Label();
-        preferenceLabelC.setText("Placeholder for preference 3:                         ");
+        Label preferenceLabelC = new Label("This will contain info for the third preference       ");
         preferenceLabelC.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelC.setTextFill(Color.web("#DED8D8"));
-        Label preferenceLabelD = new Label();
-        preferenceLabelD.setText("Placeholder for preference 4:                         ");
+        Label preferenceLabelD = new Label("This will contain info for the fourth preference      ");
         preferenceLabelD.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelD.setTextFill(Color.web("#DED8D8"));
-        Label preferenceLabelE = new Label();
-        preferenceLabelE.setText("Placeholder for preference 5:                         ");
+        Label preferenceLabelE = new Label("This will contain info for the fifth preference       ");
         preferenceLabelE.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelE.setTextFill(Color.web("#DED8D8"));
-        Label preferenceLabelF = new Label();
-        preferenceLabelF.setText("Placeholder for preference 6:                         ");
+        Label preferenceLabelF = new Label("This will contain info for the sixth preference       ");
         preferenceLabelF.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelF.setTextFill(Color.web("#DED8D8"));
-        Label preferenceLabelG = new Label();
-        preferenceLabelG.setText("Placeholder for preference 7:                         ");
+        Label preferenceLabelG = new Label("This will contain info for the seventh preference     ");
+
         preferenceLabelG.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelG.setTextFill(Color.web("#DED8D8"));
-        Label preferenceLabelH = new Label();
-        preferenceLabelH.setText("Update Preferred Destinations:  ");
+        Label preferenceLabelH = new Label("Update Preferred Destinations:  ");
         preferenceLabelH.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
 
         //Preference #1 Populating and Formatting
@@ -919,7 +920,6 @@ public class FrontEndGUI {
         preferencesSubSceneT.setSpacing(10);
         preferencesSceneI.getChildren().addAll(preferencesSubSceneS, bottomRegion, preferencesSubSceneT);
         bottomRegion.setMinWidth(275);
-        //preferencesBottomScene.setHgrow(bottomRegion, Priority.ALWAYS);
         preferencesSceneI.setPadding(new Insets(0,15,15,20));
         preferencesBottomScene.setStyle("-fx-background-color: #373747;");
         preferencesBottomScene.getChildren().add(preferencesSceneI);
@@ -957,8 +957,8 @@ public class FrontEndGUI {
         controller upon making a check that the isn "bad" (doesn't exist on the system and/or isn't a directory)
          */
         saveButton.setOnAction(event -> {
-            manageSubSceneA = controller.saveBrowse(manageSubSceneA, preferredDestinationPath);
-            defaultPaths = controller.updateDefaultPaths(defaultPaths, preferredDestinationPath);
+            manageSubSceneA = controller.saveDestinationPath(manageSubSceneA, preferredDestinationPath);
+            defaultPaths = controller.updateDefaultPaths();
         });
 
         /*
@@ -986,17 +986,16 @@ public class FrontEndGUI {
             manageRegionB.setMinHeight(50);
 
             //Manage window button declaration/initialization and formatting
-            Button manageRefreshButton = new Button();
-            manageRefreshButton.setText("Refresh");
+            Button manageRefreshButton = new Button("Refresh");
+            manageRefreshButton.setTooltip(new Tooltip("Removes any unselected destination path " +
+                                                    "\nin the checklist!"));
             manageRefreshButton.setPrefSize(78, 20);
-            Button manageSelectAllButton = new Button();
-            manageSelectAllButton.setText("Select All");
+            Button manageSelectAllButton = new Button("Select All");
             manageSelectAllButton.setPrefSize(78, 20);
-            Button manageDeselectAllButton = new Button();
-            manageDeselectAllButton.setText("Deselect All");
+            Button manageDeselectAllButton = new Button("Deselect All");
             manageDeselectAllButton.setPrefSize(78, 20);
-            Button manageCloseButton = new Button();
-            manageCloseButton.setText("Close");
+            Button manageCloseButton = new Button("Close");
+            manageCloseButton.setTooltip(new Tooltip("Did you click 'Refresh' so \nsave your changes?"));
             manageCloseButton.setPrefSize(78, 20);
 
             //Manage window scene formatting
@@ -1027,7 +1026,7 @@ public class FrontEndGUI {
                 if(!manageSubSceneA.getItems().isEmpty() ||
                         !controller.checkThatAllDesiredFilesAreSelected(manageSubSceneA)) {
                     manageSubSceneA = controller.refreshPreferredDestinationFiles(manageSubSceneA);
-                    defaultPaths = controller.updateDefaultPaths(defaultPaths, preferredDestinationPath);
+                    defaultPaths = controller.updateDefaultPaths();
                 }
                 else {
                     AlertBox.simpleDisplay("Nothing to refresh... Everything seems up to date!");
@@ -1066,6 +1065,438 @@ public class FrontEndGUI {
 
         });
 
+    }
+
+    /**
+     * Private Method that builds the Test Fixture window for the user
+     */
+    private void buildTestFixtureWindow() {
+        //Test fixture main window BorderPane layout
+        BorderPane fixtureLayout = new BorderPane();
+
+        //Test fixture window scene declaration and initialization
+        HBox fixtureTopScene = new HBox();
+        VBox fixtureCenterScene  = new VBox();
+        HBox fixtureBottomScene = new HBox();
+        HBox centerSceneA = new HBox();  //Compiler Preference
+        HBox centerSceneB = new HBox();  //Executable Name
+        HBox centerSceneC = new HBox();  //CFlags
+        HBox centerSceneD = new HBox();  //Add Methods
+        HBox centerSceneE = new HBox();  //Default Primitive Values Label
+        HBox centerSceneF = new HBox();  //String Default
+        HBox centerSceneG = new HBox();  //Character(Character, char) Default
+        HBox centerSceneH = new HBox();  //Integer(Integer, int, short, long, byte) Default
+        HBox centerSceneI = new HBox();  //Floating-Point Number (float, double, real, doublePrecision) Default
+        HBox centerSceneJ = new HBox();  //Boolean (true, false) Default
+
+
+        //Fixture Region Initialization and Declaration
+        Region topRegionA = new Region();
+        Region topRegionB = new Region();
+        Region centerRegionA = new Region();
+        Region centerRegionB = new Region();
+        Region centerRegionC = new Region();
+        Region centerRegionD = new Region();
+        Region centerRegionEA = new Region();
+        Region centerRegionEB = new Region();
+        Region centerRegionF = new Region();
+        Region centerRegionG = new Region();
+        Region centerRegionH = new Region();
+        Region centerRegionI = new Region();
+        Region centerRegionJ = new Region();
+        Region bottomRegion = new Region();
+
+        //Test fixture labels declaration/initialization and formatting
+        Label centerLabelA = new Label("Compiler: ");
+        centerLabelA.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
+        centerLabelA.setTextFill(Color.web("#DED8D8"));
+        Label centerLabelB = new Label("Executable Name: ");
+        centerLabelB.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
+        centerLabelB.setTextFill(Color.web("#DED8D8"));
+        Label centerLabelC = new Label("Enable CFlags: ");
+        centerLabelC.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
+        centerLabelC.setTextFill(Color.web("#DED8D8"));
+        Label centerLabelD = new Label("Add Methods To Test: ");
+        centerLabelD.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
+        centerLabelD.setTextFill(Color.web("#DED8D8"));
+        Label centerLabelE = new Label("Specify Default Values: ");
+        centerLabelE.setFont(Font.font("Courier New", FontWeight.BOLD, 38));
+        centerLabelE.setTextFill(Color.web("#DED8D8"));
+        centerLabelE.setEffect(shadow);
+        Label centerLabelF = new Label("String: ");
+        centerLabelF.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
+        centerLabelF.setTextFill(Color.web("#DED8D8"));
+        Label centerLabelG = new Label("Character: ");
+        centerLabelG.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
+        centerLabelG.setTextFill(Color.web("#DED8D8"));
+        Label centerLabelH = new Label("Integer: ");
+        centerLabelH.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
+        centerLabelH.setTextFill(Color.web("#DED8D8"));
+        Label centerLabelI = new Label("Double: ");
+        centerLabelI.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
+        centerLabelI.setTextFill(Color.web("#DED8D8"));
+        Label centerLabelJ = new Label("Boolean: ");
+        centerLabelJ.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
+        centerLabelJ.setTextFill(Color.web("#DED8D8"));
+
+        //Compiler Choice Initialization and Declaration along with population of compiler choices and scene
+        ChoiceBox<String> compilerChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList("g++"));
+        compilerChoiceBox.setMinWidth(115);
+        compilerChoiceBox.getSelectionModel().selectFirst();
+        centerSceneA.getChildren().addAll(centerLabelA, centerRegionA, compilerChoiceBox);
+        HBox.setHgrow(centerRegionA,Priority.ALWAYS);
+        centerSceneA.setAlignment(Pos.CENTER);
+        centerSceneA.setPadding(new Insets(0,15,10,15));
+
+        //Executable Name text field declaration/initialization, formatting and population of scene
+        TextField executableName = new TextField("executable");
+        executableName.setMinWidth(165);
+        centerSceneB.getChildren().addAll(centerLabelB, centerRegionB, executableName);
+        HBox.setHgrow(centerRegionB,Priority.ALWAYS);
+        centerSceneB.setAlignment(Pos.CENTER);
+        centerSceneB.setPadding(new Insets(0,15,10,15));
+
+        //CFlag enabling
+        Button enableCFlagsButton = new Button("Enable CFlags");
+        enableCFlagsButton.setPrefSize(115,20 );
+        centerSceneC.getChildren().addAll(centerLabelC, centerRegionC, enableCFlagsButton);
+        centerSceneC.setHgrow(centerRegionC,Priority.ALWAYS);
+        centerSceneC.setAlignment(Pos.CENTER);
+        centerSceneC.setPadding(new Insets(0,15,10,15));
+
+        //Add Methods button declaration/initialization and formatting and population of Scene
+        Button addMethodsButton = new Button("Add Methods");
+        addMethodsButton.setPrefSize(115,20 );
+        centerSceneD.getChildren().addAll(centerLabelD, centerRegionD, addMethodsButton);
+        HBox.setHgrow(centerRegionD,Priority.ALWAYS);
+        centerSceneD.setAlignment(Pos.CENTER);
+        centerSceneD.setPadding(new Insets(0,15,5,15));
+
+        //Default Value Section (Label) and String Default Value Scene population and formatting
+        centerSceneE.getChildren().addAll(centerRegionEA, centerLabelE, centerRegionEB);
+        HBox.setHgrow(centerRegionEA, Priority.ALWAYS );
+        HBox.setHgrow(centerRegionEB, Priority.ALWAYS );
+        centerSceneE.setPadding(new Insets(0,0,10,0));
+        stringDefault.setMinWidth(150);
+        centerSceneF.getChildren().addAll(centerLabelF, centerRegionF, stringDefault);
+        HBox.setHgrow(centerRegionF,Priority.ALWAYS);
+        centerSceneF.setAlignment(Pos.CENTER);
+        centerSceneF.setPadding(new Insets(0,15,10,15));
+
+        //Character Default Value Scene Population and Formatting
+        centerSceneG.getChildren().addAll(centerLabelG, centerRegionG, characterDefault);
+        HBox.setHgrow(centerRegionG,Priority.ALWAYS);
+        centerSceneG.setAlignment(Pos.CENTER);
+        centerSceneG.setPadding(new Insets(0,15,10,15));
+
+        //Integer Default Value Scene Population and Formatting
+        centerSceneH.getChildren().addAll(centerLabelH, centerRegionH, integerDefault);
+        HBox.setHgrow(centerRegionH,Priority.ALWAYS);
+        centerSceneH.setAlignment(Pos.CENTER);
+        centerSceneH.setPadding(new Insets(0,15,10,15));
+
+        //Floating-Point # Default Value Scene Population and Formatting
+        centerSceneI.getChildren().addAll(centerLabelI, centerRegionI, doubleDefault);
+        HBox.setHgrow(centerRegionI,Priority.ALWAYS);
+        centerSceneI.setAlignment(Pos.CENTER);
+        centerSceneI.setPadding(new Insets(0,15,10,15));
+
+        //Boolean Default Value Scene Population and Formatting
+        centerSceneJ.getChildren().addAll(centerLabelJ, centerRegionJ, booleanDefault);
+        HBox.setHgrow(centerRegionJ,Priority.ALWAYS);
+        centerSceneJ.setAlignment(Pos.CENTER);
+        centerSceneJ.setPadding(new Insets(0,15,5,15));
+
+        //Center Scene populating & formatting
+        fixtureCenterScene.getChildren().addAll(centerSceneA, centerSceneB, centerSceneC, centerSceneD, centerSceneE,
+                centerSceneF, centerSceneG, centerSceneH, centerSceneI, centerSceneJ);
+        fixtureCenterScene.setPadding(new Insets(0, 5, 0, 5));
+
+        //Top label declaration/initialization and formatting
+        Label fixtureLabel = new Label("Almost There!");
+        fixtureLabel.setTextFill(Color.web("#DED8D8"));
+        fixtureLabel.setEffect(shadow);
+        fixtureLabel.setFont(Font.font("Courier New", FontWeight.BOLD, 69));
+        //Top Scene populating & formatting
+        fixtureTopScene.setStyle("-fx-background-color: #373747;");
+        fixtureTopScene.getChildren().addAll(topRegionA, fixtureLabel, topRegionB);
+        HBox.setHgrow(topRegionA, Priority.ALWAYS);
+        HBox.setHgrow(topRegionB, Priority.ALWAYS);
+
+        //Bottom Scene Button Declaration/Initialization and formatting
+        Button generateButton = new Button("Generate");
+        generateButton.setTooltip(new Tooltip("Generate output files!"));
+        generateButton.setPrefSize(78,20);
+        Button helpButton = new Button("Help");
+        helpButton.setTooltip(new Tooltip("Access the help manual!"));
+        helpButton.setPrefSize(78,20);
+
+        //Bottom Scene Formatting and Population
+        fixtureBottomScene.setPadding(new Insets(0,20,20,20));
+        fixtureBottomScene.getChildren().addAll(helpButton, bottomRegion, generateButton);
+        HBox.setHgrow(bottomRegion, Priority.ALWAYS);
+        fixtureBottomScene.setStyle("-fx-background-color: #373747;");
+
+        //Test fixture window display and and formatting
+        fixtureLayout.setTop(fixtureTopScene);
+        fixtureLayout.setCenter(fixtureCenterScene);
+        fixtureLayout.setBottom(fixtureBottomScene);
+        fixtureLayout.setStyle("-fx-background-color: #373747;");
+        Stage fixtureStage = new Stage();
+        fixtureStage.initModality(Modality.APPLICATION_MODAL);
+        fixtureStage.setTitle("AxolotlSWENG:        Powered by Rowan University");
+        fixtureStage.setScene(new Scene(fixtureLayout, 580, 590));
+        fixtureStage.setResizable(false);
+        fixtureStage.getIcons().add(new Image("CuteLizard.PNG"));
+        fixtureStage.show();
+
+        /*
+         Action Listener for the 'Help' button which will display the help window/menu for the user
+         */
+        helpButton.setOnAction(event -> buildHelpWindow());
+
+        /*
+         Action Listener for the 'Apply' button thaT, after handling error checking, directs the user to the 'Success'
+         screen that guides the user to their output files
+         */
+        generateButton.setOnAction(event -> {
+            String errorMessage = "";
+            String userValue = booleanDefault.getText();
+            boolean error = false;
+            if(compilerChoiceBox.getSelectionModel().getSelectedItem().isEmpty()) {
+                errorMessage = "Please specify your compiler!";
+                error = true;
+            }
+            else if(executableName.getText().isEmpty()) {
+                errorMessage = "Please specify a valid executable name!";
+                error = true;
+            }
+            else if(stringDefault.getText().isEmpty()) {
+                errorMessage = "Please specify a valid String default value!";
+                error = true;
+            }
+            else if(!characterDefault.getText().trim().matches("[a-zA-Z\\d]")) {
+                errorMessage = "Please specify a valid Character default value!";
+                error = true;
+            }
+            else if(!integerDefault.getText().trim().matches("^-?\\d+$")) {
+                errorMessage = "Please specify a valid Integer default value!";
+                error = true;
+            }
+            else if(!doubleDefault.getText().trim().matches("^-?\\d+(\\.\\d+)?")) {
+                errorMessage = "Please specify a valid Double default value!";
+                //error = true;
+            }
+            else if(!userValue.equalsIgnoreCase("true") &&
+                            !userValue.equalsIgnoreCase("false")) {
+                errorMessage = "Please specify a valid Boolean default value!";
+            }
+            if(!error) {
+                buildGenerateWindow();
+                controller.printTextFixturePreferences(); //Test Method
+                controller.updateTestFixturePreferences(compilerChoiceBox.getSelectionModel().getSelectedItem(),
+                        executableName.getText(), stringDefault.getText(), characterDefault.getText(),
+                        integerDefault.getText(), doubleDefault.getText(), booleanDefault.getText());
+                controller.printTextFixturePreferences(); //Test Method
+                controller.getFileParser().generateOutputFiles(controller.getDestinationFile(), //Destination
+                                                    //MORE TO BE ADDED
+                                                    controller.getExecutableName()); //Executable Name
+                fixtureStage.close();
+            }
+            else {
+                AlertBox.simpleDisplay(errorMessage);
+            }
+        });
+
+        /*
+           Action Listener for the 'Enable CFlags' button that builds and displays a new window showing a check list of
+           all the selectable CFlags, as well as a 'Select All' and 'Deselect All' (for obvious uses) as well as an
+           'Apply' button that updates the Controller component of the CFlags selected by the user.
+         */
+        enableCFlagsButton.setOnAction(event -> {
+            //'Enable CFlags' window main layout declaration and initialization
+            BorderPane enableCFlagsLayout = new BorderPane();
+
+            //'Enable CFlags' window scene declaration/initialization
+            HBox cFlagCenterScene = new HBox();
+            VBox cFlagCenterSubScene = new VBox();
+            HBox cFlagBottomScene = new HBox();
+
+            //'Enable CFlags' region declaration/initialization
+            Region regionA = new Region();
+            Region regionB = new Region();
+
+            //'Enable CFlags' window button initialization/declaration and formatting
+            Button cFlagSelectAllButton = new Button("Select All");
+            cFlagSelectAllButton.setPrefSize(93, 20);
+            Button cFlagDeselectAllButton = new Button("Deselect All");
+            cFlagDeselectAllButton.setPrefSize(93, 20);
+            Button cFlagApplyButton = new Button("Apply");
+            cFlagApplyButton.setPrefSize(78, 20);
+            Button cFlagCloseButton = new Button("Close");
+            cFlagCloseButton.setPrefSize(78, 20);
+
+            //'Enable CFlags' window center scene formatting and populating
+            cFlagCenterSubScene.getChildren().addAll(cFlagSelectAllButton, cFlagDeselectAllButton);
+            cFlagCenterSubScene.setSpacing(10);
+            cFlagCenterSubScene.setAlignment(Pos.TOP_CENTER);
+            cFlagCenterScene.getChildren().addAll(cFlagCheckList, regionA, cFlagCenterSubScene);
+            HBox.setHgrow(regionA, Priority.ALWAYS);
+            cFlagCenterScene.setPadding(new Insets(20, 15, 15, 10));
+            cFlagCenterScene.setStyle("-fx-background-color: #373747;");
+            methodCheckList.setMinWidth(400);
+
+            ////'Enable CFlags' window bottom scene formatting and populating
+            cFlagBottomScene.getChildren().addAll(regionB, cFlagApplyButton, cFlagCloseButton);
+            cFlagBottomScene.setSpacing(10);
+            cFlagBottomScene.setAlignment(Pos.CENTER_RIGHT);
+            cFlagBottomScene.setPadding(new Insets(0, 15, 15, 0));
+            cFlagBottomScene.setStyle("-fx-background-color: #373747;");
+            HBox.setHgrow(regionB, Priority.ALWAYS);
+
+            ////'Enable CFlags' main window population, formatting and display
+            enableCFlagsLayout.setCenter(cFlagCenterScene);
+            enableCFlagsLayout.setBottom(cFlagBottomScene);
+            Stage cFlagStage = new Stage();
+            cFlagStage.initModality(Modality.APPLICATION_MODAL);
+            cFlagStage.setTitle("AxolotlSWENG:        Powered by Rowan University");
+            cFlagStage.setScene(new Scene(enableCFlagsLayout, 375, 300));
+            cFlagStage.setResizable(false);
+            cFlagStage.getIcons().add(new Image("CuteLizard.PNG"));
+            cFlagStage.show();
+
+            /*
+            Action Listener for the 'Enable CFlags' 'Close' buttons that closes the window for the user
+            */
+            cFlagCloseButton.setOnAction(eventA -> {
+                cFlagStage.close();
+            });
+
+            /*
+            Action Listener for the 'Enable CFlags' 'Apply' button that makes a call to the controller to update
+            the Controller component's 'cFlagList' (ArrayList) attribute to be transparent and synonymous with the
+            check list of CFlags on the 'Enable CFlags' window
+            */
+            cFlagApplyButton.setOnAction(eventA -> {
+                //controller.updateParsedMethodsForTesting(methodCheckList);
+            });
+
+            /*
+            Action Listener for the 'Enable CFlags' window that makes a call to the controller that sends the
+            checklist to the controller and sends it back to the FrontEndGUI with all CFlags selected
+            */
+            cFlagSelectAllButton.setOnAction(eventA -> {
+                cFlagCheckList = controller.selectAllSourceFiles(cFlagCheckList);
+            });
+
+            /*
+            Action Listener for the 'Enable CFlags' window that makes a call to the controller that sends the
+            checklist to the controller and sends it back to the FrontEndGUI with all CFlags deselected
+            */
+            cFlagDeselectAllButton.setOnAction(eventA -> {
+                cFlagCheckList = controller.deselectAllSourceFiles(cFlagCheckList);
+            });
+        });
+
+        /*
+         Action Listener for the 'Add Methods' button that builds and displays a new window showing a check list of
+         all the parsed methods selectable for testing , as well as a 'Select All' and 'Deselect All' (for obvious uses)
+         as well as an 'Apply' button that updates the Controller component of the parsed methods selected by the user
+         for testing
+
+         */
+        addMethodsButton.setOnAction(event -> {
+            if(!methodCheckList.getItems().isEmpty()) {
+                //'Add Methods' window main layout declaration and initialization
+                BorderPane addMethodsLayout = new BorderPane();
+
+                //'Add Methods' window scene declaration/initialization
+                HBox methodCenterScene = new HBox();
+                VBox methodCenterSubScene = new VBox();
+                HBox methodBottomScene = new HBox();
+
+                //'Add Methods' region declaration and initialization
+                Region regionA = new Region();
+                Region regionB = new Region();
+
+                //Add Methods window button initialization/declaration and formatting
+                Button methodSelectAllButton = new Button("Select All");
+                methodSelectAllButton.setPrefSize(93, 20);
+                Button methodDeselectAllButton = new Button("Deselect All");
+                methodDeselectAllButton.setPrefSize(93, 20);
+                Button methodApplyButton = new Button("Apply");
+                methodApplyButton.setTooltip(new Tooltip("All unselected methods will \nnot be tested!"));
+                methodApplyButton.setPrefSize(78, 20);
+                Button methodCloseButton = new Button("Close");
+                methodCloseButton.setTooltip(new Tooltip("Did you click 'Apply' \nto save your changes?"));
+                methodCloseButton.setPrefSize(78, 20);
+
+                //'Add Methods' window center scene formatting and populating
+                methodCenterSubScene.getChildren().addAll(methodSelectAllButton, methodDeselectAllButton);
+                methodCenterSubScene.setSpacing(10);
+                methodCenterSubScene.setAlignment(Pos.TOP_CENTER);
+                methodCenterScene.getChildren().addAll(methodCheckList, regionA, methodCenterSubScene);
+                HBox.setHgrow(regionA, Priority.ALWAYS);
+                methodCenterScene.setPadding(new Insets(20, 15, 15, 10));
+                methodCenterScene.setStyle("-fx-background-color: #373747;");
+                methodCheckList.setMinWidth(400);
+
+                //'Add Method's window bottom scene formatting and populating
+                methodBottomScene.getChildren().addAll(regionB, methodApplyButton, methodCloseButton);
+                methodBottomScene.setSpacing(10);
+                methodBottomScene.setAlignment(Pos.CENTER_RIGHT);
+                methodBottomScene.setPadding(new Insets(0, 15, 15, 0));
+                methodBottomScene.setStyle("-fx-background-color: #373747;");
+                HBox.setHgrow(regionB, Priority.ALWAYS);
+
+                //'Add Methods' main window population, formatting and display
+                addMethodsLayout.setCenter(methodCenterScene);
+                addMethodsLayout.setBottom(methodBottomScene);
+                Stage methodStage = new Stage();
+                methodStage.initModality(Modality.APPLICATION_MODAL);
+                methodStage.setTitle("AxolotlSWENG:        Powered by Rowan University");
+                methodStage.setScene(new Scene(addMethodsLayout, 540, 500));
+                methodStage.setResizable(false);
+                methodStage.getIcons().add(new Image("CuteLizard.PNG"));
+                methodStage.show();
+
+                /*
+                Action Listener for the 'Add Methods' 'Close' button that closes the window for the user
+                */
+                methodCloseButton.setOnAction(eventA -> {
+                    methodStage.close();
+                });
+
+                /*
+                Action Listener for the 'Add Methods' 'Apply' button that makes a call to the controller to update
+                the FileParser component's 'method' (ArrayList) attribute to be transparent and synonymous with the
+                check list of parsed methods on the 'Add Methods' window
+                 */
+                methodApplyButton.setOnAction(eventA -> {
+                    controller.updateParsedMethodsForTesting(methodCheckList);
+                });
+
+                /*
+                Action Listener for the 'Add Methods' window that makes a call to the controller that sends the
+                checklist to the controller and sends it back to the FrontEndGUI with all Methods selected
+                */
+                methodSelectAllButton.setOnAction(eventA -> {
+                    methodCheckList = controller.selectAllSourceFiles(methodCheckList);
+                });
+
+                /*
+                Action Listener for the 'Add Methods' window that makes a call to the controller that sends the
+                checklist to the controller and sends it back to the FrontEndGUI with all Methods deselected
+                 */
+                methodDeselectAllButton.setOnAction(eventA -> {
+                    methodCheckList = controller.deselectAllSourceFiles(methodCheckList);
+                });
+            }
+            else {
+               AlertBox.simpleDisplay("No methods appear to exist!  Did you remember to the include .h file(s)?");
+            }
+
+        });
     }
 
     /**
@@ -1170,10 +1601,10 @@ public class FrontEndGUI {
                 File[] parsingFiles = new File[controller.getSourceFiles().size()];
                 controller.getSourceFiles().toArray(parsingFiles);
                 try {
-                    controller.getFileParser().parseFilesAndGenerateOutputFiles(parsingFiles,
-                            controller.getDestinationFile());
+                    controller.getFileParser().parseSourceFiles(parsingFiles); //PARSES SOURCE FILES
                     window.hide();
-                    buildGenerateWindow();
+                    methodCheckList = controller.populateMethodsOnGui(methodCheckList);
+                    buildTestFixtureWindow();
 
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
@@ -1191,33 +1622,35 @@ public class FrontEndGUI {
         Action listener for the 'Preview' button that will display the 'Preview' window for the user
          */
         previewButton.setOnAction(event -> buildPreviewWindow());
+
         /*
         Action listener for the 'Preferences' button that will display the 'Preferences' window/menu for the user
          */
         preferencesButton.setOnAction(event -> buildPreferencesWindow());
+
         /*
         Action Listener for the 'Defaults' button that build the 'Defaults' window that allows the user select and load
         one of their predefined destination paths.
          */
         defaultsButton.setOnAction(event -> {
-
             if (!defaultPaths.getItems().isEmpty()) {
+                //'Defaults' window main scene declaration/initialization
                 HBox defaultPathWindow = new HBox();
 
-                Button loadButton = new Button();
-                loadButton.setText("Load");
+                //'Defaults' window button declaration/initialization and formatting
+                Button loadButton = new Button("Load");
                 loadButton.setPrefSize(78, 20);
-                Button closeButton = new Button();
-                closeButton.setText("Close");
+                Button closeButton = new Button("Close");
                 closeButton.setPrefSize(78, 20);
 
+                //Default destination path checkList formatting
                 defaultPaths.setMinWidth(500);
                 defaultPaths.getSelectionModel().selectFirst();
 
+                //'Defaults window population, formatting and display
                 defaultPathWindow.getChildren().addAll(defaultPaths, loadButton, closeButton);
                 defaultPathWindow.setSpacing(10);
                 defaultPathWindow.setPadding(new Insets(10, 10, 10, 10));
-
                 Stage defaultPathStage = new Stage();
                 defaultPathStage.setScene(new Scene(defaultPathWindow, 650, 50));
                 defaultPathStage.initModality(Modality.APPLICATION_MODAL);
@@ -1226,10 +1659,17 @@ public class FrontEndGUI {
                 defaultPathStage.getIcons().add(new Image("CuteLizard.PNG"));
                 defaultPathStage.show();
 
+                /*
+                 * Action Listener for the 'Load' button in the 'Defaults' window that closes the window
+                 */
                 closeButton.setOnAction(eventA -> {
                     defaultPathStage.close();
                 });
 
+                /*
+                 * Action Listener for the 'Load' button in the 'Defaults' window that loads the selected destination from
+                 * the drop down menu onto the main GUI for the user
+                 */
                 loadButton.setOnAction(eventA -> {
                     destinationPath.setText(defaultPaths.getSelectionModel().getSelectedItem());
                     defaultPathStage.close();

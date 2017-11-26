@@ -29,6 +29,22 @@ public class FileParser {
         fixture = new TestFixture();
     }
 
+    public ArrayList<Method> getMethods() {
+        return methods;
+    }
+
+    public void setMethods(ArrayList<Method> methods) {
+        this.methods = methods;
+    }
+
+    public HashSet<Dependence> getDependencies() {
+        return dependencies;
+    }
+
+    public void setDependencies(HashSet<Dependence> dependencies) {
+        this.dependencies = dependencies;
+    }
+
     /**
      * Receives the files to be parsed and extracts the necessary information;
      * Currently prints that information to the console, but will ultimately pass the information to the file writers.
@@ -38,7 +54,7 @@ public class FileParser {
      * Will ultimately return the makefiles and the unit test and test fixture files.
      * @throws IOException Thrown if an IOException was experienced by BufferedReader reading a passed file.
      */
-    public void parseFilesAndGenerateOutputFiles(File[] projectFiles, File destination) throws IOException {
+    public void parseSourceFiles(File[] projectFiles) throws IOException {
         for (File cFile : projectFiles) {
             if (cFile.getName().endsWith(".cpp"))
                 dependencies.add(makeDependence(cFile));
@@ -47,9 +63,24 @@ public class FileParser {
             //else
                 //throw new IOException("An unexpected file has been passed.");
         }
+
+    }
+
+    /**
+     * Generates the necessary output files (makefile, unit tests, test fixtures) to the destination selected by the
+     * user
+     * @param destination
+     * @param executableName
+     */
+    public void generateOutputFiles(File destination, String executableName) {
         MakeFileWriter.setCompiler(fixture.getCompiler());
         MakeFileWriter.setFlags(fixture.getFlags());
-        MakeFileWriter.writeMakefile(dependencies, fixture.getFinalExecutableName(), destination);
+        try {
+            MakeFileWriter.writeMakefile(dependencies, fixture.getFinalExecutableName(), destination);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
     }
 
@@ -265,8 +296,10 @@ public class FileParser {
      */
     private static void consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(ArrayList<Method> methods,
                                                                           HashSet<Dependence> dependencies) {
+        System.out.println("Parsed Source File Methods and Dependencies");
         methods.forEach(n -> System.out.println(n.toString()));
         dependencies.forEach(n -> System.out.println(n.toString()));
+        System.out.println();
     }
 
     /*

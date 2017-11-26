@@ -42,7 +42,7 @@ public class AlertBox {
         layout.getChildren().addAll(label, closeButton);
         layout.setAlignment(Pos.CENTER);
 
-        window.setScene(new Scene(layout, 475, 75));
+        window.setScene(new Scene(layout, 550, 75));
         window.setResizable(false);
         window.getIcons().add(new Image("warning.png"));
         window.show();

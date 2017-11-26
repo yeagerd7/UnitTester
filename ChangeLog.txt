@@ -41,3 +41,4 @@
 11-17 | Sprint 4 | Build 'Preferences' Window and implemented all functionality including skeletal toggles (stretch goals)
 11-17 | Sprint 4 | Added a 'Default' to main GUI that allows the user to load predefined destination paths
 11-17 | Sprint 4 | Small cosmetic and design oriented fixes applied to FrontEndGUI and other classes
+11-23 | Sprint 4 | Added a 'Test Fixtures Preferences' window that allows user to specify their own preferences for the test fixtures
