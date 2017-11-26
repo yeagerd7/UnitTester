@@ -1299,11 +1299,9 @@ public class FrontEndGUI {
                 controller.updateTestFixturePreferences(compilerChoiceBox.getSelectionModel().getSelectedItem(),
                         executableName.getText(), stringDefault.getText(), characterDefault.getText(),
                         integerDefault.getText(), doubleDefault.getText(), booleanDefault.getText());
+                controller.updateCFlags(cFlagCheckList);
                 controller.printTextFixturePreferences(); //Test Method
-                controller.getFileParser().generateOutputFiles(controller.getDestinationFile(), //Destination
-                        controller.getCompilerChoice(), controller.getExecutableName(), controller.getcFlagList(),
-                        controller.getStringDefault(), controller.getCharacterDefault(), controller.getIntegerDefault(),
-                        controller.getDoubleDefault(), controller.getBooleanDefault());
+                controller.getFileParser().generateOutputFiles(controller.getDestinationFile());
                 fixtureStage.close();
             }
             else {
@@ -1381,7 +1379,7 @@ public class FrontEndGUI {
             check list of CFlags on the 'Enable CFlags' window
             */
             cFlagApplyButton.setOnAction(eventA -> {
-                //controller.updateParsedMethodsForTesting(methodCheckList);
+                controller.updateCFlags(cFlagCheckList);
             });
 
             /*

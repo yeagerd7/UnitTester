@@ -27,9 +27,18 @@ public class TestFixture implements java.io.Serializable {
      */
     private String finalExecutableName;
     /*
-    Default list of files to have unit tests generated for
+    Default list of methods to test
      */
-    private ArrayList<File> testSuite;
+    private ArrayList<Method> testSuite;
+
+    /*
+    Default values for each C++ data type
+     */
+    private String stringDefault;
+    private Character characterDefault;
+    private Integer integerDefault;
+    private Double doubleDefault;
+    private Boolean booleanDefault;
 
     /*
        Hashmap of methods that need to be tested with particular parameters mapped to a .csv file with the parameters stored
@@ -48,18 +57,20 @@ public class TestFixture implements java.io.Serializable {
         compiler = "g++";
         flags = "-c";
         finalExecutableName = "executable";
-        testSuite = new ArrayList<File>();
-        inputValues = new HashMap<Method, File>();
+        testSuite = new ArrayList<Method>();
+        stringDefault = "Axolotl";
+        characterDefault = 'X';
+        integerDefault = 36;
+        doubleDefault = 3.14;
+        booleanDefault = true;
     }
 
-    public TestFixture(String fixtureName, String compiler, String flags, String finalExecutableName, ArrayList<File> testSuite,
-                        HashMap<Method, File> inputValues){
+    public TestFixture(String fixtureName, String compiler, String flags, String finalExecutableName, ArrayList<Method> testSuite){
         this.fixtureName = fixtureName;
         this.compiler = compiler;
         this.flags = flags;
         this.finalExecutableName = finalExecutableName;
         this.testSuite = testSuite;
-        this.inputValues = inputValues;
     }
 
 
@@ -131,7 +142,7 @@ public class TestFixture implements java.io.Serializable {
     Getter for the input files to be used when generating tests
     @returns the input files to be used when generating tests
      */
-    public ArrayList<File> gettestSuite() {
+    public ArrayList<Method> gettestSuite() {
         return testSuite;
     }
 
@@ -139,24 +150,94 @@ public class TestFixture implements java.io.Serializable {
     Setter for the input files to be used when generating tests
     @param inputFiles the input files to be used when generating tests
      */
-    public void setTestSuite(ArrayList<File> inputFiles) {
+    public void setTestSuite(ArrayList<Method> inputFiles) {
         testSuite = inputFiles;
     }
 
-    /*
-      Getter for the methods to be tested with particular parameters
-      @returns a HashMap where methods are mapped to a file full of parameters they should be tested with
-    */
-    public HashMap<Method, File> getInputValues() {
-        return inputValues;
+
+    /**
+     * Accessor method for the 'stringDefault' attribute that returns said attribute.
+     * @return
+     */
+    public String getStringDefault() {
+        return stringDefault;
     }
 
-    /*
-      Getter for the methods to be tested with particular parameters
-      @param inputValues a HashMap where methods are mapped to a file full of parameters they should be tested with
-    */
-    public void setInputValues(HashMap<Method, File> inputValues) {
-        this.inputValues = inputValues;
+    /**
+     * Setter method for 'stringDefault' attribute that sets the value to a new stringDefault String value denoted as a
+     * parameter
+     * @param stringDefault new value
+     */
+    public void setStringDefault(String stringDefault) {
+        this.stringDefault = stringDefault;
+    }
+
+    /**
+     * Accessor method for the 'characterDefault' attribute that returns said attribute.
+     * @return
+     */
+    public Character getCharacterDefault() {
+        return characterDefault;
+    }
+
+    /**
+     * Setter method for 'characterDefault' attribute that sets the value to a new characterDefault character value
+     * denoted as a parameter
+     * @param characterDefault new value
+     */
+    public void setCharacterDefault(Character characterDefault) {
+        this.characterDefault = characterDefault;
+    }
+
+    /**
+     * Accessor method for the 'integerDefault' attribute that returns said attribute.
+     * @return
+     */
+    public Integer getIntegerDefault() {
+        return integerDefault;
+    }
+
+    /**
+     * Setter method for 'integerDefault' attribute that sets the value to a new integerDefault integer value
+     * denoted as a parameter
+     * @param integerDefault new value
+     */
+    public void setIntegerDefault(Integer integerDefault) {
+        this.integerDefault = integerDefault;
+    }
+
+    /**
+     * Accessor method for the 'floatingPointDefault' attribute that returns said attribute.
+     * @return
+     */
+    public Double getDoubleDefault() {
+        return doubleDefault;
+    }
+
+    /**
+     * Setter method for 'floatingPointDefault' attribute that sets the value to a new floatingPointDefault float value
+     * denoted as a parameter
+     * @param doubleDefault new value
+     */
+    public void setDoubleDefault(Double doubleDefault) {
+        this.doubleDefault = doubleDefault;
+    }
+
+    /**
+     * Accessor method for the 'booleanDefault' attribute that returns said attribute.
+     * @return
+     */
+    public Boolean getBooleanDefault() {
+        return booleanDefault;
+    }
+
+    /**
+     * Setter method for 'booleanDefault' attribute that sets the value to a new booleanDefault float value
+     * denoted as a parameter
+     * @param booleanDefault new value
+     */
+    public void setBooleanDefault(Boolean booleanDefault) {
+        this.booleanDefault = booleanDefault;
     }
 
 

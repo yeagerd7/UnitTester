@@ -50,7 +50,6 @@ public class FileParser {
      * Currently prints that information to the console, but will ultimately pass the information to the file writers.
      *
      * @param projectFiles The array of files to be read.
-     * @return The projectFiles array at the current time;
      * Will ultimately return the makefiles and the unit test and test fixture files.
      * @throws IOException Thrown if an IOException was experienced by BufferedReader reading a passed file.
      */
@@ -70,9 +69,8 @@ public class FileParser {
      * Generates the necessary output files (makefile, unit tests, test fixtures) to the destination selected by the
      * user
      * @param destination
-     * @param executableName
      */
-    public void generateOutputFiles(File destination, String executableName) {
+    public void generateOutputFiles(File destination) {
         MakeFileWriter.setCompiler(fixture.getCompiler());
         MakeFileWriter.setFlags(fixture.getFlags());
         try {

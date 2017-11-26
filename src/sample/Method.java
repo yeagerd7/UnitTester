@@ -87,6 +87,10 @@ public class Method {
             toReturn.append(cParam).append(", ");
         toReturn = new StringBuilder(toReturn.toString().indexOf(',') == -1 ?
                 toReturn + ")" : toReturn.substring(0, toReturn.toString().lastIndexOf(',')) + ")");
+        try {
+            toReturn.append("\nInput file: " + csvFile.getAbsolutePath());
+        }catch(NullPointerException e){};
+
         return toReturn.toString();
     }
 }
