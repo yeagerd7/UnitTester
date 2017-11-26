@@ -57,10 +57,11 @@ public class FileParser {
         for (File cFile : projectFiles) {
             if (cFile.getName().endsWith(".cpp"))
                 dependencies.add(makeDependence(cFile));
-            //else if (cFile.getName().endsWith(".h"))
+            else if (cFile.getName().endsWith(".h"))
                 methods.addAll(Arrays.asList(makeMethods(cFile)));
-            //else
-                //throw new IOException("An unexpected file has been passed.");
+            else {
+                throw new IOException("An unexpected file has been passed.");
+            }
         }
 
     }
