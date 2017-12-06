@@ -303,7 +303,7 @@ public class FileParser {
     Setter for the test fixture to be used. Invoke when you don't want to be using the default parameters for a test.
     @param fixture the TestFixture to be applied to test generation
      */
-    public void setTestFixture(TestFixture fixture){
+    public void updateTestFixture(TestFixture fixture){
         this.fixture = fixture;
     }
 }

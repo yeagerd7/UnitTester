@@ -467,6 +467,7 @@ public class Controller {
                 newFlags += guiFlagList.getItems().get(i).getText();
         }
         testFixture.setFlags(newFlags);
+        fileParser.updateTestFixture(testFixture);
     }
 
     /**
@@ -490,6 +491,7 @@ public class Controller {
         else {
             testFixture.setBooleanDefault(false);
         }
+        fileParser.updateTestFixture(testFixture);
 
     }
 
