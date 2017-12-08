@@ -74,6 +74,8 @@ public class FileParser {
     public void generateOutputFiles(File destination) {
         try {
             MakeFileWriter.writeMakefile(dependencies, fixture, destination);
+            UnitTestWriter.setDestination(destination);
+            UnitTestWriter.writeUnitTests(methods, fixture);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -298,6 +300,27 @@ public class FileParser {
         dependencies.forEach(n -> System.out.println(n.toString()));
         System.out.println();
     }
+
+    public static String[][] parseCSVFile(File csv) {
+        String[][] params;
+        ArrayList<String[]> tempParams = new ArrayList<String[]>();
+        try (BufferedReader br = new BufferedReader(new FileReader(csv))) {
+            int numLines = 0;
+            for(String currentLine = br.readLine(); currentLine != null; currentLine = br.readLine()){
+                String[] currentParams = currentLine.split(",");
+                tempParams.add(new String[currentParams.length]);
+                for(int i = 0; i<currentParams.length; i++){
+                    tempParams.get(numLines)[i] = currentParams[i];
+                }
+                numLines++;
+            }
+
+        } catch (java.io.IOException e) {
+        }
+
+        return tempParams.toArray(new String[tempParams.size()][]);
+    }
+
 
     /*
     Setter for the test fixture to be used. Invoke when you don't want to be using the default parameters for a test.

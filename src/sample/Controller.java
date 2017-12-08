@@ -481,7 +481,7 @@ public class Controller {
                                              String userFloatingPointDefault, String userBooleanDefault) {
         testFixture.setCompiler(userCompiler);
         testFixture.setFinalExecutableName(userExecutableName);
-        (new TestFixture()).setStringDefault(userStringDefault);
+        testFixture.setStringDefault(userStringDefault);
         testFixture.setCharacterDefault(userCharacterDefault.toCharArray()[0]);
         testFixture.setIntegerDefault(Integer.parseInt(userIntegerDefault));
         testFixture.setDoubleDefault(Double.parseDouble(userFloatingPointDefault));

@@ -55,7 +55,7 @@ public class TestFixture implements java.io.Serializable {
     public TestFixture(){
         fixtureName = "TF";
         compiler = "g++";
-        flags = "-c";
+        flags = "-testFLAG!";
         finalExecutableName = "executable";
         testSuite = new ArrayList<Method>();
         stringDefault = "Axolotl";

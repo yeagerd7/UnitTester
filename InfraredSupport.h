@@ -20,7 +20,7 @@ public:
 
     bool getMotionDetected() const;
 
-    inline void test();
+    void test();
 
 private:
     unsigned inputPin;
