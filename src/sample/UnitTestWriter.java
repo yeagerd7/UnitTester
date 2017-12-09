@@ -149,6 +149,7 @@ public class UnitTestWriter {
             //      / \
 
         } catch (IOException e) {
+            Main.LOGGER.severe("Error generating unit test for class " + methods.get(0).getClassName());
             System.out.println(e.getStackTrace());
         }
     }

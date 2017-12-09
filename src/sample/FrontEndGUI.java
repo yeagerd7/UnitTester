@@ -1295,7 +1295,6 @@ public class FrontEndGUI {
             }
             if(!error) {
                 buildGenerateWindow();
-                controller.printTextFixturePreferences(); //Test Method
                 controller.updateTestFixturePreferences(compilerChoiceBox.getSelectionModel().getSelectedItem(),
                         executableName.getText(), stringDefault.getText(), characterDefault.getText(),
                         integerDefault.getText(), doubleDefault.getText(), booleanDefault.getText());

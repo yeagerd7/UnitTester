@@ -9,6 +9,10 @@ import java.util.HashMap;
  * @author Axolotl Development Team
  */
 public class TestFixture implements java.io.Serializable {
+    /*
+    String to denote the start of a file representing a test fixture
+     */
+    public static final String testFixtureHeader = "//This is a Test fixture, not your average .h file.";
 
     /*
     The user-specified name of this test fixture
@@ -240,5 +244,26 @@ public class TestFixture implements java.io.Serializable {
         this.booleanDefault = booleanDefault;
     }
 
+    public String toString() {
+        StringBuilder toReturn = new StringBuilder();
+        toReturn.append(testFixtureHeader + "\n");
+        toReturn.append("Compiler: " +  compiler + "\n");
+        toReturn.append("Final executable name: " + finalExecutableName + "\n");
+        toReturn.append("Default test value for strings: " + stringDefault + "\n");
+        toReturn.append("Default test value for chars: " + characterDefault + "\n");
+        toReturn.append("Default test value for ints: " + integerDefault + "\n");
+        toReturn.append("Default test value for doubles: " + doubleDefault + "\n");
+        toReturn.append("Default test value for bools: " + booleanDefault + "\n");
+        toReturn.append("Flags: " + flags);
+        return toReturn.toString();
+    }
+
+    /*
+    Getter for the header for .h representations of test fixtures
+    @returns the header for .h representations of test fixtures
+     */
+    public static String getTestFixtureHeader(){
+        return testFixtureHeader;
+    }
 
 }
