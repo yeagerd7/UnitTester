@@ -43,3 +43,9 @@
 11-17 | Sprint 4 | Small cosmetic and design oriented fixes applied to FrontEndGUI and other classes
 11-23 | Sprint 4 | Added a 'Test Fixtures Preferences' window that allows user to specify their own preferences for the test fixtures
 11-24 | Sprint 4 | Added more functionality to 'Test Fixture Preferences' window to attach csv files to methods for testing
+
+12-06 | Sprint 5 | Added 'UnitTestWriter' class and method to separate out methods by the class they belong to
+12-06 | Sprint 5 | Added functionality wherein the TestWriter writes a file to test methods without CSV data files attached to them
+12-08 | Sprint 5 | Added functionality wherein the TestWriter writes a file to test all methods, including ones with params specified by CSV files
+12-09 | Sprint 5 | State of Test Fixtures is now outputted to a .h file when output is generated
+12-09 | Sprint 5 | Unit Test files and Test Fixture files are now ignored. We don't generate unit tests for unit tests.

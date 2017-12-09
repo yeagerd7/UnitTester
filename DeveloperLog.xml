@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2017-12-09T13:32:20</date>
-  <millis>1512844340400</millis>
+  <date>2017-12-09T13:49:50</date>
+  <millis>1512845390487</millis>
   <sequence>1</sequence>
   <logger>global</logger>
   <level>INFO</level>
@@ -13,8 +13,8 @@
   <message>Front End User Interface built and displayed</message>
 </record>
 <record>
-  <date>2017-12-09T13:32:20</date>
-  <millis>1512844340402</millis>
+  <date>2017-12-09T13:49:50</date>
+  <millis>1512845390490</millis>
   <sequence>2</sequence>
   <logger>global</logger>
   <level>INFO</level>
@@ -24,20 +24,9 @@
   <message>Program begins to execute,   Logger Formatted</message>
 </record>
 <record>
-  <date>2017-12-09T13:32:36</date>
-  <millis>1512844356180</millis>
+  <date>2017-12-09T13:50:06</date>
+  <millis>1512845406378</millis>
   <sequence>3</sequence>
-  <logger>global</logger>
-  <level>INFO</level>
-  <class>sample.FileParser</class>
-  <method>makeDependence</method>
-  <thread>12</thread>
-  <message>Unit test identified, Skipping. We don't go deep.</message>
-</record>
-<record>
-  <date>2017-12-09T13:32:36</date>
-  <millis>1512844356186</millis>
-  <sequence>4</sequence>
   <logger>global</logger>
   <level>WARNING</level>
   <class>sample.FileParser</class>
@@ -46,14 +35,14 @@
   <message>Blank file read.</message>
 </record>
 <record>
-  <date>2017-12-09T13:32:36</date>
-  <millis>1512844356202</millis>
-  <sequence>5</sequence>
+  <date>2017-12-09T13:50:48</date>
+  <millis>1512845448768</millis>
+  <sequence>4</sequence>
   <logger>global</logger>
   <level>INFO</level>
   <class>sample.FileParser</class>
-  <method>makeDependence</method>
+  <method>generateOutputFiles</method>
   <thread>12</thread>
-  <message>Unit test identified, Skipping. We don't go deep.</message>
+  <message>MakeFile: makefile has been generated.</message>
 </record>
 </log>
