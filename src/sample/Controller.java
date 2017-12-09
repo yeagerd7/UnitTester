@@ -481,7 +481,7 @@ public class Controller {
                                              String userFloatingPointDefault, String userBooleanDefault) {
         testFixture.setCompiler(userCompiler);
         testFixture.setFinalExecutableName(userExecutableName);
-        (new TestFixture()).setStringDefault(userStringDefault);
+        testFixture.setStringDefault(userStringDefault);
         testFixture.setCharacterDefault(userCharacterDefault.toCharArray()[0]);
         testFixture.setIntegerDefault(Integer.parseInt(userIntegerDefault));
         testFixture.setDoubleDefault(Double.parseDouble(userFloatingPointDefault));
@@ -612,5 +612,14 @@ public class Controller {
         System.out.println(testFixture.getDoubleDefault());
         System.out.println(testFixture.getBooleanDefault() + "\n");
         System.out.println(testFixture.getFlags());
+        File tf = new File(destinationFile.getAbsolutePath() + "/" + testFixture.getFixtureName() + ".h");
+        try ( BufferedWriter bw = new BufferedWriter(new FileWriter(tf))){
+            tf.createNewFile();
+            bw.write(testFixture.toString());
+            bw.close();
+        } catch (IOException e){
+            Main.LOGGER.severe("Error: IOException failed to write Test Fixture");
+        } finally {
+        }
     }
 }

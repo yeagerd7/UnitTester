@@ -55,11 +55,18 @@ public class FileParser {
      */
     public void parseSourceFiles(File[] projectFiles) throws IOException {
         for (File cFile : projectFiles) {
-            if (cFile.getName().endsWith(".cpp"))
-                dependencies.add(makeDependence(cFile));
-            else if (cFile.getName().endsWith(".h"))
-                methods.addAll(Arrays.asList(makeMethods(cFile)));
+            if (cFile.getName().endsWith(".cpp")) {
+                Dependence dep = makeDependence(cFile);
+                if (dep != null)
+                    dependencies.add(dep);
+            }
+            else if (cFile.getName().endsWith(".h")) {
+                Method[] met = makeMethods(cFile);
+                if(met != null)
+                    methods.addAll(Arrays.asList(met));
+            }
             else {
+                Main.LOGGER.warning("An unexpected file has been passed.");
                 throw new IOException("An unexpected file has been passed.");
             }
         }
@@ -73,9 +80,12 @@ public class FileParser {
      */
     public void generateOutputFiles(File destination) {
         try {
-            MakeFileWriter.writeMakefile(dependencies, fixture, destination);
+            Main.LOGGER.info("MakeFile: " + MakeFileWriter.writeMakefile(dependencies, fixture, destination).getName() + " has been generated.");
+            UnitTestWriter.setDestination(destination);
+            UnitTestWriter.writeUnitTests(methods, fixture);
         } catch (IOException e) {
             e.printStackTrace();
+            Main.LOGGER.severe("An error in generation has occurred\n" + e.toString());
         }
 
         consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
@@ -96,6 +106,14 @@ public class FileParser {
 
         try (BufferedReader br = new BufferedReader(new FileReader(cppFile))) {
             String line = br.readLine();
+            if(line == null) {
+                Main.LOGGER.warning("Blank file read.");
+                return null;
+            }
+            if(line.equals(UnitTestWriter.getUnitTestHeader())){
+                Main.LOGGER.info("Unit test identified, Skipping. We don't go deep.");
+                return null;
+            }
             // Reads the whole file
             while (line != null) {
                 // Cuts any line comments out of the considered line
@@ -187,6 +205,14 @@ public class FileParser {
 
         try (BufferedReader br = new BufferedReader(new FileReader(hFile))) {
             String line = br.readLine();
+            if(line == null) {
+                Main.LOGGER.warning("Blank file read.");
+                return null;
+            }
+            if(line.equals(TestFixture.getTestFixtureHeader())) {
+                Main.LOGGER.info("Test fixture detected, Skipping. We don't go deep.");
+                return null;
+            }
             String restOfLine = "";
             // Reads the whole file
             while (line != null) {
@@ -298,6 +324,28 @@ public class FileParser {
         dependencies.forEach(n -> System.out.println(n.toString()));
         System.out.println();
     }
+
+    public static String[][] parseCSVFile(File csv) {
+        String[][] params;
+        ArrayList<String[]> tempParams = new ArrayList<String[]>();
+        try (BufferedReader br = new BufferedReader(new FileReader(csv))) {
+            int numLines = 0;
+            for(String currentLine = br.readLine(); currentLine != null; currentLine = br.readLine()){
+                String[] currentParams = currentLine.split(",");
+                tempParams.add(new String[currentParams.length]);
+                for(int i = 0; i<currentParams.length; i++){
+                    tempParams.get(numLines)[i] = currentParams[i];
+                }
+                numLines++;
+            }
+
+        } catch (java.io.IOException e) {
+            Main.LOGGER.severe("Error when reading CSV file.");
+        }
+
+        return tempParams.toArray(new String[tempParams.size()][]);
+    }
+
 
     /*
     Setter for the test fixture to be used. Invoke when you don't want to be using the default parameters for a test.
