@@ -17,6 +17,8 @@ public class FileParser {
     private ArrayList<Method> methods;
     //Dependencies Field Declaration
     private HashSet<Dependence> dependencies;
+    //Parameters for a makefile to be generated with
+    private TestFixture fixture;
 
     /**
      * Constructor for the FileParser class that initializes methods and dependencies instance variables
@@ -24,6 +26,7 @@ public class FileParser {
     public FileParser() {
         methods = new ArrayList<>();
         dependencies = new HashSet<>();
+        fixture = new TestFixture();
     }
 
     public ArrayList<Method> getMethods() {
@@ -47,35 +50,44 @@ public class FileParser {
      * Currently prints that information to the console, but will ultimately pass the information to the file writers.
      *
      * @param projectFiles The array of files to be read.
-     * @return The projectFiles array at the current time;
      * Will ultimately return the makefiles and the unit test and test fixture files.
      * @throws IOException Thrown if an IOException was experienced by BufferedReader reading a passed file.
      */
     public void parseSourceFiles(File[] projectFiles) throws IOException {
         for (File cFile : projectFiles) {
-            if (cFile.getName().endsWith(".cpp"))
-                dependencies.add(makeDependence(cFile));
-            else if (cFile.getName().endsWith(".h"))
-                methods.addAll(Arrays.asList(makeMethods(cFile)));
-            else
+            if (cFile.getName().endsWith(".cpp")) {
+                Dependence dep = makeDependence(cFile);
+                if (dep != null)
+                    dependencies.add(dep);
+            }
+            else if (cFile.getName().endsWith(".h")) {
+                Method[] met = makeMethods(cFile);
+                if(met != null)
+                    methods.addAll(Arrays.asList(met));
+            }
+            else {
+                Main.LOGGER.warning("An unexpected file has been passed.");
                 throw new IOException("An unexpected file has been passed.");
+            }
         }
+
     }
 
     /**
      * Generates the necessary output files (makefile, unit tests, test fixtures) to the destination selected by the
      * user
      * @param destination
-     * @param executableName
      */
-    public void generateOutputFiles(File destination, String executableName) {
-        MakeFileWriter.setCompiler("g++");
-        MakeFileWriter.setFlags("-c");
+    public void generateOutputFiles(File destination) {
         try {
-            MakeFileWriter.writeMakefile(dependencies, executableName, destination);
+            Main.LOGGER.info("MakeFile: " + MakeFileWriter.writeMakefile(dependencies, fixture, destination).getName() + " has been generated.");
+            UnitTestWriter.setDestination(destination);
+            UnitTestWriter.writeUnitTests(methods, fixture);
         } catch (IOException e) {
             e.printStackTrace();
+            Main.LOGGER.severe("An error in generation has occurred\n" + e.toString());
         }
+
         consoleTestBecauseWeDontKnowHowToUseJUnitRightNow(methods, dependencies);
     }
 
@@ -94,6 +106,14 @@ public class FileParser {
 
         try (BufferedReader br = new BufferedReader(new FileReader(cppFile))) {
             String line = br.readLine();
+            if(line == null) {
+                Main.LOGGER.warning("Blank file read.");
+                return null;
+            }
+            if(line.equals(UnitTestWriter.getUnitTestHeader())){
+                Main.LOGGER.info("Unit test identified, Skipping. We don't go deep.");
+                return null;
+            }
             // Reads the whole file
             while (line != null) {
                 // Cuts any line comments out of the considered line
@@ -176,7 +196,7 @@ public class FileParser {
            ie Stri[]ng or a method name with illegal characters,
            these uncompilable parts are not expected in the passes files.
          */
-        String regex = "\\S+\\s+\\S+\\s*\\(\\s*(\\S+\\s+\\S+\\s*,?\\s*)*\\)\\s*;";
+        String regex = "\\S+\\s+\\S+\\s*\\(\\s*(\\S+\\s+\\S+\\s*,?\\s*)*\\).*";
         ArrayList<Method> methods = new ArrayList<>();
         // Grabs the class name by taking every part before the file's type
         String className = hFile.getName().substring(0, hFile.getName().indexOf('.'));
@@ -185,11 +205,21 @@ public class FileParser {
 
         try (BufferedReader br = new BufferedReader(new FileReader(hFile))) {
             String line = br.readLine();
+            if(line == null) {
+                Main.LOGGER.warning("Blank file read.");
+                return null;
+            }
+            if(line.equals(TestFixture.getTestFixtureHeader())) {
+                Main.LOGGER.info("Test fixture detected, Skipping. We don't go deep.");
+                return null;
+            }
+            String restOfLine = "";
             // Reads the whole file
             while (line != null) {
                 // Cuts any line comments out of the considered line
                 if (line.contains("//"))
                     line = line.substring(0, line.indexOf("//"));
+
                 /* Extends the considered string to include the next line if an open parenthesis was not closed;
                    It is possible that, do to page space constraints,
                    the parameters were declared across different lines;
@@ -221,6 +251,7 @@ public class FileParser {
                        Also removes anything past the close parenthesis;
                        What we should have now is the list of method parameters.
                      */
+                    restOfLine = line.substring(line.indexOf(')') + 1);
                     line = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
                     // Splits the method parameters around any commas and puts the pieces into an array
                     currentParamTypes = line.split(",");
@@ -239,6 +270,9 @@ public class FileParser {
                                             currentParamTypes[i].indexOf(' ')).trim();
                     }
                     methods.add(new Method(className, currentReturnType, currentMethodName, currentParamTypes));
+                    if(!restOfLine.contains(";"))
+                        curlyBurn(br, restOfLine);
+                    restOfLine = "";
                 }
                 line = br.readLine();
             }
@@ -257,6 +291,25 @@ public class FileParser {
         return methodsArray;
     }
 
+    private static void curlyBurn(BufferedReader br, String restOfLine) throws IOException {
+        int brace = 0;
+        while(restOfLine != null) {
+            if (restOfLine.contains("{")) {
+                brace++;
+                restOfLine = restOfLine.substring(restOfLine.indexOf('{') + 1);
+            }
+            if (restOfLine.contains("}")) {
+                brace--;
+                if(brace == 0)
+                    return;
+                restOfLine = restOfLine.substring(restOfLine.indexOf('}') + 1);
+            }
+            restOfLine = br.readLine();
+        }
+        if(brace != 0)
+            throw new IllegalArgumentException("This file does not close a curly brace.");
+    }
+
     /**
      * A temporary test method that prints all parsed information to the console;
      * Will ultimately be removed and its functionality will be covered by JUnit testing.
@@ -270,5 +323,35 @@ public class FileParser {
         methods.forEach(n -> System.out.println(n.toString()));
         dependencies.forEach(n -> System.out.println(n.toString()));
         System.out.println();
+    }
+
+    public static String[][] parseCSVFile(File csv) {
+        String[][] params;
+        ArrayList<String[]> tempParams = new ArrayList<String[]>();
+        try (BufferedReader br = new BufferedReader(new FileReader(csv))) {
+            int numLines = 0;
+            for(String currentLine = br.readLine(); currentLine != null; currentLine = br.readLine()){
+                String[] currentParams = currentLine.split(",");
+                tempParams.add(new String[currentParams.length]);
+                for(int i = 0; i<currentParams.length; i++){
+                    tempParams.get(numLines)[i] = currentParams[i];
+                }
+                numLines++;
+            }
+
+        } catch (java.io.IOException e) {
+            Main.LOGGER.severe("Error when reading CSV file.");
+        }
+
+        return tempParams.toArray(new String[tempParams.size()][]);
+    }
+
+
+    /*
+    Setter for the test fixture to be used. Invoke when you don't want to be using the default parameters for a test.
+    @param fixture the TestFixture to be applied to test generation
+     */
+    public void updateTestFixture(TestFixture fixture){
+        this.fixture = fixture;
     }
 }

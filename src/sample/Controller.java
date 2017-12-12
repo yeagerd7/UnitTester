@@ -31,24 +31,8 @@ public class Controller {
     //Preference Field Declaration
     private Preference defaultPreference;
 
-    //Compiler Choice Field Declaration
-    private String compilerChoice;
-
-    //Executable Name Choice Field Declaration
-    private String executableName;
-
-    //User-Selected CFlag List Field Declaration
-    private ArrayList<String> cFlagList;
-
-    //User-Selected List of Methods to to be tested Field Declararion
-    private ArrayList<Method> guiMethodList;
-
-    //Default Data Type Value Field Declarations
-    private String stringDefault;
-    private Character characterDefault;
-    private Integer integerDefault;
-    private Double doubleDefault;
-    private Boolean booleanDefault;
+    //Test Fixture state declaration
+    private TestFixture testFixture;
 
     //Required Declaration for Singleton Pattern
     private static Controller singletonInstance = new Controller();
@@ -62,15 +46,7 @@ public class Controller {
         sourceFiles = new HashSet<>();
         fileParser = new FileParser();
         defaultPreference = deserializePreference();
-        compilerChoice = "G++";
-        executableName = "executable";
-        cFlagList = new ArrayList<>();
-        guiMethodList = new ArrayList<>();
-        stringDefault = "Axolotl";
-        characterDefault = 'X';
-        integerDefault = 36;
-        doubleDefault = 3.14;
-        booleanDefault = true;
+        testFixture = new TestFixture();
         Main.LOGGER.finest("Controller object created and initialized");
     }
 
@@ -131,158 +107,8 @@ public class Controller {
         return defaultPreference;
     }
 
-    /**
-     * Accessor method for the 'compilerChoice' attribute that returns said attribute.
-     * @return
-     */
-    public String getCompilerChoice() {
-        return compilerChoice;
-    }
 
-    /**
-     * Setter method for 'compilerChoice' attribute that sets the value to a new compilerChoice String value denoted as a
-     * parameter
-     * @param  compilerChoice new value
-     */
-    public void setCompilerChoice(String compilerChoice) {
-        this.compilerChoice = compilerChoice;
-    }
 
-    /**
-     * Accessor method for the 'executableName' attribute that returns said attribute.
-     * @return
-     */
-    public String getExecutableName() {
-        return executableName;
-    }
-
-    /**
-     * * Setter method for 'executableName' attribute that sets the value to a new exectutableName String value denoted
-     * as aparameter
-     * @param executableName new value
-     */
-    public void setExecutableName(String executableName) {
-        this.executableName = executableName;
-    }
-
-    /**
-     * Accessor method for the 'cFlagsList' attribute that returns said attribute.
-     * @return
-     */
-    public ArrayList<String> getcFlagList() {
-        return cFlagList;
-    }
-
-    /**
-     * Setter method for 'cFlagList' attribute that sets the value to a new cFlagList ArrayList<String> value denoted
-     * as a parameter
-     * @param cFlagList new value
-     */
-    public void setcFlagList(ArrayList<String> cFlagList) {
-        this.cFlagList = cFlagList;
-    }
-
-    /**
-     * Accessor method for the 'guiMethodList' attribute that returns said attribute.
-     * @return
-     */
-    public ArrayList<Method> getGuiMethodList() {
-        return guiMethodList;
-    }
-
-    /**
-     * Setter method for 'guiMethodList' attribute that sets the value to a new guiMethodList ArrayList<String> value
-     * denoted as a parameter
-     * @param guiMethodList new value
-     */
-    public void setGuiMethodList(ArrayList<Method> guiMethodList) {
-        this.guiMethodList = guiMethodList;
-    }
-
-    /**
-     * Accessor method for the 'stringDefault' attribute that returns said attribute.
-     * @return
-     */
-    public String getStringDefault() {
-        return stringDefault;
-    }
-
-    /**
-     * Setter method for 'stringDefault' attribute that sets the value to a new stringDefault String value denoted as a
-     * parameter
-     * @param stringDefault new value
-     */
-    public void setStringDefault(String stringDefault) {
-        this.stringDefault = stringDefault;
-    }
-
-    /**
-     * Accessor method for the 'characterDefault' attribute that returns said attribute.
-     * @return
-     */
-    public Character getCharacterDefault() {
-        return characterDefault;
-    }
-
-    /**
-     * Setter method for 'characterDefault' attribute that sets the value to a new characterDefault character value
-     * denoted as a parameter
-     * @param characterDefault new value
-     */
-    public void setCharacterDefault(Character characterDefault) {
-        this.characterDefault = characterDefault;
-    }
-
-    /**
-     * Accessor method for the 'integerDefault' attribute that returns said attribute.
-     * @return
-     */
-    public Integer getIntegerDefault() {
-        return integerDefault;
-    }
-
-    /**
-     * Setter method for 'integerDefault' attribute that sets the value to a new integerDefault integer value
-     * denoted as a parameter
-     * @param integerDefault new value
-     */
-    public void setIntegerDefault(Integer integerDefault) {
-        this.integerDefault = integerDefault;
-    }
-
-    /**
-     * Accessor method for the 'floatingPointDefault' attribute that returns said attribute.
-     * @return
-     */
-    public Double getFloatingPointDefault() {
-        return doubleDefault;
-    }
-
-    /**
-     * Setter method for 'floatingPointDefault' attribute that sets the value to a new floatingPointDefault float value
-     * denoted as a parameter
-     * @param doubleDefault new value
-     */
-    public void setFloatingPointDefault(Double doubleDefault) {
-        this.doubleDefault = doubleDefault;
-    }
-
-    /**
-     * Accessor method for the 'booleanDefault' attribute that returns said attribute.
-     * @return
-     */
-    public Boolean getBooleanDefault() {
-        return booleanDefault;
-    }
-
-    /**
-     * Setter method for 'booleanDefault' attribute that sets the value to a new booleanDefault float value
-     * denoted as a parameter
-     * @param booleanDefault new value
-     */
-    public void setBooleanDefault(Boolean booleanDefault) {
-        this.booleanDefault = booleanDefault;
-    }
 
     /**
      * sourceBrowse is called up following a button click on the front end GUI (graphical user interface) and allows
@@ -572,7 +398,7 @@ public class Controller {
      * @param list CheckBox list from the GUI of Methods to be populated and then returned
      * @return
      */
-    public ListView<CheckBox> populateMethodsOnGui(ListView<CheckBox> list) {
+    public ListView<CheckBox> populateMethodsOnGuiCheckList(ListView<CheckBox> list) {
         ArrayList<Method> parsedMethods = fileParser.getMethods();
         int size = parsedMethods.size();
         int index = 0;
@@ -581,6 +407,26 @@ public class Controller {
             box.setText(parsedMethods.get(index).toString());
             box.setSelected(true);
             list.getItems().add(box);
+            index++;
+        }
+        return list;
+    }
+
+    /**
+     * Allows the user to load all the tested selected into a ChoiceBox drop down which is transparent across all
+     * components
+     * @return
+     */
+    public ChoiceBox<String> populateMethodsOnGuiChoiceList() {
+        ArrayList<Method> parsedMethods = fileParser.getMethods();
+        ChoiceBox<String> list = new ChoiceBox<>();
+        int size = parsedMethods.size();
+        int index = 0;
+        while(index < size) {
+            Method methodChoice = parsedMethods.get(index);
+            if(methodChoice.getWillBeTested()) {
+                list.getItems().add(methodChoice.toString());
+            }
             index++;
         }
         return list;
@@ -614,6 +460,16 @@ public class Controller {
         fileParser.setMethods(methodsForTesting);
     }
 
+    public void updateCFlags(ListView<CheckBox> guiFlagList){
+        String newFlags = "";
+        for(int i = 0; i<guiFlagList.getItems().size(); i++){
+            if(guiFlagList.getItems().get(i).isSelected())
+                newFlags += guiFlagList.getItems().get(i).getText();
+        }
+        testFixture.setFlags(newFlags);
+        fileParser.updateTestFixture(testFixture);
+    }
+
     /**
      * Allows the user to update the controller's test fixture attributes (String/Character/Integer/Double/Float
      * Boolean according to the one's inputted in by the user (otherwise default) in the text fixture window
@@ -623,19 +479,49 @@ public class Controller {
     public void updateTestFixturePreferences(String userCompiler, String userExecutableName, String userStringDefault,
                                              String userCharacterDefault, String userIntegerDefault,
                                              String userFloatingPointDefault, String userBooleanDefault) {
-        setCompilerChoice(userCompiler);
-        setExecutableName(userExecutableName);
-        setStringDefault(userStringDefault);
-        setCharacterDefault(userCharacterDefault.toCharArray()[0]);
-        setIntegerDefault(Integer.parseInt(userIntegerDefault));
-        setFloatingPointDefault(Double.parseDouble(userFloatingPointDefault));
+        testFixture.setCompiler(userCompiler);
+        testFixture.setFinalExecutableName(userExecutableName);
+        testFixture.setStringDefault(userStringDefault);
+        testFixture.setCharacterDefault(userCharacterDefault.toCharArray()[0]);
+        testFixture.setIntegerDefault(Integer.parseInt(userIntegerDefault));
+        testFixture.setDoubleDefault(Double.parseDouble(userFloatingPointDefault));
         if(userBooleanDefault.equalsIgnoreCase("True")) {
-            setBooleanDefault(true);
+            testFixture.setBooleanDefault(true);
         }
         else {
-            setBooleanDefault(false);
+            testFixture.setBooleanDefault(false);
         }
+        fileParser.updateTestFixture(testFixture);
 
+    }
+
+    /**
+     * Allows the user to attach a CSV file (w/default values) to a method and updates the method object's 'csvFile'
+     * attribute to the non-null user-selected CSV file.
+     * @param methodString, csvFile
+     */
+    public void attachCSVToMethod(String methodString) {
+        FileChooser window = new FileChooser();
+        window.getExtensionFilters().add(new FileChooser.ExtensionFilter(".csv Files", "*.csv"));
+        File csvFile = window.showOpenDialog(null);
+        int size = fileParser.getMethods().size();
+        int index = 0;
+        boolean searching = true;
+        while(index < size) {
+            Method method = fileParser.getMethods().get(index);
+            if(method.toString().equals(methodString)) {
+                fileParser.getMethods().get(index).setCsvFile(csvFile);
+                //searching = false;
+            }
+            //TEST
+            if(fileParser.getMethods().get(index).getCsvFile() == null) {
+                System.out.println("Method CSV: null");
+            }
+            else {
+                System.out.println("Method CSV: " + fileParser.getMethods().get(index).getCsvFile().getAbsolutePath());
+            }
+            index++;
+        }
     }
 
     /**
@@ -718,12 +604,22 @@ public class Controller {
      */
     public void printTextFixturePreferences() {
         System.out.println("Current Test Fixture Preferences: ");
-        System.out.println(compilerChoice);
-        System.out.println(executableName);
-        System.out.println(stringDefault);
-        System.out.println(characterDefault);
-        System.out.println(integerDefault);
-        System.out.println(doubleDefault);
-        System.out.println(booleanDefault + "\n");
+        System.out.println(testFixture.getCompiler());
+        System.out.println(testFixture.getFinalExecutableName());
+        System.out.println(testFixture.getStringDefault());
+        System.out.println(testFixture.getCharacterDefault());
+        System.out.println(testFixture.getIntegerDefault());
+        System.out.println(testFixture.getDoubleDefault());
+        System.out.println(testFixture.getBooleanDefault() + "\n");
+        System.out.println(testFixture.getFlags());
+        File tf = new File(destinationFile.getAbsolutePath() + "/" + testFixture.getFixtureName() + ".h");
+        try ( BufferedWriter bw = new BufferedWriter(new FileWriter(tf))){
+            tf.createNewFile();
+            bw.write(testFixture.toString());
+            bw.close();
+        } catch (IOException e){
+            Main.LOGGER.severe("Error: IOException failed to write Test Fixture");
+        } finally {
+        }
     }
 }

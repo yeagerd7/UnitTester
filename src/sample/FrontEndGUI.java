@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -87,13 +88,14 @@ public class FrontEndGUI {
     //Toggles Field declaration
     private ArrayList<Boolean> toggles;
 
-    //manageSubSceneA field declaration
+    //User-Default Destination Path Field Declaration
     private ListView<CheckBox> manageSubSceneA;
 
-    //Method List(Test Fixtures) Field Declaration
+    //Method CheckList/ChoiceList (Test Fixtures) Field Declaration
     private ListView<CheckBox> methodCheckList;
+    private ChoiceBox<String> methodChoiceList;
 
-    //CFlag List(Test Fixture) Field Declaration
+    //CFlag Checklist(Test Fixture) Field Declaration
     private ListView<CheckBox> cFlagCheckList;
 
     //Default (Test Fixtures) TextField Declarations
@@ -105,6 +107,8 @@ public class FrontEndGUI {
 
     //Controller Field Declaration
     private Controller controller;
+
+    private boolean helpCheck = false;
 
     /**
      * Constructor that initializes all the attributes(fields) of the FrontEndGUI class
@@ -186,8 +190,9 @@ public class FrontEndGUI {
         image = new Image("CuteLizard.PNG", 140, 140,
                 false, false);
 
-        //(To be)Parsed Method List
+        //(To be)Parsed Method List (Choice/Check)
         methodCheckList = new ListView<>();
+        methodChoiceList = new ChoiceBox<>();
 
         //CFlag List Declaration/Initialization and Populating
         cFlagCheckList = new ListView<>();
@@ -350,16 +355,14 @@ public class FrontEndGUI {
         //Declarations for the tabs
         Tab buttonTab = new Tab();
         Tab makeTab = new Tab();
-        Tab unitTab = new Tab();
         Tab testTab = new Tab();
         Tab walkthroughTab = new Tab();
 
         walkthroughTab.setText("Program Walkthrough");
         buttonTab.setText("Buttons");
         makeTab.setText("Makefile");
-        unitTab.setText("Unit Test File");
         testTab.setText("Test Fixture");
-        tabpane.getTabs().addAll(walkthroughTab, buttonTab, makeTab, unitTab, testTab);
+        tabpane.getTabs().addAll(walkthroughTab, buttonTab, makeTab, testTab);
         tabpane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         /*
@@ -381,6 +384,11 @@ public class FrontEndGUI {
         HBox refreshButtonBox = new HBox();
         refreshButtonBox.setPadding(new Insets(15, 12, 15, 12));
         refreshButtonBox.setSpacing(10);
+        HBox defaultBox = new HBox();
+        defaultBox.setPadding(new Insets(15, 12, 15, 12));
+        defaultBox.setSpacing(10);
+
+
         VBox buttonBox = new VBox();
 
         //Images used in the button tab
@@ -394,29 +402,40 @@ public class FrontEndGUI {
         Image generateImage = new Image("generate.JPG");
         ImageView prImage = new ImageView();
         Image preferencesImage = new Image("preferences.JPG");
+        ImageView dImage = new ImageView();
+        Image defaultImage = new Image("default.jpg");
+        ImageView mImage = new ImageView();
+        Image makefileImage = new Image("makefile.JPG");
         prImage.setImage(preferencesImage);
         pImage.setImage(previewImage);
         bImage.setImage(browseImage);
         rImage.setImage(refreshImage);
         gImage.setImage(generateImage);
+        dImage.setImage(defaultImage);
+        mImage.setImage(makefileImage);
+        mImage.setFitWidth(800);
+        mImage.setFitHeight(200);
 
         //Labels for each button
         Label upperBrowse = new Label("Upper Browse Button");
         upperBrowse.setWrapText(true);
-        Label browseInfo = new Label(  "Browse Buttons: " + "\n" + "With the upper browse button, you " +
+        Label browseInfo = new Label(  "Browse Buttons:" + "\n" + "With the upper browse button, you " +
                 "can select " + "filepaths/files that are to be tested." + " It should pull up a typical browse " +
                 "window. With the lower browse button, " + "you can select where you like to save the generated " +
-                "file.  ");
+                "file(s).  ");
         upperBrowseBox.getChildren().addAll(bImage, browseInfo);
         Label generateInfo = new Label("Generate Button:" + "\n" + "Button to select when the user is ready " +
-                "to run the unit test.");
+                "to run the unit test. They will then need to select test fixture options.");
         Label preferencesInfo = new Label( "Preferences Button:" + "\n" + "The user will have options they can" +
                 " opt to use for the unit test. " );
-        Label previewInfo = new Label("Preview Button:" + "\n" + "The user will be able to preview information" +
-                " they have entered into the program. " );
+        Label previewInfo = new Label("Preview Button:" + "\n" + "The user can select preview to get a better idea of" +
+                " what the makefile, test fixtures, and unit test files will look like when completed. " );
         Label refreshInfo = new Label("Refresh Button: " + "\n" + "Selecting this button will effectively " +
                 "clear the files the user had loaded into the program. The refresh button does not clear the " +
                 "information loaded for the destination folder.");
+        Label defaultInfo = new Label("Defaults Button: " + "\n" + "The defaults button will load a window " +
+                " with a drop down menu to select a previously saved destination location. If you do not have any saved, it will say so. " +
+                "See the walkthrough tab for more information. ");
 
         //Wraps text so if the window is resized, the label will work with the new window dimensions
         browseInfo.setWrapText(true);
@@ -424,13 +443,15 @@ public class FrontEndGUI {
         generateInfo.setWrapText(true);
         preferencesInfo.setWrapText(true);
         refreshInfo.setWrapText(true);
+        defaultInfo.setWrapText(true);
 
         previewButtonBox.getChildren().addAll(pImage, previewInfo);
         generateBox.getChildren().addAll(gImage, generateInfo);
         preferencesBox.getChildren().addAll(prImage, preferencesInfo);
         refreshButtonBox.getChildren().addAll(rImage,refreshInfo);
+        defaultBox.getChildren().addAll(dImage, defaultInfo);
         ScrollPane buttonScroll = new ScrollPane();
-        buttonBox.getChildren().addAll(upperBrowseBox, generateBox, preferencesBox, previewButtonBox, refreshButtonBox);
+        buttonBox.getChildren().addAll(upperBrowseBox, generateBox, preferencesBox, previewButtonBox, refreshButtonBox, defaultBox);
 
         buttonBox.setPadding(new Insets(15, 12, 15, 12));
         buttonScroll.setContent(buttonBox);
@@ -444,6 +465,14 @@ public class FrontEndGUI {
         stage.setTitle("Help");
         stage.setScene(new Scene(browseWindow1, 600, 400));
         stage.show();
+        /**
+        stage.setOnHiding(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                helpCheck = false;
+            }
+        });
+         **/
 
         /*
          * Code for the makefile tab
@@ -458,15 +487,17 @@ public class FrontEndGUI {
                 "compile; it can also name executable files and send them to a specific location." + "\n" + "\n" +
                 "Cpp files tend to have a corresponding .h file, which has function prototypes, class declarations, " +
                 "and external variables. Cpp files consist of method implementations, standalone functions, and " +
-                "global variables." + "\n" + "\n" + "There will be more supporting information here involving the " +
-                "specific information for our makefiles.");
+                "global variables. After the tests are generated, you will be able to view those as well as the makefile" +
+                "in the destination folder. It will have the filenames, executable name, as well as the test fixtures" +
+                "included in the test.");
+
+
         Label makeFileSyntax = new Label("Makefile Syntax:" + "\n" + "--");
         makeFileInfo.setWrapText(true);
         makeFileSyntax.setWrapText(true);
         makeScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         makeScroll.setFitToWidth(true);
-
-        makefileBox.getChildren().addAll(makeFileInfo, makeFileSyntax);
+        makefileBox.getChildren().addAll(makeFileInfo, makeFileSyntax, mImage);
         makeScroll.setContent(makefileBox);
         makeTab.setContent(makeScroll);
 
@@ -487,7 +518,6 @@ public class FrontEndGUI {
         unitScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         unitScroll.setFitToWidth(true);
         unitScroll.setContent(unitFileBox);
-        unitTab.setContent(unitScroll);
 
         /*
          * Code for test fixture tab
@@ -496,14 +526,35 @@ public class FrontEndGUI {
         VBox testfileBox = new VBox();
         testfileBox.setPadding(new Insets(15, 12, 15, 12));
         testfileBox.setSpacing(10);
-        Label testFixtureInfo = new Label("Tab that will contain the complete test fixture information." +
-                "Will be updated periodically as we complete the project.");
+        Label testFixtureLabel1 = new Label("Adding CSV Files for testing: ");
+        Label testFixtureLabel2 = new Label("CFlags:");
+        Label testFixtureLabel3 = new Label("NOTE:");
+        testFixtureLabel2.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        testFixtureLabel1.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        testFixtureLabel3.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        Label testFixtureInfo = new Label(
+                 "\n" + "To add a .CSV file to a method, select Add Methods. There, the methods will be displayed with " +
+                "checkboxes to remove what will not be considered. Select Attach File and the next window will prompt the user to" +
+                " select a method to attach a file to, and selecting Load will open the browse window to locate a .CSV file. " + "\n" + "\n" +
+                " *Developer Note: If the console window is open, you will see the method CSV for the particular method you loaded "+
+                " now has a populated file location, as opposed to null. " + "\n" + "\n");
+        Label testFixtureInfo2 = new Label(  "\n" +
+                "You are able to enable/disable CFlags from the menu when selected. Once selected, click Apply and Close." + "\n" + "\n" +
+                "Developer Note: Selected Flags will be shown in the console window after Generate is selected from the " +
+                "Text Fixtures window." + "\n" + "\n");
+        Label testFixtureInfo3 = new Label("\n" + "Character: input" +
+                " has to be a valid char or an error will be displayed. " + "\n" + "" +
+                "Integer: Has to be a valid integer, not a double, or an error will be displayed." + "\n"  +
+                "Boolean: If input is not true or false, the value will default to true.");
         testFixtureInfo.setWrapText(true);
-        testfileBox.getChildren().addAll(testFixtureInfo);
+        testFixtureInfo2.setWrapText(true);
+        testFixtureInfo3.setWrapText(true);
+        testfileBox.getChildren().addAll(testFixtureLabel1, testFixtureInfo, testFixtureLabel2, testFixtureInfo2, testFixtureLabel3, testFixtureInfo3);
         testScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         testScroll.setFitToWidth(true);
         testScroll.setContent(testfileBox);
         testTab.setContent(testScroll);
+
 
         /*
          * Code for program walkthrough tab
@@ -512,26 +563,49 @@ public class FrontEndGUI {
         ImageView gMenu = new ImageView();
         Image generatorMenu = new Image("generator.JPG");
         gMenu.setImage(generatorMenu);
-        gMenu.setFitHeight(220);
-        gMenu.setFitWidth(290);
+        gMenu.setFitHeight(250);
+        gMenu.setFitWidth(250);
         HBox walkthroughGenerator = new HBox();
         VBox walkBox = new VBox();
         walkBox.setPadding(new Insets(15, 12, 15, 12));
         walkBox.setSpacing(10);
-        Label walkthroughInfo1 = new Label("The walkthrough tab will consist of the steps necessary to" +
-                " complete a run of the program with a better understanding of what does what. The user can start" +
-                "by hitting the browse button to locate a .Cpp file (or files), and once that is selected it should " +
-                "appear " + "in the white box. ");
-        Label walkthroughInfo2 = new Label("Next, a destination folder must be selected. The destination box " +
-                "IS editable," + " so if you had a specific location already in mind you would be able to key it in. " +
-                "If there" + " isn't a selected folder, the program currently will open an alert box. The refresh " +
-                "button will" + "clear the white box of selected files but not the destination folder." + "\n" + "\n" +
-                "(key notes on preferences)" + "\n" + "\n" + "Finally, when the correct files are selected and the " +
-                "preferences are set, the user can hit generate. ");
+        Label walkthroughInfo1 = new Label(
+                "The user can start" +
+                " by hitting the browse button to locate a .Cpp file and/or .h file; once that is selected it should " +
+                "appear in the a checklist in the white box. From there, you can select/deselect any options that you " +
+                "want to include/exclude. Hitting the refresh button will remove any unselected. " + "\n" + "Next, a " +
+                "destination folder must be selected. The destination box IS editable, so if you had a specific location" +
+                " already in mind you would be able to just key it in. If you had a previously saved destination, you" +
+                " can select the defaults button to find it. Otherwise, hitting the browse button will allow you to manually" +
+                " select the folder. If there isn't a selected folder, the program will open an alert box stating so." + "\n"+ "\n");
+        Label devNote = new Label("*Developer Note: Files selected from the browse menu appear in the console window.");
+        Label saveLocationLabel = new Label("Save Destination Location:");
+        saveLocationLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        Label saveLocation = new Label(
+                "You can save the destination location through the preferences window. From there, the user can again key in" +
+                " or browse for a destination folder. Once that is selected, select save. When the manage button is selected, " +
+                "a window will appear showing the saved locations. These are also the ones that the user will see at the regular " +
+                "menu. " + "\n" );
+        Label preferencesLabel = new Label("Preferences + Test Fixtures/ Finalization:");
+        preferencesLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        Label walkthroughInfo2 = new Label(
+                "The user can then move onto preferences. Selecting this button will prompt another window will appear where the user" +
+                " can toggle on/off preferences for the test. This is also where the user can save their destination " +
+                "location, and view the current saved locations via the manage button. Deselecting a destination location and " +
+                "hitting refresh will remove it from the list." + "\n" + "\n" + "Finally, when the correct files are selected and the " +
+                "preferences are set, the user can hit generate. The text fixture information can then be configured; the user " +
+                "will be able to choose the compiler type, executable name, flags, and what methods to test. See the Text Fixtures tab" +
+                " for more information. Once the test is complete, all files will be accessible in the destination folder. Examples of each" +
+                        " type of file can be seen by selecting the Preview button. " +
+                        "Unit test files will be .Cpp file format. " + "\n" + "\n" + "*Developer Note: After hitting apply, the enabled preferences" +
+                " will appear in the console window. After generating, the selected flags will be shown, and input .CSV files for " +
+                "specific methods (if applicable)");
+
         walkthroughInfo1.setWrapText(true);
+        saveLocation.setWrapText(true);
         walkthroughInfo2.setWrapText(true);
         walkthroughGenerator.getChildren().addAll(walkthroughInfo1, gMenu);
-        walkBox.getChildren().addAll(walkthroughGenerator, walkthroughInfo2);
+        walkBox.getChildren().addAll(walkthroughGenerator, devNote, saveLocationLabel, saveLocation, preferencesLabel, walkthroughInfo2);
         walkScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         walkScroll.setFitToWidth(true);
         walkScroll.setContent(walkBox);
@@ -703,6 +777,26 @@ public class FrontEndGUI {
         makefileTab.setContent(makefileScene);
 
         //Populating Unit Test Tab
+        HBox unitTestScene = new HBox();
+        Image exampleunitTest = new Image("unitTestExample.JPG");
+        Label unitTestLabel = new Label();
+        unitTestLabel.setGraphic(new ImageView(exampleunitTest));
+        unitTestLabel.setPadding(new Insets(20, 20, 20,20));
+        unitTestScene.getChildren().addAll(unitTestLabel);
+        unitTestScene.setAlignment(Pos.CENTER);
+        unitTestTab.setContent(unitTestScene);
+
+        //Populating Test Fixture Tab
+        HBox testFixturetScene = new HBox();
+        Image exampleTestFixture = new Image("testfixtureExample.JPG");
+        Label testFixtureLabel = new Label();
+        testFixtureLabel.setGraphic(new ImageView(exampleTestFixture));
+        testFixtureLabel.setPadding(new Insets(20, 20, 20,20));
+        testFixturetScene.getChildren().addAll(testFixtureLabel);
+        testFixturetScene.setAlignment(Pos.CENTER);
+        testFixtureTab.setContent(testFixturetScene);
+
+        //Populating Unit Test Tab
 
         //Populating Test Fixture Tab
 
@@ -811,6 +905,7 @@ public class FrontEndGUI {
         Region bottomRegion = new Region();
 
         //Preferences window label declaration/initialization and formatting
+
         Label preferenceLabelA = new Label("This will contain info for the first preference       ");
         preferenceLabelA.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelA.setTextFill(Color.web("#DED8D8"));
@@ -830,6 +925,7 @@ public class FrontEndGUI {
         preferenceLabelF.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelF.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelG = new Label("This will contain info for the seventh preference     ");
+
         preferenceLabelG.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
         preferenceLabelG.setTextFill(Color.web("#DED8D8"));
         Label preferenceLabelH = new Label("Update Preferred Destinations:  ");
@@ -1291,14 +1387,12 @@ public class FrontEndGUI {
             }
             if(!error) {
                 buildGenerateWindow();
-                controller.printTextFixturePreferences(); //Test Method
                 controller.updateTestFixturePreferences(compilerChoiceBox.getSelectionModel().getSelectedItem(),
                         executableName.getText(), stringDefault.getText(), characterDefault.getText(),
                         integerDefault.getText(), doubleDefault.getText(), booleanDefault.getText());
+                controller.updateCFlags(cFlagCheckList);
                 controller.printTextFixturePreferences(); //Test Method
-                controller.getFileParser().generateOutputFiles(controller.getDestinationFile(), //Destination
-                                                    //MORE TO BE ADDED
-                                                    controller.getExecutableName()); //Executable Name
+                controller.getFileParser().generateOutputFiles(controller.getDestinationFile());
                 fixtureStage.close();
             }
             else {
@@ -1376,7 +1470,7 @@ public class FrontEndGUI {
             check list of CFlags on the 'Enable CFlags' window
             */
             cFlagApplyButton.setOnAction(eventA -> {
-                //controller.updateParsedMethodsForTesting(methodCheckList);
+                controller.updateCFlags(cFlagCheckList);
             });
 
             /*
@@ -1425,12 +1519,17 @@ public class FrontEndGUI {
                 Button methodApplyButton = new Button("Apply");
                 methodApplyButton.setTooltip(new Tooltip("All unselected methods will \nnot be tested!"));
                 methodApplyButton.setPrefSize(78, 20);
+                Button methodAttachButton = new Button("Attach File");
+                methodAttachButton.setTooltip(new Tooltip("Attach a csv file to a \nselected method for " +
+                                                                        "testing !"));
+                methodAttachButton.setPrefSize(93, 20);
                 Button methodCloseButton = new Button("Close");
                 methodCloseButton.setTooltip(new Tooltip("Did you click 'Apply' \nto save your changes?"));
                 methodCloseButton.setPrefSize(78, 20);
 
                 //'Add Methods' window center scene formatting and populating
-                methodCenterSubScene.getChildren().addAll(methodSelectAllButton, methodDeselectAllButton);
+                methodCenterSubScene.getChildren().addAll(methodAttachButton, methodSelectAllButton,
+                        methodDeselectAllButton);
                 methodCenterSubScene.setSpacing(10);
                 methodCenterSubScene.setAlignment(Pos.TOP_CENTER);
                 methodCenterScene.getChildren().addAll(methodCheckList, regionA, methodCenterSubScene);
@@ -1466,12 +1565,59 @@ public class FrontEndGUI {
                 });
 
                 /*
+                Action Listener for the 'Attach File' button that opens a new window for the user and allows them
+                 */
+                methodAttachButton.setOnAction(eventA -> {
+                    //'Attach File' window main scene declaration/initialization
+                    HBox attachFileWindow = new HBox();
+
+                    //'Attach File' window button declaration/initialization and formatting
+                    Button loadButton = new Button("Load");
+                    loadButton.setPrefSize(78, 20);
+                    Button closeButton = new Button("Close");
+                    closeButton.setPrefSize(78, 20);
+
+                    //Selected Methods checkList formatting
+                    methodChoiceList.setMinWidth(500);
+                    methodChoiceList.getSelectionModel().selectFirst();
+
+                    //'Defaults window population, formatting and display
+                    attachFileWindow.getChildren().addAll(methodChoiceList, loadButton, closeButton);
+                    attachFileWindow.setSpacing(10);
+                    attachFileWindow.setPadding(new Insets(10, 10, 10, 10));
+                    Stage attachFileStage = new Stage();
+                    attachFileStage.setScene(new Scene(attachFileWindow, 650, 50));
+                    attachFileStage.initModality(Modality.APPLICATION_MODAL);
+                    attachFileStage.setTitle("AxolotlSWENG:        Powered by Rowan University");
+                    attachFileStage.setResizable(false);
+                    attachFileStage.getIcons().add(new Image("CuteLizard.PNG"));
+                    attachFileStage.show();
+
+                    /*
+                    * Action Listener for the 'Close' button in the 'Attach File' window that closes the window
+                    */
+                    closeButton.setOnAction(eventB -> {
+                        attachFileStage.close();
+                    });
+
+                    /*
+                    * Action Listener for the 'Load' button in the 'Attach File' window that loads the selected
+                    * destination from the drop down menu onto the main GUI for the user
+                    */
+                    loadButton.setOnAction(eventB -> {
+                        controller.attachCSVToMethod(methodChoiceList.getSelectionModel().getSelectedItem());
+                        attachFileStage.close();
+                    });
+                });
+
+                /*
                 Action Listener for the 'Add Methods' 'Apply' button that makes a call to the controller to update
                 the FileParser component's 'method' (ArrayList) attribute to be transparent and synonymous with the
                 check list of parsed methods on the 'Add Methods' window
                  */
                 methodApplyButton.setOnAction(eventA -> {
                     controller.updateParsedMethodsForTesting(methodCheckList);
+                    methodChoiceList = controller.populateMethodsOnGuiChoiceList();
                 });
 
                 /*
@@ -1601,7 +1747,9 @@ public class FrontEndGUI {
                 try {
                     controller.getFileParser().parseSourceFiles(parsingFiles); //PARSES SOURCE FILES
                     window.hide();
-                    methodCheckList = controller.populateMethodsOnGui(methodCheckList);
+                    methodCheckList = controller.populateMethodsOnGuiCheckList(methodCheckList);
+                    methodChoiceList = controller.populateMethodsOnGuiChoiceList();
+
                     buildTestFixtureWindow();
 
                 } catch (IOException e) {
@@ -1615,7 +1763,6 @@ public class FrontEndGUI {
         Action listener for the 'Help' button that will display the 'Help' menu for the user
          */
         helpButton.setOnAction(event -> buildHelpWindow());
-
         /*
         Action listener for the 'Preview' button that will display the 'Preview' window for the user
          */
@@ -1658,7 +1805,7 @@ public class FrontEndGUI {
                 defaultPathStage.show();
 
                 /*
-                 * Action Listener for the 'Load' button in the 'Defaults' window that closes the window
+                 * Action Listener for the 'Close' button in the 'Defaults' window that closes the window
                  */
                 closeButton.setOnAction(eventA -> {
                     defaultPathStage.close();

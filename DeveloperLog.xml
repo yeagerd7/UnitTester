@@ -2,26 +2,47 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2017-11-07T22:00:40.066471800Z</date>
-  <millis>1510092040066</millis>
-  <nanos>471800</nanos>
+  <date>2017-12-09T13:49:50</date>
+  <millis>1512845390487</millis>
   <sequence>1</sequence>
   <logger>global</logger>
   <level>INFO</level>
   <class>sample.FrontEndGUI</class>
   <method>mainWindowDisplay</method>
-  <thread>16</thread>
+  <thread>12</thread>
   <message>Front End User Interface built and displayed</message>
 </record>
 <record>
-  <date>2017-11-07T22:00:40.091041Z</date>
-  <millis>1510092040091</millis>
-  <nanos>41000</nanos>
+  <date>2017-12-09T13:49:50</date>
+  <millis>1512845390490</millis>
   <sequence>2</sequence>
   <logger>global</logger>
   <level>INFO</level>
   <class>sample.Main</class>
   <method>start</method>
-  <thread>16</thread>
+  <thread>12</thread>
   <message>Program begins to execute,   Logger Formatted</message>
 </record>
+<record>
+  <date>2017-12-09T13:50:06</date>
+  <millis>1512845406378</millis>
+  <sequence>3</sequence>
+  <logger>global</logger>
+  <level>WARNING</level>
+  <class>sample.FileParser</class>
+  <method>makeDependence</method>
+  <thread>12</thread>
+  <message>Blank file read.</message>
+</record>
+<record>
+  <date>2017-12-09T13:50:48</date>
+  <millis>1512845448768</millis>
+  <sequence>4</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>sample.FileParser</class>
+  <method>generateOutputFiles</method>
+  <thread>12</thread>
+  <message>MakeFile: makefile has been generated.</message>
+</record>
+</log>
