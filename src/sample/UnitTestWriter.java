@@ -141,7 +141,7 @@ public class UnitTestWriter {
 
             // return 0;
             // }
-            pw.println("\treturn 0\n}");
+            pw.println("\treturn 0;\n}");
 
             //       O
             //     / | \

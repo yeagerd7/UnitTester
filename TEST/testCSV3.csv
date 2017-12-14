@@ -1,0 +1,4 @@
+new ASRCbject()
+new ASRCObject("parameter")
+new ASRCObject("more", "parameters");
+new ASRCObject('a','n','y',' ','p','a','r','a','m','s',' ','y','o','u',' ','w','a','n','t');
