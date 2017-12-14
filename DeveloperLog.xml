@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2017-12-14T10:44:54</date>
-  <millis>1513266294028</millis>
+  <date>2017-12-14T10:55:02</date>
+  <millis>1513266902949</millis>
   <sequence>1</sequence>
   <logger>global</logger>
   <level>INFO</level>
@@ -13,8 +13,8 @@
   <message>Front End User Interface built and displayed</message>
 </record>
 <record>
-  <date>2017-12-14T10:44:54</date>
-  <millis>1513266294031</millis>
+  <date>2017-12-14T10:55:02</date>
+  <millis>1513266902955</millis>
   <sequence>2</sequence>
   <logger>global</logger>
   <level>INFO</level>
@@ -24,20 +24,9 @@
   <message>Program begins to execute,   Logger Formatted</message>
 </record>
 <record>
-  <date>2017-12-14T10:45:58</date>
-  <millis>1513266358550</millis>
+  <date>2017-12-14T10:55:25</date>
+  <millis>1513266925093</millis>
   <sequence>3</sequence>
-  <logger>global</logger>
-  <level>INFO</level>
-  <class>sample.FileParser</class>
-  <method>generateOutputFiles</method>
-  <thread>12</thread>
-  <message>MakeFile: makefile has been generated.</message>
-</record>
-<record>
-  <date>2017-12-14T10:48:47</date>
-  <millis>1513266527515</millis>
-  <sequence>22</sequence>
   <logger>global</logger>
   <level>INFO</level>
   <class>sample.FileParser</class>

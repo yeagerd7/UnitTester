@@ -1,10 +1,8 @@
-Dec 14, 2017 10:44:53 AM sample.Controller <init>
+Dec 14, 2017 10:55:02 AM sample.Controller <init>
 FINEST: Controller object created and initialized
-Dec 14, 2017 10:44:54 AM sample.FrontEndGUI mainWindowDisplay
+Dec 14, 2017 10:55:02 AM sample.FrontEndGUI mainWindowDisplay
 INFO: Front End User Interface built and displayed
-Dec 14, 2017 10:44:54 AM sample.Main start
+Dec 14, 2017 10:55:02 AM sample.Main start
 INFO: Program begins to execute,   Logger Formatted
-Dec 14, 2017 10:45:58 AM sample.FileParser generateOutputFiles
-INFO: MakeFile: makefile has been generated.
-Dec 14, 2017 10:48:47 AM sample.FileParser generateOutputFiles
+Dec 14, 2017 10:55:25 AM sample.FileParser generateOutputFiles
 INFO: MakeFile: makefile has been generated.
