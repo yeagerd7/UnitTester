@@ -3,6 +3,10 @@ void testNoParams(){
 	
 };
 
+void testInt(int foo){
+
+};
+
 void testChar(char foo){
 	
 };
@@ -15,3 +19,6 @@ void testDouble(double foo){
 	
 };
 
+void testString(string foo){
+
+};

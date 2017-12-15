@@ -1,5 +1,5 @@
 
-class TEST{
+class class1{
 	public:
 		void testInt(int foo);
 		void testChar(char foo);

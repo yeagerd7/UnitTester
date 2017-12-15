@@ -136,12 +136,13 @@ public class UnitTestWriter {
                             pw.println(");");
                         }
                     }
+                    pw.println();
                 }
             }
 
             // return 0;
             // }
-            pw.println("\treturn 0\n}");
+            pw.println("\treturn 0;\n}");
 
             //       O
             //     / | \

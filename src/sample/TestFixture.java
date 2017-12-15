@@ -6,6 +6,8 @@ import java.util.HashMap;
 
 /**
  * An extendable class made to model a test fixture for testing a particular C++ file with
+ * Note the "fixtureName" field is used for the output filename. This is currently hard-coded, but given setters to allow
+ * future changability in that variable.
  * @author Axolotl Development Team
  */
 public class TestFixture implements java.io.Serializable {
